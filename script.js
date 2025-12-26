@@ -1,60 +1,34 @@
+// ==========================
+// CONFIG
+// ==========================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYKeSzL7hrrxrB69r-0352jz0Mvd2BJc-bP4F_uOj_shF6ypODrt6Uyafg6vr4UZ5G9A/exec";
 
-document.addEventListener("DOMContentLoaded", () => {
+// ==========================
+// SELECTORS
+// ==========================
+const form = document.querySelector("#signup-form");
+const submitBtn = document.querySelector("#submit-btn");
+const successMsg = document.querySelector("#success-message");
+const resultBox = document.querySelector("#result");
+const refCodeSpan = document.querySelector("#refCode");
+const copyBtn = document.querySelector("#copy-btn");
 
-  // --- SIGN UP ---
-  const form = document.querySelector("#signup-form");
-  const submitBtn = document.querySelector("#submit-btn");
-  const successMsg = document.querySelector("#success-message");
+const signupToggle = document.querySelector("#signupToggle");
+const trackToggle = document.querySelector("#trackToggle");
+const signupSection = document.querySelector("#signupSection");
+const trackerSection = document.querySelector("#trackerSection");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+const trackBtn = document.querySelector("#trackBtn");
+const trackerCodeInput = document.querySelector("#trackerCode");
+const trackerResult = document.querySelector("#trackerResult");
 
-    const name = document.querySelector("#name").value.trim();
-    const email = document.querySelector("#email").value.trim();
+const shareFb = document.querySelector("#shareFb");
+const shareTw = document.querySelector("#shareTw");
+const shareWa = document.querySelector("#shareWa");
 
-    if (!name || !email) {
-      alert("Please enter your name and email.");
-      return;
-    }
-
-    submitBtn.innerText = "Submitting...";
-    submitBtn.disabled = true;
-
-    try {
-      const response = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email })
-      });
-
-      if (!response.ok) throw new Error("Submission failed");
-      const data = await response.json();
-
-      const refCode = data.referralCode || "ABC123";
-      document.getElementById("refCode").innerText = refCode;
-      successMsg.classList.remove("hidden");
-
-      const baseUrl = "https://taxentricsolutions-max.github.io/referral-site/?ref=" + refCode;
-      document.getElementById("shareFb").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(baseUrl)}`;
-      document.getElementById("shareTw").href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(baseUrl)}&text=${encodeURIComponent("Join our referral program!")}`;
-      document.getElementById("shareWa").href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Check this out: " + baseUrl)}`;
-
-    } catch (err) {
-      alert("Something went wrong. Please try again.");
-      console.error(err);
-    }
-
-    submitBtn.innerText = "Get Started";
-    submitBtn.disabled = false;
-  });
-
-  // Toggle between signup and tracker
-const signupToggle = document.getElementById("signupToggle");
-const trackToggle = document.getElementById("trackToggle");
-const signupSection = document.getElementById("signupSection");
-const trackerSection = document.getElementById("trackerSection");
-
+// ==========================
+// TAB TOGGLE
+// ==========================
 signupToggle.addEventListener("click", () => {
   signupToggle.classList.add("active");
   trackToggle.classList.remove("active");
@@ -69,22 +43,91 @@ trackToggle.addEventListener("click", () => {
   signupSection.classList.add("hidden");
 });
 
-// Share buttons
-const shareFb = document.getElementById("shareFb");
-const shareTw = document.getElementById("shareTw");
-const shareWa = document.getElementById("shareWa");
+// ==========================
+// SIGN UP FORM SUBMISSION
+// ==========================
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
+  const name = document.querySelector("#name").value.trim();
+  const email = document.querySelector("#email").value.trim();
+
+  if (!name || !email) {
+    alert("Please enter your name and email.");
+    return;
+  }
+
+  submitBtn.innerText = "Submitting...";
+  submitBtn.disabled = true;
+
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.result !== "success") {
+      throw new Error(data.error || "Submission failed");
+    }
+
+    // Show success message and generate referral code
+    form.reset();
+    successMsg.classList.remove("hidden");
+
+    // Simple referral code generator (6 alphanumeric)
+    const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    refCodeSpan.textContent = referralCode;
+    resultBox.classList.remove("hidden");
+
+  } catch (err) {
+    alert("Something went wrong. Please try again.");
+    console.error("Error:", err);
+  }
+
+  submitBtn.innerText = "Get Started";
+  submitBtn.disabled = false;
+});
+
+// ==========================
+// COPY REFERRAL CODE
+// ==========================
+copyBtn.addEventListener("click", () => {
+  const code = refCodeSpan.textContent;
+  navigator.clipboard.writeText(code);
+  alert("Referral code copied!");
+});
+
+// ==========================
+// TRACK STATS
+// ==========================
+trackBtn.addEventListener("click", () => {
+  const code = trackerCodeInput.value.trim();
+  if (!code) {
+    alert("Please enter a referral code.");
+    return;
+  }
+
+  // Dummy tracking output (replace with real API logic if needed)
+  trackerResult.textContent = `Referrals for ${code}: 0`; 
+});
+
+// ==========================
+// SHARE BUTTONS
+// ==========================
 shareFb.addEventListener("click", () => {
-  const url = encodeURIComponent(window.location.href);
+  const url = encodeURIComponent(window.location.href + "?ref=" + refCodeSpan.textContent);
   window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
 });
 
 shareTw.addEventListener("click", () => {
-  const url = encodeURIComponent(window.location.href);
+  const url = encodeURIComponent(window.location.href + "?ref=" + refCodeSpan.textContent);
   window.open(`https://twitter.com/intent/tweet?url=${url}`, "_blank");
 });
 
 shareWa.addEventListener("click", () => {
-  const url = encodeURIComponent(window.location.href);
+  const url = encodeURIComponent(window.location.href + "?ref=" + refCodeSpan.textContent);
   window.open(`https://wa.me/?text=${url}`, "_blank");
 });
