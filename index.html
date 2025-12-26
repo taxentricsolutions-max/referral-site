@@ -3,46 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Referral Hub</title>
+  <title>Taxentric Referral Hub</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Header / Logo -->
-  <div class="header">
-    <img src="logo.png" alt="Logo" class="logo">
-  </div>
+  <div class="background"></div>
+  <div class="overlay"></div>
 
-  <!-- Main Container -->
-  <div class="container">
-    <h1>Join & Earn Rewards</h1>
+  <header>
+    <img src="logo.png" alt="Taxentric Solutions" class="logo">
+  </header>
 
-    <!-- Signup Form -->
-    <form id="signupForm">
-      <input type="text" id="name" placeholder="Name" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="text" id="referredBy" placeholder="Referral Code (Optional)">
-      <button type="submit">Sign Up</button>
-    </form>
+  <main>
+    <div class="form-container">
+      <h1>Join Our Referral Program</h1>
+      <p>Earn cash every time a friend files with us.</p>
 
-    <!-- Post-signup Display -->
-    <div id="result" class="hidden">
-      <p>Your Referral Code: <span id="refCode"></span></p>
-      <p>Share this link: <span id="shareLink"></span></p>
-      <div class="social-buttons">
-        <a id="fbShare" target="_blank">Facebook</a>
-        <a id="twShare" target="_blank">Twitter</a>
-        <a id="waShare" target="_blank">WhatsApp</a>
+      <!-- Toggle Buttons -->
+      <div class="toggle-buttons">
+        <button id="signupToggle" class="active">Sign Up</button>
+        <button id="trackToggle">Track Stats</button>
+      </div>
+
+      <!-- Sign Up Form -->
+      <div id="signupSection">
+        <form id="signupForm">
+          <input type="text" id="name" placeholder="Full Name" required>
+          <input type="email" id="email" placeholder="Email Address" required>
+          <input type="text" id="referredBy" placeholder="Referral Code (Optional)">
+          <button type="submit">Get Started</button>
+        </form>
+
+        <div id="result" class="hidden">
+          <p>Your Referral Code: <span id="refCode"></span></p>
+          <p>Share this link: <span id="shareLink"></span></p>
+          <div class="social-buttons">
+            <a id="fbShare" target="_blank">Facebook</a>
+            <a id="twShare" target="_blank">Twitter</a>
+            <a id="waShare" target="_blank">WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tracker Form -->
+      <div id="trackerSection" class="hidden">
+        <h2>Check Your Referral Stats</h2>
+        <input type="text" id="trackerCode" placeholder="Enter Your Code">
+        <button id="trackBtn">Check Stats</button>
+        <div id="trackerResult"></div>
       </div>
     </div>
 
-    <!-- Referral Tracker -->
-    <div class="tracker">
-      <h2>Check Your Referral Stats</h2>
-      <input type="text" id="trackerCode" placeholder="Enter Your Code">
-      <button id="trackBtn">Check Stats</button>
-      <div id="trackerResult"></div>
-    </div>
-  </div>
+    <p class="footer">© 2025 Taxentric Solutions. All rights reserved.</p>
+  </main>
 
   <script src="script.js"></script>
 </body>

@@ -1,52 +1,61 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec"; // Replace with your Web App URL
+const signupToggle = document.getElementById("signupToggle");
+const trackToggle = document.getElementById("trackToggle");
+const signupSection = document.getElementById("signupSection");
+const trackerSection = document.getElementById("trackerSection");
 
-// Signup Form
+function switchSection(show, hide) {
+  hide.style.opacity = 0;
+  setTimeout(() => {
+    hide.classList.add("hidden");
+    show.classList.remove("hidden");
+    show.style.opacity = 0;
+    setTimeout(() => {
+      show.style.opacity = 1;
+    }, 20);
+  }, 200);
+}
+
+/* TOGGLE HANDLERS */
+signupToggle.addEventListener("click", () => {
+  signupToggle.classList.add("active");
+  trackToggle.classList.remove("active");
+  switchSection(signupSection, trackerSection);
+});
+
+trackToggle.addEventListener("click", () => {
+  trackToggle.classList.add("active");
+  signupToggle.classList.remove("active");
+  switchSection(trackerSection, signupSection);
+});
+
+/* SIGNUP FORM */
 document.getElementById("signupForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
-  const referredBy = document.getElementById("referredBy").value;
 
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "signup", name, email, referredBy, code: "" })
-    });
+  const response = await fetch("https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec", {
+    method: "POST",
+    body: JSON.stringify({ name, email })
+  });
 
-    const data = await response.json();
+  const data = await response.json();
 
-    // Use referral code returned by Apps Script
-    const refCode = data.refCode;
-    const shareLink = `${window.location.href}?ref=${refCode}`;
-
-    document.getElementById("refCode").textContent = refCode;
-    document.getElementById("shareLink").textContent = shareLink;
-
-    document.getElementById("fbShare").href = `https://www.facebook.com/sharer/sharer.php?u=${shareLink}`;
-    document.getElementById("twShare").href = `https://twitter.com/intent/tweet?url=${shareLink}`;
-    document.getElementById("waShare").href = `https://api.whatsapp.com/send?text=${shareLink}`;
-
-    document.getElementById("result").classList.remove("hidden");
-
-  } catch (err) {
-    alert("Signup failed. Please try again.");
-    console.error(err);
-  }
+  document.getElementById("refCode").textContent = data.referralCode;
+  document.getElementById("shareLink").textContent = data.shareUrl;
+  document.getElementById("result").classList.remove("hidden");
 });
 
-// Tracker
+/* TRACKER */
 document.getElementById("trackBtn").addEventListener("click", async () => {
   const code = document.getElementById("trackerCode").value;
 
-  try {
-    const response = await fetch(`${API_URL}?code=${code}`);
-    const data = await response.json();
+  const response = await fetch(
+    `https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec?code=${code}`
+  );
+  const data = await response.json();
 
-    document.getElementById("trackerResult").innerHTML =
-      `Clicks: ${data.clicks || 0} <br> Signups: ${data.signups || 0}`;
-  } catch (err) {
-    alert("Could not retrieve tracker data.");
-    console.error(err);
-  }
+  document.getElementById("trackerResult").innerHTML =
+    `You have <strong>${data.count}</strong> referrals.`;
 });
