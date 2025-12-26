@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw99iLGzCTskmDSs9k4oFoGDfIKTXTtsWReqF7HRphjOi3kvw7kRe4tEwr5wlCCPhlwFQ/exec";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -49,31 +49,42 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.disabled = false;
   });
 
-  // --- TOGGLE ---
-  const signupToggle = document.getElementById("signupToggle");
-  const trackToggle = document.getElementById("trackToggle");
-  const signupSection = document.getElementById("signupSection");
-  const trackerSection = document.getElementById("trackerSection");
+  // Toggle between signup and tracker
+const signupToggle = document.getElementById("signupToggle");
+const trackToggle = document.getElementById("trackToggle");
+const signupSection = document.getElementById("signupSection");
+const trackerSection = document.getElementById("trackerSection");
 
-  signupToggle.addEventListener("click", () => {
-    signupSection.classList.remove("hidden");
-    trackerSection.classList.add("hidden");
-    signupToggle.classList.add("active");
-    trackToggle.classList.remove("active");
-  });
+signupToggle.addEventListener("click", () => {
+  signupToggle.classList.add("active");
+  trackToggle.classList.remove("active");
+  signupSection.classList.remove("hidden");
+  trackerSection.classList.add("hidden");
+});
 
-  trackToggle.addEventListener("click", () => {
-    signupSection.classList.add("hidden");
-    trackerSection.classList.remove("hidden");
-    signupToggle.classList.remove("active");
-    trackToggle.classList.add("active");
-  });
+trackToggle.addEventListener("click", () => {
+  trackToggle.classList.add("active");
+  signupToggle.classList.remove("active");
+  trackerSection.classList.remove("hidden");
+  signupSection.classList.add("hidden");
+});
 
-  // --- COPY BUTTON ---
-  const copyBtn = document.getElementById("copy-btn");
-  copyBtn.addEventListener("click", () => {
-    const refCode = document.getElementById("refCode").innerText;
-    navigator.clipboard.writeText(refCode).then(() => alert("Copied to clipboard!"));
-  });
+// Share buttons
+const shareFb = document.getElementById("shareFb");
+const shareTw = document.getElementById("shareTw");
+const shareWa = document.getElementById("shareWa");
 
+shareFb.addEventListener("click", () => {
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
+});
+
+shareTw.addEventListener("click", () => {
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://twitter.com/intent/tweet?url=${url}`, "_blank");
+});
+
+shareWa.addEventListener("click", () => {
+  const url = encodeURIComponent(window.location.href);
+  window.open(`https://wa.me/?text=${url}`, "_blank");
 });
