@@ -33,22 +33,39 @@
 
       <!-- SIGN UP -->
       <section id="signupSection">
-        <form id="signupForm">
-          <label>Full Name</label>
-          <input id="name" required />
+       <form id="signup-form" class="space-y-5">
 
-          <label>Email Address</label>
-          <input id="email" type="email" required />
+  <div class="space-y-2">
+    <label for="name">Full Name</label>
+    <input id="name" type="text" required />
+  </div>
 
-          <button type="submit">Get Started</button>
-        </form>
+  <div class="space-y-2">
+    <label for="email">Email Address</label>
+    <input id="email" type="email" required />
+  </div>
 
-        <div id="result" class="hidden">
-          <p><strong>Your Code</strong></p>
-          <div class="copy-box">
-            <span id="refCode"></span>
-            <button id="copyBtn">Copy</button>
-          </div>
+  <button id="submit-btn" type="submit">
+    Get Started
+  </button>
+
+</form>
+<p id="success-message"
+   class="hidden text-green-700 text-center mt-4">
+  🎉 You're signed up! Your referral code is below.
+</p>
+
+        <div id="result" class="hidden mt-6 text-center">
+
+  <p class="font-semibold mb-2">Your Code</p>
+
+  <div class="copy-box">
+    <span id="refCode"></span>
+    <button id="copy-btn" type="button">Copy</button>
+  </div>
+
+</div>
+
 
           <p class="share-label">Share your link</p>
           <div class="share-buttons">
