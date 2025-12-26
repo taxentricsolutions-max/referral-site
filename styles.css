@@ -113,7 +113,12 @@ h1 {
 
 .tab.active {
   background: white;
+  color: #000; /* BLACK when active */
   box-shadow: 0 6px 14px rgba(0,0,0,.2);
+}
+
+.tab:not(.active):hover {
+  color: #6b7280;
 }
 
 /* Forms */
