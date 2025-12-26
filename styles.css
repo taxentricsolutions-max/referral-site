@@ -1,8 +1,12 @@
+/* Body / Background */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: url('background.png') no-repeat center center fixed;
+  background-image: url('background.png'); /* Exact file name */
+  background-repeat: no-repeat;
+  background-position: center center;
   background-size: cover;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,12 +14,13 @@ body {
   color: #111827;
 }
 
+/* Header / Logo */
 .header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 15px 30px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   z-index: 2;
@@ -24,8 +29,10 @@ body {
 .header .logo {
   height: 40px;
   width: auto;
+  object-fit: contain;
 }
 
+/* Container / Card */
 .container {
   background: rgba(255,255,255,0.9);
   max-width: 420px;
@@ -38,6 +45,7 @@ body {
   z-index: 1;
 }
 
+/* Inputs */
 input {
   width: 100%;
   padding: 10px;
@@ -46,6 +54,7 @@ input {
   border: 1px solid #ccc;
 }
 
+/* Buttons */
 button {
   width: 100%;
   padding: 12px;
@@ -61,10 +70,12 @@ button:hover {
   background-color: #1e40af;
 }
 
+/* Hidden */
 .hidden {
   display: none;
 }
 
+/* Social Buttons */
 .social-buttons a {
   margin: 0 5px;
   padding: 5px 10px;
@@ -72,4 +83,9 @@ button:hover {
   color: white;
   text-decoration: none;
   border-radius: 4px;
+}
+
+/* Tracker */
+.tracker {
+  margin-top: 20px;
 }
