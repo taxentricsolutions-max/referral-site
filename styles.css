@@ -107,6 +107,8 @@ h1 {
   font-weight: 600;
   border-radius: 10px;
   cursor: pointer;
+  color: #9ca3af; /* GREY when inactive */
+  transition: all 0.25s ease;
 }
 
 .tab.active {
