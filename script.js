@@ -1,61 +1,40 @@
-const signupToggle = document.getElementById("signupToggle");
-const trackToggle = document.getElementById("trackToggle");
-const signupSection = document.getElementById("signupSection");
-const trackerSection = document.getElementById("trackerSection");
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec";
 
-function switchSection(show, hide) {
-  hide.style.opacity = 0;
-  setTimeout(() => {
-    hide.classList.add("hidden");
-    show.classList.remove("hidden");
-    show.style.opacity = 0;
-    setTimeout(() => {
-      show.style.opacity = 1;
-    }, 20);
-  }, 200);
-}
+const form = document.querySelector("#signup-form");
+const submitBtn = document.querySelector("#submit-btn");
+const successMsg = document.querySelector("#success-message");
 
-/* TOGGLE HANDLERS */
-signupToggle.addEventListener("click", () => {
-  signupToggle.classList.add("active");
-  trackToggle.classList.remove("active");
-  switchSection(signupSection, trackerSection);
-});
-
-trackToggle.addEventListener("click", () => {
-  trackToggle.classList.add("active");
-  signupToggle.classList.remove("active");
-  switchSection(trackerSection, signupSection);
-});
-
-/* SIGNUP FORM */
-document.getElementById("signupForm").addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
+  const name = document.querySelector("#name").value.trim();
+  const email = document.querySelector("#email").value.trim();
 
-  const response = await fetch("https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec", {
-    method: "POST",
-    body: JSON.stringify({ name, email })
-  });
+  if (!name || !email) {
+    alert("Please enter your name and email.");
+    return;
+  }
 
-  const data = await response.json();
+  submitBtn.innerText = "Submitting...";
+  submitBtn.disabled = true;
 
-  document.getElementById("refCode").textContent = data.referralCode;
-  document.getElementById("shareLink").textContent = data.shareUrl;
-  document.getElementById("result").classList.remove("hidden");
-});
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email })
+    });
 
-/* TRACKER */
-document.getElementById("trackBtn").addEventListener("click", async () => {
-  const code = document.getElementById("trackerCode").value;
+    if (!response.ok) throw new Error("Submission failed");
 
-  const response = await fetch(
-    `https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec?code=${code}`
-  );
-  const data = await response.json();
+    form.reset();
+    successMsg.classList.remove("hidden");
 
-  document.getElementById("trackerResult").innerHTML =
-    `You have <strong>${data.count}</strong> referrals.`;
+  } catch (err) {
+    alert("Something went wrong. Please try again.");
+    console.error(err);
+  }
+
+  submitBtn.innerText = "Get Started";
+  submitBtn.disabled = false;
 });
