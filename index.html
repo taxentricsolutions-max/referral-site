@@ -7,55 +7,56 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="background"></div>
-  <div class="overlay"></div>
+  <div class="page-bg"></div>
+  <div class="page-overlay"></div>
 
-  <header>
-    <img src="logo.png" alt="Taxentric Solutions" class="logo">
+  <header class="site-header">
+    <img src="logo.png" class="logo" alt="Taxentric Solutions" />
   </header>
 
-  <main>
-    <div class="form-container">
-      <h1>Join Our Referral Program</h1>
-      <p>Earn cash every time a friend files with us.</p>
+  <main class="page-center">
+    <div class="card">
 
-      <!-- Toggle Buttons -->
-      <div class="toggle-buttons">
-        <button id="signupToggle" class="active">Sign Up</button>
-        <button id="trackToggle">Track Stats</button>
+      <h1>Join Our Referral Program</h1>
+      <p class="subtitle">Earn cash every time a friend files with us.</p>
+
+      <div class="tabs">
+        <button id="signupToggle" class="tab active">Sign Up</button>
+        <button id="trackToggle" class="tab">Track Stats</button>
       </div>
 
-      <!-- Sign Up Form -->
-      <div id="signupSection">
+      <!-- SIGNUP -->
+      <section id="signupSection">
         <form id="signupForm">
-          <input type="text" id="name" placeholder="Full Name" required>
-          <input type="email" id="email" placeholder="Email Address" required>
-          <input type="text" id="referredBy" placeholder="Referral Code (Optional)">
+          <label>Full Name</label>
+          <input id="name" required />
+
+          <label>Email Address</label>
+          <input id="email" type="email" required />
+
           <button type="submit">Get Started</button>
         </form>
 
         <div id="result" class="hidden">
-          <p>Your Referral Code: <span id="refCode"></span></p>
-          <p>Share this link: <span id="shareLink"></span></p>
-          <div class="social-buttons">
-            <a id="fbShare" target="_blank">Facebook</a>
-            <a id="twShare" target="_blank">Twitter</a>
-            <a id="waShare" target="_blank">WhatsApp</a>
-          </div>
+          <p><strong>Your Code:</strong> <span id="refCode"></span></p>
+          <p><strong>Share Link:</strong> <span id="shareLink"></span></p>
         </div>
-      </div>
+      </section>
 
-      <!-- Tracker Form -->
-      <div id="trackerSection" class="hidden">
-        <h2>Check Your Referral Stats</h2>
-        <input type="text" id="trackerCode" placeholder="Enter Your Code">
+      <!-- TRACK -->
+      <section id="trackerSection" class="hidden">
+        <label>Referral Code</label>
+        <input id="trackerCode" />
         <button id="trackBtn">Check Stats</button>
         <div id="trackerResult"></div>
-      </div>
-    </div>
+      </section>
 
-    <p class="footer">© 2023 Taxentric Solutions. All rights reserved.</p>
+    </div>
   </main>
+
+  <footer>
+    © 2025 Taxentric Solutions. All rights reserved.
+  </footer>
 
   <script src="script.js"></script>
 </body>
