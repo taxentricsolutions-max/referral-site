@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral Site</title>
-
-    <!-- LINK TO YOUR CSS FILE -->
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referral Hub</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Header -->
+  <div class="header">
+    <img src="logo.png" alt="Logo" class="logo">
+  </div>
 
-    <!-- Header with logo -->
-    <div class="header">
-        <img src="Taxentric Sun IV.png" alt="Your Logo" class="logo">
+  <!-- Main Container -->
+  <div class="container">
+    <h1>Join & Earn Rewards</h1>
+
+    <!-- Signup Form -->
+    <form id="signupForm">
+      <input type="text" id="name" placeholder="Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="text" id="referredBy" placeholder="Referral Code (Optional)">
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- Post-signup Display -->
+    <div id="result" class="hidden">
+      <p>Your Referral Code: <span id="refCode"></span></p>
+      <p>Share this link: <span id="shareLink"></span></p>
+      <div class="social-buttons">
+        <a id="fbShare" target="_blank">Facebook</a>
+        <a id="twShare" target="_blank">Twitter</a>
+        <a id="waShare" target="_blank">WhatsApp</a>
+      </div>
     </div>
 
-    <!-- Main container -->
-    <div class="container">
-        <h1>Join & Earn Rewards</h1>
-        <form id="signupForm">
-            <input required placeholder="Name" id="name">
-            <input required placeholder="Email" id="email">
-            <button>Sign Up</button>
-        </form>
-        <div id="result"></div>
+    <!-- Referral Tracker -->
+    <div class="tracker">
+      <h2>Check Your Referral Stats</h2>
+      <input type="text" id="trackerCode" placeholder="Enter Your Code">
+      <button id="trackBtn">Check Stats</button>
+      <div id="trackerResult"></div>
     </div>
+  </div>
 
-    <!-- JS -->
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
