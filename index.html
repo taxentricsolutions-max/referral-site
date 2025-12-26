@@ -18,14 +18,20 @@
     <div class="card">
 
       <h1>Join Our Referral Program</h1>
-      <p class="subtitle">Earn cash every time a friend files with us.</p>
+      <p class="subtitle">
+        Earn cash every time a friend files with us.
+      </p>
 
       <div class="tabs">
-        <button id="signupToggle" class="tab active">Sign Up</button>
-        <button id="trackToggle" class="tab">Track Stats</button>
+        <button id="signupToggle" class="tab active">
+          👤 Sign Up
+        </button>
+        <button id="trackToggle" class="tab">
+          📊 Track Stats
+        </button>
       </div>
 
-      <!-- SIGNUP -->
+      <!-- SIGN UP -->
       <section id="signupSection">
         <form id="signupForm">
           <label>Full Name</label>
@@ -38,25 +44,36 @@
         </form>
 
         <div id="result" class="hidden">
-          <p><strong>Your Code:</strong> <span id="refCode"></span></p>
-          <p><strong>Share Link:</strong> <span id="shareLink"></span></p>
+          <p><strong>Your Code</strong></p>
+          <div class="copy-box">
+            <span id="refCode"></span>
+            <button id="copyBtn">Copy</button>
+          </div>
+
+          <p class="share-label">Share your link</p>
+          <div class="share-buttons">
+            <a id="shareFb" target="_blank">Facebook</a>
+            <a id="shareTw" target="_blank">Twitter</a>
+            <a id="shareWa" target="_blank">WhatsApp</a>
+          </div>
         </div>
       </section>
 
       <!-- TRACK -->
       <section id="trackerSection" class="hidden">
-        <label>Referral Code</label>
+        <label>Enter Your Referral Code</label>
         <input id="trackerCode" />
         <button id="trackBtn">Check Stats</button>
         <div id="trackerResult"></div>
       </section>
 
+      <!-- FOOTER UNDER CARD -->
+      <div class="card-footer">
+        © 2023 Taxentric Solutions. All rights reserved.
+      </div>
+
     </div>
   </main>
-
-  <footer>
-    © 2025 Taxentric Solutions. All rights reserved.
-  </footer>
 
   <script src="script.js"></script>
 </body>
