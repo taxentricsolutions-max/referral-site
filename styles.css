@@ -9,14 +9,18 @@
 /* Page layout */
 body {
   min-height: 100vh;
-  background: url('Studio-Project (21).jpg') no-repeat center center fixed;
+  background-image: url('background.jpg'); /* exact file name */
+  background-repeat: no-repeat;
+  background-position: center center;
   background-size: cover;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   color: #111827;
 }
+
 
 /* Card container */
 .container {
@@ -89,17 +93,17 @@ button:hover {
 /* Header for logo */
 .header {
   width: 100%;
-  padding: 15px 15px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   position: absolute; /* keep it on top */
   top: 0;
   left: 0;
+  z-index: 2;
 }
 
 .header .logo {
-  height: 10px; /* adjust as needed */
+  height: 25px; /* adjust as needed */
   width: auto;
+  object-fit: contain;
 }
-
-
