@@ -9,7 +9,8 @@
 /* Page layout */
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f9fafb, #eef2f7);
+  background: url('Studio-Project (21).jpg') no-repeat center center fixed;
+  background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,3 +85,19 @@ button:hover {
   margin-top: 10px;
   background: #ffffff;
   cursor:
+
+/* Header for logo */
+.header {
+  width: 100%;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  position: absolute; /* keep it on top */
+  top: 0;
+  left: 0;
+}
+
+.header .logo {
+  height: 50px; /* adjust as needed */
+  width: auto;
+}
