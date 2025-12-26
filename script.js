@@ -1,40 +1,75 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec";
 
-const form = document.querySelector("#signup-form");
-const submitBtn = document.querySelector("#submit-btn");
-const successMsg = document.querySelector("#success-message");
+// Wait until the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  // --- SIGN UP FORM ---
+  const form = document.querySelector("#signup-form");
+  const submitBtn = document.querySelector("#submit-btn");
+  const successMsg = document.querySelector("#success-message");
 
-  const name = document.querySelector("#name").value.trim();
-  const email = document.querySelector("#email").value.trim();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  if (!name || !email) {
-    alert("Please enter your name and email.");
-    return;
-  }
+    const name = document.querySelector("#name").value.trim();
+    const email = document.querySelector("#email").value.trim();
 
-  submitBtn.innerText = "Submitting...";
-  submitBtn.disabled = true;
+    if (!name || !email) {
+      alert("Please enter your name and email.");
+      return;
+    }
 
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email })
-    });
+    submitBtn.innerText = "Submitting...";
+    submitBtn.disabled = true;
 
-    if (!response.ok) throw new Error("Submission failed");
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email })
+      });
 
-    form.reset();
-    successMsg.classList.remove("hidden");
+      if (!response.ok) throw new Error("Submission failed");
 
-  } catch (err) {
-    alert("Something went wrong. Please try again.");
-    console.error(err);
-  }
+      const data = await response.json(); // if your Apps Script returns JSON with referralCode
+      const refCode = data.referralCode || "ABC123"; // fallback if testing
 
-  submitBtn.innerText = "Get Started";
-  submitBtn.disabled = false;
+      document.getElementById("refCode").innerText = refCode;
+      successMsg.classList.remove("hidden");
+
+      // Populate share links dynamically
+      const baseUrl = "https://taxentricsolutions-max.github.io/referral-site/?ref=" + refCode;
+      document.getElementById("shareFb").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(baseUrl)}`;
+      document.getElementById("shareTw").href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(baseUrl)}&text=${encodeURIComponent("Join our referral program!")}`;
+      document.getElementById("shareWa").href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Check this out: " + baseUrl)}`;
+
+    } catch (err) {
+      alert("Something went wrong. Please try again.");
+      console.error(err);
+    }
+
+    submitBtn.innerText = "Get Started";
+    submitBtn.disabled = false;
+  });
+
+  // --- TOGGLE BUTTONS ---
+  const signupToggle = document.getElementById("signupToggle");
+  const trackToggle = document.getElementById("trackToggle");
+  const signupSection = document.getElementById("signupSection");
+  const trackerSection = document.getElementById("trackerSection");
+
+  signupToggle.addEventListener("click", () => {
+    signupSection.classList.remove("hidden");
+    trackerSection.classList.add("hidden");
+    signupToggle.classList.add("active");
+    trackToggle.classList.remove("active");
+  });
+
+  trackToggle.addEventListener("click", () => {
+    signupSection.classList.add("hidden");
+    trackerSection.classList.remove("hidden");
+    signupToggle.classList.remove("active");
+    trackToggle.classList.add("active");
+  });
+
 });
