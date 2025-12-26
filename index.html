@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
   <div class="page-bg"></div>
   <div class="page-overlay"></div>
 
@@ -18,73 +19,62 @@
     <div class="card">
 
       <h1>Join Our Referral Program</h1>
-      <p class="subtitle">
-        Earn cash every time a friend files with us.
-      </p>
+      <p class="subtitle">Earn cash every time a friend files with us.</p>
 
       <div class="tabs">
-        <button id="signupToggle" class="tab active">
-          👤 Sign Up
-        </button>
-        <button id="trackToggle" class="tab">
-          📊 Track Stats
-        </button>
+        <button id="signupToggle" class="tab active">👤 Sign Up</button>
+        <button id="trackToggle" class="tab">📊 Track Stats</button>
       </div>
 
       <!-- SIGN UP -->
       <section id="signupSection">
-       <form id="signup-form" class="space-y-5">
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input id="name" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input id="email" type="email" required />
+          </div>
+          <button id="submit-btn" type="submit">Get Started</button>
+        </form>
 
-  <div class="space-y-2">
-    <label for="name">Full Name</label>
-    <input id="name" type="text" required />
-  </div>
-
-  <div class="space-y-2">
-    <label for="email">Email Address</label>
-    <input id="email" type="email" required />
-  </div>
-
-  <button id="submit-btn" type="submit">
-    Get Started
-  </button>
-
-</form>
-<p id="success-message"
-   class="hidden text-green-700 text-center mt-4">
-  🎉 You're signed up! Your referral code is below.
-</p>
+        <p id="success-message" class="hidden text-green-700 text-center mt-4">
+          🎉 You're signed up! Your referral code is below.
+        </p>
 
         <div id="result" class="hidden mt-6 text-center">
-
-  <p class="font-semibold mb-2">Your Code</p>
-
-  <div class="copy-box">
-    <span id="refCode"></span>
-    <button id="copy-btn" type="button">Copy</button>
-  </div>
-
-</div>
-
-
-          <p class="share-label">Share your link</p>
-          <div class="share-buttons">
-            <a id="shareFb" target="_blank">Facebook</a>
-            <a id="shareTw" target="_blank">Twitter</a>
-            <a id="shareWa" target="_blank">WhatsApp</a>
+          <p class="font-semibold mb-2">Your Code</p>
+          <div class="copy-box">
+            <span id="refCode"></span>
+            <button id="copy-btn" type="button">Copy</button>
           </div>
+        </div>
+
+        <p class="share-label mt-4">Share your link</p>
+        <div class="share-buttons">
+          <a id="shareFb" target="_blank">Facebook</a>
+          <a id="shareTw" target="_blank">Twitter</a>
+          <a id="shareWa" target="_blank">WhatsApp</a>
         </div>
       </section>
 
       <!-- TRACK -->
       <section id="trackerSection" class="hidden">
-        <label>Enter Your Referral Code</label>
-        <input id="trackerCode" />
+        <div class="form-group">
+          <label>Enter Your Referral Code</label>
+          <input id="trackerCode" />
+        </div>
         <button id="trackBtn">Check Stats</button>
-        <div id="trackerResult"></div>
+        <div id="trackerResult" class="mt-4"></div>
       </section>
 
-  
+      <!-- FOOTER INSIDE CARD -->
+      <div class="card-footer">
+        © 2023 Taxentric Solutions. All rights reserved.
+      </div>
+
     </div>
   </main>
 

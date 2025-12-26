@@ -1,9 +1,8 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbweM6Q6adZKmlVedialFERzzxkAqSyonh0MWIMpz2H5UNwN0MGhcs3KWcscfMBTIc6EBQ/exec";
 
-// Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
 
-  // --- SIGN UP FORM ---
+  // --- SIGN UP ---
   const form = document.querySelector("#signup-form");
   const submitBtn = document.querySelector("#submit-btn");
   const successMsg = document.querySelector("#success-message");
@@ -30,14 +29,12 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!response.ok) throw new Error("Submission failed");
+      const data = await response.json();
 
-      const data = await response.json(); // if your Apps Script returns JSON with referralCode
-      const refCode = data.referralCode || "ABC123"; // fallback if testing
-
+      const refCode = data.referralCode || "ABC123";
       document.getElementById("refCode").innerText = refCode;
       successMsg.classList.remove("hidden");
 
-      // Populate share links dynamically
       const baseUrl = "https://taxentricsolutions-max.github.io/referral-site/?ref=" + refCode;
       document.getElementById("shareFb").href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(baseUrl)}`;
       document.getElementById("shareTw").href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(baseUrl)}&text=${encodeURIComponent("Join our referral program!")}`;
@@ -52,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.disabled = false;
   });
 
-  // --- TOGGLE BUTTONS ---
+  // --- TOGGLE ---
   const signupToggle = document.getElementById("signupToggle");
   const trackToggle = document.getElementById("trackToggle");
   const signupSection = document.getElementById("signupSection");
@@ -70,6 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
     trackerSection.classList.remove("hidden");
     signupToggle.classList.remove("active");
     trackToggle.classList.add("active");
+  });
+
+  // --- COPY BUTTON ---
+  const copyBtn = document.getElementById("copy-btn");
+  copyBtn.addEventListener("click", () => {
+    const refCode = document.getElementById("refCode").innerText;
+    navigator.clipboard.writeText(refCode).then(() => alert("Copied to clipboard!"));
   });
 
 });
