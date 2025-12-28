@@ -9,7 +9,7 @@ const dashContent = document.querySelector("#dashboardContent");
 const dashError = document.querySelector("#dashError");
 
 if (code) {
-  fetch(`https://script.google.com/macros/s/AKfycbzwZ2WaJ4auCdjWPbEFxHGxZ2c2nP14vzAfoJl2tIbRXDutP-ssgG3SR3G8FuqdUt0NDQ/exec?code=${code}`)
+  fetch(`https://script.google.com/macros/s/AKfycbzqG6Za-A-rTCUF1sg_r546VTgirkIhg4pEjeP2jhu2kIqDeL414IC3ZPuD_LyiuXbOGA/exec?code=${code}`)
     .then(res => res.json())
     .then(data => {
       if (data.status === "success") {

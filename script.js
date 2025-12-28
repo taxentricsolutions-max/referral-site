@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwZ2WaJ4auCdjWPbEFxHGxZ2c2nP14vzAfoJl2tIbRXDutP-ssgG3SR3G8FuqdUt0NDQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqG6Za-A-rTCUF1sg_r546VTgirkIhg4pEjeP2jhu2kIqDeL414IC3ZPuD_LyiuXbOGA/exec";
 
 /* ===============================
    AUTO-FILL REFERRAL TRACKING
