@@ -32,23 +32,28 @@ body {
   padding: 32px;
 }
 
+/* Container */
 .header-inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* keeps logo centered */
 }
 
+/* Logo */
 .logo {
   height: 140px;
   width: auto;
   margin-bottom: 6px;
 }
 
+/* Back link */
 .back-link {
+  align-self: flex-start;      /* 👈 key line */
   font-size: 0.9rem;
   font-weight: 600;
   color: #111827;
   text-decoration: none;
+  margin-top: 4px;
 }
 
 .back-link:hover {
