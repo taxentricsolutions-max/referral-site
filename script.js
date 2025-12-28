@@ -1,108 +1,113 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmgLlVCAtBsm050FPfh8gllgm1bMh6k_f793S64O1_U-F_9zm1w3ujfeTgfXG-Dxnk2g/exec";
+document.addEventListener("DOMContentLoaded", () => {
 
-/* ===============================
-   AUTO-FILL REFERRAL TRACKING
-================================ */
-const params = new URLSearchParams(window.location.search);
-const referredByFromURL = params.get("ref");
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwmgLlVCAtBsm050FPfh8gllgm1bMh6k_f793S64O1_U-F_9zm1w3ujfeTgfXG-Dxnk2g/exec";
 
-if (referredByFromURL) {
-  localStorage.setItem("referredBy", referredByFromURL);
-}
+  /* ===============================
+     AUTO-FILL REFERRAL TRACKING
+  ================================ */
+  const params = new URLSearchParams(window.location.search);
+  const referredByFromURL = params.get("ref");
 
-const storedReferredBy = localStorage.getItem("referredBy") || "";
+  if (referredByFromURL) {
+    localStorage.setItem("referredBy", referredByFromURL);
+  }
 
-/* ===============================
-   DOM ELEMENTS
-================================ */
-const form = document.querySelector("#signup-form");
-const submitBtn = document.querySelector("#submit-btn");
-const successMsg = document.querySelector("#success-message");
-const resultDiv = document.querySelector("#result");
+  const storedReferredBy = localStorage.getItem("referredBy") || "";
 
-const refCodeSpan = document.querySelector("#refCode");
-const copyBtn = document.querySelector("#copy-btn");
+  /* ===============================
+     DOM ELEMENTS
+  ================================ */
+  const form = document.querySelector("#signup-form");
+  const submitBtn = document.querySelector("#submit-btn");
+  const successMsg = document.querySelector("#success-message");
+  const resultDiv = document.querySelector("#result");
 
-const shareFb = document.querySelector("#shareFb");
-const shareTw = document.querySelector("#shareTw");
-const shareWa = document.querySelector("#shareWa");
-const shareSms = document.querySelector("#shareSms");
-const dashboardLink = document.querySelector("#dashboardLink");
+  const refCodeSpan = document.querySelector("#refCode");
+  const copyBtn = document.querySelector("#copy-btn");
 
-/* ===============================
-   FORM SUBMIT
-================================ */
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  const shareFb = document.querySelector("#shareFb");
+  const shareTw = document.querySelector("#shareTw");
+  const shareWa = document.querySelector("#shareWa");
+  const shareSms = document.querySelector("#shareSms");
+  const dashboardLink = document.querySelector("#dashboardLink");
 
-  const name = document.querySelector("#name").value.trim();
-  const email = document.querySelector("#email").value.trim();
-
-  if (!name || !email) {
-    alert("Please enter your name and email.");
+  if (!form) {
+    console.error("Signup form not found");
     return;
   }
 
-  submitBtn.textContent = "Submitting...";
-  submitBtn.disabled = true;
+  /* ===============================
+     FORM SUBMIT
+  ================================ */
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        referredBy: storedReferredBy
-      })
-    });
+    const name = document.querySelector("#name").value.trim();
+    const email = document.querySelector("#email").value.trim();
 
-    if (!response.ok) throw new Error("Network error");
+    if (!name || !email) {
+      alert("Please enter your name and email.");
+      return;
+    }
 
-    const data = await response.json();
-    if (data.status !== "success") throw new Error(data.message);
+    submitBtn.textContent = "Submitting...";
+    submitBtn.disabled = true;
 
-    // Show success UI
-    successMsg.classList.remove("hidden");
-    resultDiv.classList.remove("hidden");
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          referredBy: storedReferredBy
+        })
+      });
 
-    // Populate referral info
-    refCodeSpan.textContent = data.referralCode;
-    dashboardLink.href = data.dashboardURL;
+      if (!response.ok) throw new Error("Network error");
 
-    // Share links
-    shareFb.href =
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.referralURL)}`;
+      const data = await response.json();
+      if (data.status !== "success") throw new Error(data.message);
 
-    shareTw.href =
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        "Join me at Taxentric!"
-      )}&url=${encodeURIComponent(data.referralURL)}`;
+      successMsg.classList.remove("hidden");
+      resultDiv.classList.remove("hidden");
 
-    shareWa.href =
-      `https://api.whatsapp.com/send?text=${encodeURIComponent(
-        "Join me at Taxentric! " + data.referralURL
-      )}`;
+      refCodeSpan.textContent = data.referralCode;
+      dashboardLink.href = data.dashboardURL;
 
-    const shareText = `Join me at Taxentric! Use my referral link: ${data.referralURL}`;
-    shareSms.href = `sms:?body=${encodeURIComponent(shareText)}`;
+      shareFb.href =
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.referralURL)}`;
 
-    // Reset form ONLY after success
-    form.reset();
+      shareTw.href =
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          "Join me at Taxentric!"
+        )}&url=${encodeURIComponent(data.referralURL)}`;
 
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong. Please try again.");
-  }
+      shareWa.href =
+        `https://api.whatsapp.com/send?text=${encodeURIComponent(
+          "Join me at Taxentric! " + data.referralURL
+        )}`;
 
-  submitBtn.textContent = "Get Started";
-  submitBtn.disabled = false;
-});
+      const shareText = `Join me at Taxentric! Use my referral link: ${data.referralURL}`;
+      shareSms.href = `sms:?body=${encodeURIComponent(shareText)}`;
 
-/* ===============================
-   COPY REFERRAL CODE
-================================ */
-copyBtn.addEventListener("click", () => {
-  navigator.clipboard.writeText(refCodeSpan.textContent);
-  alert("Referral code copied!");
+      form.reset();
+
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
+
+    submitBtn.textContent = "Get Started";
+    submitBtn.disabled = false;
+  });
+
+  /* ===============================
+     COPY CODE
+  ================================ */
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(refCodeSpan.textContent);
+    alert("Referral code copied!");
+  });
+
 });
