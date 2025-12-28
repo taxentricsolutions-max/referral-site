@@ -1,38 +1,33 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqKacblu42HnYPvDF4HfmLsnytwrc9rwkDGs2k5wAJ9SjlNynytMhoVpZ0bPz7AGBdnw/exec";
+const params = new URLSearchParams(window.location.search);
+const code = params.get("code");
 
-// Get referral code from URL query string
-const urlParams = new URLSearchParams(window.location.search);
-const referralCode = urlParams.get("code");
+const dashRefCode = document.querySelector("#dashRefCode");
+const dashClicks = document.querySelector("#dashClicks");
+const dashSignups = document.querySelector("#dashSignups");
+const dashRewards = document.querySelector("#dashRewards");
+const dashContent = document.querySelector("#dashboardContent");
+const dashError = document.querySelector("#dashError");
 
-// DOM elements
-const totalClicks = document.querySelector("#totalClicks");
-const totalSignups = document.querySelector("#totalSignups");
-const totalFiled = document.querySelector("#totalFiled");
-const dashboardLink = document.querySelector("#dashboardLink");
-
-if (!referralCode) {
-  alert("Referral code not found in URL.");
+if (code) {
+  fetch(`https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?code=${code}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        dashRefCode.textContent = data.referralCode;
+        dashClicks.textContent = data.clicks;
+        dashSignups.textContent = data.signups;
+        dashRewards.textContent = data.rewards;
+        dashContent.classList.remove("hidden");
+      } else {
+        dashError.textContent = data.message;
+        dashError.classList.remove("hidden");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      dashError.classList.remove("hidden");
+    });
 } else {
-  fetchReferralData(referralCode);
-}
-
-async function fetchReferralData(code) {
-  try {
-    const response = await fetch(`${SCRIPT_URL}?refCode=${encodeURIComponent(code)}`);
-    if (!response.ok) throw new Error("Network error");
-
-    const data = await response.json();
-
-    // Populate dashboard
-    totalClicks.textContent = data.clicks || 0;
-    totalSignups.textContent = data.signups || 0;
-    totalFiled.textContent = data.filed || 0;
-
-    // Optional: if you want to dynamically update the portal link
-    dashboardLink.href = data.dashboardURL || "https://portal.taxentric.com";
-
-  } catch (err) {
-    console.error(err);
-    alert("Failed to load dashboard data.");
-  }
+  dashError.textContent = "Referral code missing.";
+  dashError.classList.remove("hidden");
 }

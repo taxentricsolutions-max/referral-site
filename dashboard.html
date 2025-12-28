@@ -3,39 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Referral Dashboard - Taxentric</title>
-  <link rel="stylesheet" href="dashboard-style.css">
+  <title>Referral Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="page-bg"></div>
   <div class="page-overlay"></div>
 
   <header class="site-header">
-    <a href="https://taxentric.com" class="button" style="padding:8px 12px; font-size:.9rem;">← Back to Taxentric</a>
+    <a href="https://taxentric.com" class="back-link">← Back to Taxentric.com</a>
+    <img src="logo.png" class="logo" alt="Taxentric Solutions" />
   </header>
 
   <main class="page-center">
     <div class="card">
-      <h1 class="dashboard-header">Your Referral Dashboard</h1>
+      <h1>Your Referral Dashboard</h1>
+      <p class="subtitle">Track your referrals, signups, and rewards.</p>
 
-      <div class="dashboard-row">
-        <span>Total Clicks:</span>
-        <span id="totalClicks">0</span>
+      <div id="dashboardContent" class="hidden">
+        <p><strong>Referral Code:</strong> <span id="dashRefCode"></span></p>
+        <p><strong>Clicks:</strong> <span id="dashClicks"></span></p>
+        <p><strong>Signups:</strong> <span id="dashSignups"></span></p>
+        <p><strong>Rewards:</strong> $<span id="dashRewards"></span></p>
       </div>
 
-      <div class="dashboard-row">
-        <span>Total Signups:</span>
-        <span id="totalSignups">0</span>
-      </div>
+      <p id="dashError" class="hidden text-red-700">Error loading dashboard. Please try again.</p>
 
-      <div class="dashboard-row">
-        <span>Total Filed:</span>
-        <span id="totalFiled">0</span>
+      <div class="card-footer">
+        © 2023 Taxentric Solutions. All rights reserved.
       </div>
-
-      <a id="dashboardLink" href="https://portal.taxentric.com" class="button mt-4">
-        Go to Client Portal
-      </a>
     </div>
   </main>
 
