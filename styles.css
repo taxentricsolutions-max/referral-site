@@ -30,27 +30,30 @@ body {
   position: relative;
   z-index: 2;
   padding: 32px;
-  text-align: center;
+}
+
+.header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo {
   height: 140px;
-  display: block;
-  margin: 0 auto 8px;
+  width: auto;
+  margin-bottom: 6px;
 }
 
 .back-link {
-  display: inline-block;
   font-size: 0.9rem;
+  font-weight: 600;
   color: #111827;
   text-decoration: none;
-  font-weight: 600;
 }
 
 .back-link:hover {
   text-decoration: underline;
 }
-
 
 /* Center page content */
 .page-center {
