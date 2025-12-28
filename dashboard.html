@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Referral Dashboard - Taxentric</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-bg"></div>
+  <div class="page-overlay"></div>
+
+  <header class="site-header">
+    <a href="https://taxentric.com" class="button" style="padding:8px 12px; font-size:.9rem;">← Back to Taxentric</a>
+  </header>
+
+  <main class="page-center">
+    <div class="card">
+      <h1 class="dashboard-header">Your Referral Dashboard</h1>
+
+      <div class="dashboard-row">
+        <span>Total Clicks:</span>
+        <span id="totalClicks">0</span>
+      </div>
+
+      <div class="dashboard-row">
+        <span>Total Signups:</span>
+        <span id="totalSignups">0</span>
+      </div>
+
+      <div class="dashboard-row">
+        <span>Total Filed:</span>
+        <span id="totalFiled">0</span>
+      </div>
+
+      <a id="dashboardLink" href="https://portal.taxentric.com" class="button mt-4">
+        Go to Client Portal
+      </a>
+    </div>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

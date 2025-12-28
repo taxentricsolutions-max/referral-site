@@ -1,0 +1,24 @@
+/* Dashboard-specific styling */
+.dashboard-header {
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+}
+
+.dashboard-row:last-child {
+  border-bottom: none;
+}
+
+#dashboardLink {
+  display: block;
+  text-align: center;
+}

@@ -7,11 +7,11 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
   <div class="page-bg"></div>
   <div class="page-overlay"></div>
 
   <header class="site-header">
+    <a href="https://taxentric.com" class="back-link">← Back to Taxentric.com</a>
     <img src="logo.png" class="logo" alt="Taxentric Solutions" />
   </header>
 
@@ -19,25 +19,28 @@
     <div class="card">
 
       <h1>Join Our Referral Program</h1>
-      <p class="subtitle">Earn cash every time a friend files with us.</p>
-
-      <div class="tabs">
-        <button id="signupToggle" class="tab active">👤 Sign Up</button>
-        <button id="trackToggle" class="tab">📊 Track Stats</button>
-      </div>
+      <p class="subtitle">
+        Earn cash every time a friend files with us.
+      </p>
 
       <!-- SIGN UP -->
       <section id="signupSection">
-        <form id="signup-form">
-          <div class="form-group">
+        <form id="signup-form" class="space-y-5">
+
+          <div class="space-y-2">
             <label for="name">Full Name</label>
             <input id="name" type="text" required />
           </div>
-          <div class="form-group">
+
+          <div class="space-y-2">
             <label for="email">Email Address</label>
             <input id="email" type="email" required />
           </div>
-          <button id="submit-btn" type="submit">Get Started</button>
+
+          <button id="submit-btn" type="submit">
+            Get Started
+          </button>
+
         </form>
 
         <p id="success-message" class="hidden text-green-700 text-center mt-4">
@@ -50,24 +53,27 @@
             <span id="refCode"></span>
             <button id="copy-btn" type="button">Copy</button>
           </div>
+
+          <p class="share-label">Share your link</p>
+          <div class="share-buttons">
+            <a id="shareFb" target="_blank">Facebook</a>
+            <a id="shareTw" target="_blank">Twitter</a>
+            <a id="shareWa" target="_blank">WhatsApp</a>
+            <a id="shareSms" target="_blank">SMS</a>
+          </div>
+
+          <p class="mt-4">
+            <a id="dashboardLink" target="_blank">Go to your dashboard →</a>
+          </p>
         </div>
 
-        <p class="share-label mt-4">Share your link</p>
-        <div class="share-buttons">
-          <a id="shareFb" target="_blank">Facebook</a>
-          <a id="shareTw" target="_blank">Twitter</a>
-          <a id="shareWa" target="_blank">WhatsApp</a>
-        </div>
-      </section>
+        <!-- Legal terms -->
+        <p class="legal mt-6">
+          Rewards are earned only when a referred individual completes and files a paid tax return with Taxentric Solutions.
+          Referral signups alone do not qualify for rewards. Rewards are issued after filing is confirmed.
+          Taxentric Solutions reserves the right to verify referrals and deny rewards for fraud, abuse, or ineligible filings.
+        </p>
 
-      <!-- TRACK -->
-      <section id="trackerSection" class="hidden">
-        <div class="form-group">
-          <label>Enter Your Referral Code</label>
-          <input id="trackerCode" />
-        </div>
-        <button id="trackBtn">Check Stats</button>
-        <div id="trackerResult" class="mt-4"></div>
       </section>
 
       <!-- FOOTER INSIDE CARD -->
