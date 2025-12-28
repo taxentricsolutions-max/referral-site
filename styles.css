@@ -1,53 +1,187 @@
-* { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+/* Global */
+* {
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
-body { margin: 0; min-height: 100vh; background: black; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: black;
+}
 
 /* Background */
-.page-bg { position: fixed; inset: 0; background: url("./background.png") center / cover no-repeat; z-index: 0; }
-.page-overlay { position: fixed; inset: 0; background: linear-gradient(to bottom right, rgba(0,0,0,.35), rgba(0,0,0,.15), rgba(0,0,0,.4)); z-index: 1; }
+.page-bg {
+  position: fixed;
+  inset: 0;
+  background: url("./background.png") center / cover no-repeat;
+  z-index: 0;
+}
 
-/* Header */
-.site-header { position: relative; z-index: 2; padding: 32px; text-align:center; }
-.logo { height: 160px; width: auto; }
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(0,0,0,.35), rgba(0,0,0,.15), rgba(0,0,0,.4));
+  z-index: 1;
+}
 
-/* Center */
-.page-center { position: relative; z-index: 2; min-height: calc(100vh - 220px); display: flex; align-items: center; justify-content: center; padding: 20px; }
+/* Header: logo + back link left-aligned */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 32px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  height: 160px;
+  width: auto;
+}
+
+.back-link {
+  color: #111827;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+/* Center page content */
+.page-center {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 220px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
 
 /* Card */
-.card { width: 100%; max-width: 420px; background: rgba(255,255,255,.55); backdrop-filter: blur(18px); border-radius: 28px; padding: 32px; box-shadow: 0 40px 80px rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.5); }
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255,255,255,.55);
+  backdrop-filter: blur(18px);
+  border-radius: 28px;
+  padding: 32px;
+  box-shadow: 0 40px 80px rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.5);
+}
 
 /* Heading */
-h1 { text-align:center; font-size:2.1rem; font-weight:800; background: linear-gradient(270deg,#f97316,#ef4444,#f97316); background-size:400% 400%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation: gradientMove 6s ease infinite; margin-bottom:6px; }
-@keyframes gradientMove { 0% {background-position:0% 50%} 50% {background-position:100% 50%} 100% {background-position:0% 50%} }
+h1 {
+  font-size: 2.1rem;
+  font-weight: 800;
+  background: linear-gradient(270deg,#f97316,#ef4444,#f97316);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 6s ease infinite;
+  margin-bottom: 6px;
+  text-align: center;
+}
 
-.subtitle { text-align:center; color:#4b5563; margin-bottom:14px; }
+@keyframes gradientMove {
+  0% { background-position:0% 50% }
+  50% { background-position:100% 50% }
+  100% { background-position:0% 50% }
+}
 
-/* Tabs */
-.tabs { display:grid; grid-template-columns:1fr 1fr; background:#e5e7eb; padding:6px; border-radius:14px; margin-bottom:22px; }
-.tab { border:none; background:transparent; padding:10px; font-weight:600; border-radius:10px; cursor:pointer; color:#77797d; transition:all 0.25s ease; }
-.tab.active { background:white; color:#000; box-shadow:0 6px 14px rgba(0,0,0,.2); }
-.tab:not(.active):hover { color:#6b7280; }
+/* Subtitle */
+.subtitle {
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 20px; /* more spacing below subtitle */
+}
 
 /* Forms */
-.form-group { margin-bottom:16px; }
-label { font-weight:600; font-size:.9rem; display:block; margin-bottom:4px; }
-input { width:100%; height:44px; border-radius:10px; border:1px solid #d1d5db; padding:0 12px; }
-button { width:100%; height:46px; border:none; border-radius:12px; background:linear-gradient(to right,#f97316,#ef4444); color:white; font-weight:700; cursor:pointer; box-shadow:0 12px 24px rgba(249,115,22,.35); }
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  font-size: .9rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+input {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 0 12px;
+  margin-bottom: 16px;
+}
+
+button {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right,#f97316,#ef4444);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(249,115,22,.35);
+  margin-top: 12px; /* spacing above button */
+}
 
 /* Copy box */
-.copy-box { display:flex; gap:8px; margin:10px 0; }
-.copy-box span { flex:1; background:white; padding:8px; border-radius:8px; font-weight:700; }
+.copy-box {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.copy-box span {
+  flex: 1;
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  font-weight: 700;
+}
 
 /* Share buttons */
-.share-buttons { display:flex; gap:10px; margin-top:10px; }
-.share-buttons a { flex:1; text-align:center; padding:8px; background:#111827; color:white; border-radius:8px; font-size:.8rem; text-decoration:none; }
+.share-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.share-buttons a {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  background: #111827;
+  color: white;
+  border-radius: 8px;
+  font-size: .8rem;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 /* Footer inside card */
-.card-footer { margin-top:24px; text-align:center; font-size:.75rem; color:rgba(0,0,0,.6); }
+.card-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: .75rem;
+  color: rgba(0,0,0,.6);
+}
 
 /* Hidden utility */
-.hidden { display:none; }
+.hidden {
+  display: none;
+}
 
-.share-buttons { flex-wrap: wrap;}
-
-.share-buttons a { cursor: pointer;}
+/* Legal text */
+.legal {
+  font-size: 0.75rem;
+  color: #374151;
+  margin-top: 16px;
+}
