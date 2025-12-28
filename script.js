@@ -1,7 +1,7 @@
 // ==========================
 // CONFIG
 // ==========================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYKeSzL7hrrxrB69r-0352jz0Mvd2BJc-bP4F_uOj_shF6ypODrt6Uyafg6vr4UZ5G9A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6ZzKwY-FnKUIGrDtj_gtbY2JxvOL_lXLcwRC7RzBp37zWRyzSPWX5vRTnvCaL3jSM-A/exec";
 
 // ==========================
 // SELECTORS
@@ -63,9 +63,10 @@ form.addEventListener("submit", async (e) => {
   try {
     const response = await fetch(SCRIPT_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email })
     });
+    const text = await response.text();
+    console.log("Server response:", text);
 
     const data = await response.json();
 
