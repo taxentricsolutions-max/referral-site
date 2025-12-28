@@ -1,7 +1,7 @@
 // ==========================
 // CONFIG
 // ==========================
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6ZzKwY-FnKUIGrDtj_gtbY2JxvOL_lXLcwRC7RzBp37zWRyzSPWX5vRTnvCaL3jSM-A/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWhwyeN7V-QA6YVy9TJn8TZjWRBryiN9WXyvrmhIylH2xTUQaDWu4fLTs9P2gvtFuCeQ/exec";
 
 // ==========================
 // SELECTORS
@@ -65,32 +65,29 @@ form.addEventListener("submit", async (e) => {
       method: "POST",
       body: JSON.stringify({ name, email })
     });
-    const text = await response.text();
-    console.log("Server response:", text);
 
-    const data = await response.json();
+    const result = await response.json();
 
-    if (!response.ok || data.result !== "success") {
-      throw new Error(data.error || "Submission failed");
+    if (result.status !== "success") {
+      throw new Error(result.message || "Submission failed");
     }
 
-    // Show success message and generate referral code
+    // SUCCESS UI
     form.reset();
     successMsg.classList.remove("hidden");
 
-    // Simple referral code generator (6 alphanumeric)
-    const referralCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-    refCodeSpan.textContent = referralCode;
-    resultBox.classList.remove("hidden");
+    document.getElementById("refCode").innerText = result.refCode;
+    document.getElementById("result").classList.remove("hidden");
 
   } catch (err) {
     alert("Something went wrong. Please try again.");
-    console.error("Error:", err);
+    console.error(err);
   }
 
   submitBtn.innerText = "Get Started";
   submitBtn.disabled = false;
 });
+
 
 // ==========================
 // COPY REFERRAL CODE
