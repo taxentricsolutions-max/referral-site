@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  fetch(`https://script.google.com/macros/s/AKfycbyrvSMBO6vVSyZxPqTDbaGNkdkP7JiPd3UWE67048t24XrUcq0bT9XEQpnwaqvfpU_YUg/exec?code=${encodeURIComponent(code)}`
+  fetch(`https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbyVJJcWmT0SF__E2T4q-pzunNcE4PBQ6E8Jq6ZEGhK4fn4ELwgqp8KDSzu8VUgmHiE9iA/exec?code=${encodeURIComponent(code)}`
   )
     .then(res => res.json())
     .then(data => {
