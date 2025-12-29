@@ -196,4 +196,23 @@ button {
   font-size: 0.75rem;
   color: #374151;
   margin-top: 16px;
+  
+}.portal-btn {
+  display: inline-block;
+  background-color: #0066cc;  /* or match your brand color */
+  color: white;
+  padding: 14px 28px;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.portal-btn:hover {
+  background-color: #0052a3;
+}
+
+.portal-button-container {
+  margin: 30px 0;
 }
