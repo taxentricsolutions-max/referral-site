@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKYfiBToeBa6xeiNQOT3UydoYvDfssEGS-sECGaPWwNs-jWmF72QLNrO1v26lId3-00A/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz60mk8JClGWN4SdvOHEB0DC10LMXTKqea_aMg291ssIkipze1kOU1Tn_JOdCoHqAQ54g/exec";
 
   /* ===============================
      AUTO-FILL REFERRAL TRACKING
