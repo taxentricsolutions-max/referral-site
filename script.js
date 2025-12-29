@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyVJJcWmT0SF__E2T4q-pzunNcE4PBQ6E8Jq6ZEGhK4fn4ELwgqp8KDSzu8VUgmHiE9iA/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxt9d5iQadsJnUYoK44v9UkQhEbFrAl8hVwXaH1FNDnaLderLtC0wWFW7eqbUt0LobkMg/exec";
 
   /* ===============================
      AUTO-FILL REFERRAL TRACKING
@@ -53,21 +53,26 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.textContent = "Submitting...";
     submitBtn.disabled = true;
 
-    try {
-  const formData = new FormData();
-formData.append("name", name);
-formData.append("email", email);
-formData.append("referredBy", storedReferredBy || "");
+ try {
+  const response = await fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name: name,
+      email: email,
+      referredBy: storedReferredBy || ""
+    })
+  });
 
-const response = await fetch(SCRIPT_URL, {
-  method: "POST",
-  body: formData  // No headers needed – browser sets multipart/form-data or urlencoded
-});
+  if (!response.ok) throw new Error("Network error");
 
-      if (!response.ok) throw new Error("Network error");
+  const data = await response.json();
+  if (data.status !== "success") throw new Error(data.message);
 
-      const data = await response.json();
-      if (data.status !== "success") throw new Error(data.message);
+  // ... rest of success code (same as before)
+}
 
       successMsg.classList.remove("hidden");
       resultDiv.classList.remove("hidden");
