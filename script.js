@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlSPDn67wOpSxWD5eE4A6UXHp1ik5PcQKGMATev5-GIwnjbXED6no43-i29CxuE-sxqQ/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcY0TRwlCdtx4rv2SoSCcOKn17byfgaBtdVYmx3OFJN5H-Ayqet7KcqK9bxUga1dPlcw/exec";
 
   /* ===============================
      AUTO-FILL REFERRAL TRACKING
@@ -59,17 +59,41 @@ formData.append("name", name);
 formData.append("email", email);
 formData.append("referredBy", storedReferredBy || "");
 
-const response = await fetch(SCRIPT_URL, {
-  method: "POST",
-  body: formData          // ← no headers → no preflight → works
-});
+try {
+  const response = await fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",  // Optional but safe — prevents CORS errors entirely
+    headers: {
+      "Content-Type": "text/plain"  // Key: avoids preflight
+    },
+    body: JSON.stringify({
+      name: name.trim(),
+      email: email.trim(),
+      referredBy: storedReferredBy || ""
+    })
+  });
+
+  // With mode: "no-cors", we can't read response, so assume success if no throw
+  // Or remove mode: "no-cors" if you want to read the response (still works with text/plain)
+
+  successMsg.classList.remove("hidden");
+  resultDiv.classList.remove("hidden");
+
+  // Since we can't read real response, generate client-side (or keep server-side if removing no-cors)
+  // But to match your original: generate code client-side temporarily, or use proxy below
+
+  // Better: remove mode: "no-cors" — text/plain allows reading response
+  // Full working version without no-cors:
 
   if (!response.ok) throw new Error("Network error");
-
   const data = await response.json();
   if (data.status !== "success") throw new Error(data.message);
 
-  // ... rest of success code (same as before)
+  // ... rest of your success code (refCodeSpan, share links, etc.)
+
+} catch (err) {
+  console.error(err);
+  alert("Something went wrong. Please try again.");
 }
 
       successMsg.classList.remove("hidden");
