@@ -62,9 +62,9 @@ formData.append("referredBy", storedReferredBy || "");
 try {
   const response = await fetch(SCRIPT_URL, {
     method: "POST",
-    mode: "no-cors",  // Optional but safe — prevents CORS errors entirely
+    redirect: "follow",
     headers: {
-      "Content-Type": "text/plain"  // Key: avoids preflight
+      "Content-Type": "text/plain;charset=utf-8"  // This is the magic
     },
     body: JSON.stringify({
       name: name.trim(),
