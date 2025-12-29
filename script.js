@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcY0TRwlCdtx4rv2SoSCcOKn17byfgaBtdVYmx3OFJN5H-Ayqet7KcqK9bxUga1dPlcw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx939Sk3gP-yuzj8M2o66uxFkASQ65BsePYWwmGyFVl4s2RvacaFzdRy5UrbKYtaVy7Ng/exec";
   /* ===============================
      AUTO-FILL REFERRAL TRACKING
   ================================ */
