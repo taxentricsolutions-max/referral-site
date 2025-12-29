@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxt9d5iQadsJnUYoK44v9UkQhEbFrAl8hVwXaH1FNDnaLderLtC0wWFW7eqbUt0LobkMg/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlSPDn67wOpSxWD5eE4A6UXHp1ik5PcQKGMATev5-GIwnjbXED6no43-i29CxuE-sxqQ/exec";
 
   /* ===============================
      AUTO-FILL REFERRAL TRACKING
@@ -53,18 +53,16 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.textContent = "Submitting...";
     submitBtn.disabled = true;
 
- try {
-  const response = await fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      name: name,
-      email: email,
-      referredBy: storedReferredBy || ""
-    })
-  });
+ // Inside your form submit handler — leave exactly this:
+const formData = new FormData();
+formData.append("name", name);
+formData.append("email", email);
+formData.append("referredBy", storedReferredBy || "");
+
+const response = await fetch(SCRIPT_URL, {
+  method: "POST",
+  body: formData          // ← no headers → no preflight → works
+});
 
   if (!response.ok) throw new Error("Network error");
 
