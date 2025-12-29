@@ -62,7 +62,7 @@ const response = await fetch(SCRIPT_URL, {
         https://twitter.com/intent/tweet?text=${encodeURIComponent( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Join me at Taxentric!" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)}&url=${encodeURIComponent(data.referralURL)};
       shareWa.href =
         https://api.whatsapp.com/send?text=${encodeURIComponent( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Join me at Taxentric! " + data.referralURL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)};
-      const shareText = Join me at Taxentric! Use my referral link: ${data.referralURL};
+      const shareText = Sign up with Taxentric and get $25 off your tax return. Use my referral link to claim your discount: ${data.referralURL};
       shareSms.href = sms:?body=${encodeURIComponent(shareText)};
       form.reset();
     } catch (err) {
