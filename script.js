@@ -78,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
   console.error(err);
   alert("Something went wrong. Please try again.");
 }
-    }
     submitBtn.textContent = "Get Started";
     submitBtn.disabled = false;
   });
