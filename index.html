@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taxentric Referral Hub</title>
   <link rel="stylesheet" href="styles.css">
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get('ref');
+
+      if (ref) {
+        const query = window.location.search;
+        const hash = window.location.hash;
+        window.location.replace("/invite.html" + query + hash);
+      }
+      // If no ?ref → continue loading this page normally
+    })();
+  </script>
 </head>
 <body>
   <div class="page-bg"></div>
