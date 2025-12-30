@@ -363,13 +363,39 @@
     </div>
   </footer>
 
+ 
   <script>
-    // Personalization from URL params
-    const urlParams = new URLSearchParams(window.location.search);
-    const refName = urlParams.get('refName') || 'a friend';
 
-    document.getElementById('welcome').textContent = 
-      `Welcome! ${refName} invited you to save on professional tax prep`;
-  </script>
+  // Your logging endpoint – use your EXISTING SCRIPT_URL if you extended it
+  const LOG_URL = "https://script.google.com/macros/s/AKfycbzsLDNNDGpeSbEDm91Z__XuAviXIlMTNYEXg6b8AcK3scmFba9QxP2kPFJLrz5ChOm8/exec";
+  // OR new one if you created separate: const LOG_URL = "https://script.google.com/macros/s/NEW_ID/exec";
+
+  // Find the signup button
+  const signupBtn = document.querySelector('.btn-primary'); // the "Sign Up for Tax Services" button
+
+  if (signupBtn && ref) {
+    // Dynamically update the href to pass ref (even if TaxDome ignores it, it's harmless)
+    signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
+
+    // Log the intent when clicked
+    signupBtn.addEventListener('click', function(e) {
+      // We don't preventDefault() — let the link open normally
+      fetch(LOG_URL, {
+        method: 'POST',
+        mode: 'no-cors',           // Required for cross-origin Google Script
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify({
+          action: 'log_referred_signup_intent',
+          referralCode: ref,
+          timestamp: new Date().toISOString(),
+          source: 'invite_page_click'
+          // You could add more if you collect email/name later, but for now this is intent-only
+        })
+      }).catch(err => console.log('Logging error:', err)); // Silent fail is ok
+    });
+  }
+</script>
 </body>
 </html>
