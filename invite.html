@@ -376,22 +376,54 @@
   if (signupBtn && ref) {
     // Optional: pass ref to TaxDome URL
     signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
+signupBtn.addEventListener('click', function(e) {
+  e.preventDefault();  // ← Add this line to stop navigation
 
-    signupBtn.addEventListener('click', function() {
-      console.log("Logging referral click → code:", ref);  // debug line – you can remove later
+  console.log("Button clicked – ref value:", ref);
 
-      fetch(LOG_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          referralCode: ref,
-          source: 'invite_page_click',
-          notes: 'Clicked signup button'
-        })
-      })
-      .catch(err => console.log('Log send failed (normal with no-cors):', err));
-    });
+  if (!ref) {
+    console.log("No ref found – skipping fetch");
+    return;
+  }
+
+  const payload = {
+    referralCode: ref,
+    source: 'invite_page_click_debug',
+    notes: 'Test click – ' + new Date().toISOString()
+  };
+
+  console.log("Sending this payload:", payload);
+
+  fetch(LOG_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  })
+  .then(() => {
+    console.log("Fetch completed (no-cors mode – no real response visible)");
+    alert("Log attempt sent! Check your sheet and Apps Script Executions.");
+  })
+  .catch(err => {
+    console.error("Fetch failed:", err);
+    alert("Fetch error: " + err.message);
+  });
+});
+    //signupBtn.addEventListener('click', function() {
+      //console.log("Logging referral click → code:", ref);  // debug line – you can remove later
+
+      //fetch(LOG_URL, {
+        //method: 'POST',
+        //mode: 'no-cors',
+        //headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+       // body: JSON.stringify({
+       //   referralCode: ref,
+       //   source: 'invite_page_click',
+       //   notes: 'Clicked signup button'
+      //  })
+      //})
+    //  .catch(err => console.log('Log send failed (normal with no-cors):', err));
+   // });
   } else if (!ref) {
     console.log("No referral code in URL → skipping logging");
   }
