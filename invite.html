@@ -43,13 +43,26 @@
     }
 
     .logo {
-      height: 160px;
-      width: auto;
-      margin-bottom: 6px;
-      position: absolute;
-      top: 30px;
-      left: 30px;
-    }
+  position: fixed;              /* Sticks to viewport */
+  top: 20px;                    /* Small offset from top edge */
+  left: 20px;                   /* Small offset from left edge */
+  height: 120px;                /* Slightly smaller to not dominate corner */
+  width: auto;
+  z-index: 1000;                /* Stays above other content */
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .logo {
+    height: 90px;
+    top: 15px;
+    left: 15px;
+  }
+}
 
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
@@ -247,10 +260,9 @@
   </style>
 </head>
 <body>
-
+<img src="logo.png" alt="Taxentric Logo" class="logo">
   <header class="hero">
     <div class="container">
-      <img src="logo.png" alt="Taxentric Logo" class="logo">
       <h1 class="gradient-text" id="welcome">Welcome to Taxentric Solutions! You've been invited to save on professional tax prep</h1>
       <div class="discount">Claim <strong>$25 off</strong> your first filing when you sign up today.</div>
       <p>Thanks to your friend’s referral, you’ll get expert tax preparation with transparent, upfront pricing.</p> 
