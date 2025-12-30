@@ -365,67 +365,38 @@
 
  
   <script>
+  // Read URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get('ref') || urlParams.get('code') || '';
 
-  // Your logging endpoint – use your EXISTING SCRIPT_URL if you extended it
+  // Logging setup – replace with your ACTUAL script URL
   const LOG_URL = "https://script.google.com/macros/s/AKfycbzsLDNNDGpeSbEDm91Z__XuAviXIlMTNYEXg6b8AcK3scmFba9QxP2kPFJLrz5ChOm8/exec";
-  // OR new one if you created separate: const LOG_URL = "https://script.google.com/macros/s/NEW_ID/exec";
 
-  // Find the signup button
-  const signupBtn = document.querySelector('.btn-primary');  // the orange "Sign Up for Tax Services" button
+  const signupBtn = document.querySelector('.btn-primary');
 
   if (signupBtn && ref) {
-    // Optional: pass ref to TaxDome URL
+    // Pass ref to TaxDome (optional)
     signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
-signupBtn.addEventListener('click', function(e) {
-  e.preventDefault();  // ← Add this line to stop navigation
 
-  console.log("Button clicked – ref value:", ref);
+    signupBtn.addEventListener('click', function(e) {
+      // Debug logs – keep these for now
+      console.log("Button clicked! Referral code:", ref);
 
-  if (!ref) {
-    console.log("No ref found – skipping fetch");
-    return;
-  }
-
-  const payload = {
-    referralCode: ref,
-    source: 'invite_page_click_debug',
-    notes: 'Test click – ' + new Date().toISOString()
-  };
-
-  console.log("Sending this payload:", payload);
-
-  fetch(LOG_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    console.log("Fetch completed (no-cors mode – no real response visible)");
-    alert("Log attempt sent! Check your sheet and Apps Script Executions.");
-  })
-  .catch(err => {
-    console.error("Fetch failed:", err);
-    alert("Fetch error: " + err.message);
-  });
-});
-    //signupBtn.addEventListener('click', function() {
-      //console.log("Logging referral click → code:", ref);  // debug line – you can remove later
-
-      //fetch(LOG_URL, {
-        //method: 'POST',
-        //mode: 'no-cors',
-        //headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-       // body: JSON.stringify({
-       //   referralCode: ref,
-       //   source: 'invite_page_click',
-       //   notes: 'Clicked signup button'
-      //  })
-      //})
-    //  .catch(err => console.log('Log send failed (normal with no-cors):', err));
-   // });
-  } else if (!ref) {
-    console.log("No referral code in URL → skipping logging");
+      fetch(LOG_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          referralCode: ref,
+          source: 'invite_page_click',
+          notes: 'Test click on ' + new Date().toISOString()
+        })
+      })
+      .then(() => console.log("Log request sent (check sheet & Executions)"))
+      .catch(err => console.error("Fetch failed:", err));
+    });
+  } else {
+    console.log("No ref or button not found – no logging attached");
   }
 </script>
 </body>
