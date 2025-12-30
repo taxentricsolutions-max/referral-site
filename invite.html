@@ -371,30 +371,29 @@
   // OR new one if you created separate: const LOG_URL = "https://script.google.com/macros/s/NEW_ID/exec";
 
   // Find the signup button
-  const signupBtn = document.querySelector('.btn-primary'); // the "Sign Up for Tax Services" button
+  const signupBtn = document.querySelector('.btn-primary');  // the orange "Sign Up for Tax Services" button
 
   if (signupBtn && ref) {
-    // Dynamically update the href to pass ref (even if TaxDome ignores it, it's harmless)
+    // Optional: pass ref to TaxDome URL
     signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
 
-    // Log the intent when clicked
-    signupBtn.addEventListener('click', function(e) {
-      // We don't preventDefault() — let the link open normally
+    signupBtn.addEventListener('click', function() {
+      console.log("Logging referral click → code:", ref);  // debug line – you can remove later
+
       fetch(LOG_URL, {
         method: 'POST',
-        mode: 'no-cors',           // Required for cross-origin Google Script
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8'
-        },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
-          action: 'log_referred_signup_intent',
           referralCode: ref,
-          timestamp: new Date().toISOString(),
-          source: 'invite_page_click'
-          // You could add more if you collect email/name later, but for now this is intent-only
+          source: 'invite_page_click',
+          notes: 'Clicked signup button'
         })
-      }).catch(err => console.log('Logging error:', err)); // Silent fail is ok
+      })
+      .catch(err => console.log('Log send failed (normal with no-cors):', err));
     });
+  } else if (!ref) {
+    console.log("No referral code in URL → skipping logging");
   }
 </script>
 </body>
