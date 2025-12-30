@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taxentric – $25 Off Tax Prep + Earn Cash Referring Friends</title>
+  <meta name="description" content="Get $25 off your tax preparation when you file with Taxentric. Plus, join our referral program to earn $25 cash for every friend who files."/>
+  
+  <style>
+    :root {
+      --primary: #f97316;     /* orange start */
+      --secondary: #ef4444;   /* red end */
+      --text: #111827;
+      --light: #f9fafb;
+      --border: #d1d5db;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacOSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text);
+      background: var(--light);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    header.hero {
+      background: linear-gradient(135deg, #fffbeb 0%, #fee2e2 100%);
+      padding: 60px 0 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      height: 160px;
+      width: auto;
+      margin-bottom: 6px;
+      position: absolute;
+      top: 30px;
+      left: 30px;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .gradient-text {
+      background: linear-gradient(270deg, #f97316, #ef4444, #f97316);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: gradientMove 6s ease infinite;
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero .discount {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #15803d;
+      margin: 0.5rem 0 1.5rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      color: #4b5563;
+    }
+
+    .hero .cta-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s;
+      color: white;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #f97316, #ef4444);
+      border: 2px solid transparent;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #f97316;
+      border: 2px solid transparent;
+      background-image: linear-gradient(white, white), linear-gradient(to right, #f97316, #ef4444);
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+    }
+
+    section.pricing {
+      padding: 60px 0;
+      background: white;
+    }
+
+    section.join {
+      padding: 60px 0;
+      background: var(--light);
+      text-align: center;
+    }
+
+    section.join h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    section.join .btn {
+      font-size: 1.3rem;
+      padding: 18px 40px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: #6b7280;
+      font-size: 0.95rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Your pricing styles (kept mostly unchanged) */
+    .tax-pricing-section {
+      font-family: inherit;
+      padding: 0;
+      background: transparent;
+      text-align: center;
+    }
+
+    .tax-pricing-section h2 {
+      font-size: 2.6rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .tax-pricing-grid {
+      display: grid;
+      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      max-width: 1150px;
+      margin: auto;
+    }
+
+    .pricing-card-outer {
+      border: 2px solid #000;
+      border-radius: 20px;
+      background: #fff;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .pricing-card-inner {
+      background: #fff;
+      border: 2px solid #000;
+      border-radius: 16px;
+      padding: 28px 26px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      text-align: left;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pricing-card-inner h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #000;
+    }
+
+    .pricing-card-inner .price {
+      font-size: 1.9rem;
+      font-weight: bold;
+      margin: 1.2rem 0 1rem;
+      border-bottom: 1px solid #000;
+      padding-bottom: 0.8rem;
+      color: #000;
+    }
+
+    .pricing-card-inner .label {
+      font-size: 1.15rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #000;
+    }
+
+    .pricing-card-inner ul {
+      list-style: disc;
+      padding-left: 1.6rem;
+      margin: 0;
+      color: #000;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .book-note {
+      margin-top: 3rem;
+      font-size: 0.95rem;
+      color: #4b5563;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .hero .cta-buttons { flex-direction: column; }
+      .logo { position: static; display: block; margin: 0 auto 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="container">
+      <img src="logo.png" alt="Taxentric Logo" class="logo">
+      <h1 class="gradient-text" id="welcome">Welcome to Taxentric Solutions! You've been invited to save on professional tax prep</h1>
+      <div class="discount">Claim <strong>$25 off</strong> your first filing when you sign up today.</div>
+      <p>Thanks to your friend’s referral, you’ll get expert tax preparation with transparent, upfront pricing.</p> 
+	  <p>Not ready to file yet? That’s totally fine. You can still join the referral program and earn $25 cash for every friend who files with us.</p>
+
+      <div class="cta-buttons">
+        <a href="https://portal.taxentric.com/en-us/signup" class="btn btn-primary">Sign Up for Tax Services → $25 Off</a>
+        <a href="https://referrals.taxentric.com" class="btn btn-secondary">Just Join the Referral Program (Earn Cash)</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="tax-pricing-section">
+        <h2 class="gradient-text">Tax Preparation Pricing</h2>
+        <div class="tax-pricing-grid">
+          <!-- Individual Tax Prep -->
+          <div class="pricing-card-outer">
+            <div class="pricing-card-inner">
+              <h3>Individual Tax Preparation</h3>
+              <div class="price">$150 Base Fee</div>
+              <div class="label">Additional Fees:</div>
+              <ul>
+                <li>Schedule A – Itemized Deductions : $50</li>
+                <li>Schedule B – Interest & Dividends : $50</li>
+                <li>Schedule C – Business : $150</li>
+                <li>Schedule D – Capital Gains/Losses : $100</li>
+                <li>Schedule E – Supplemental Income & Loss : $150</li>
+                <li>Schedule F – Farm Income & Expenses : $300</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Business Tax Prep -->
+          <div class="pricing-card-outer">
+            <div class="pricing-card-inner">
+              <h3>Business Tax Preparation</h3>
+              <div class="price">Starting Fees</div>
+              <div class="label">Includes:</div>
+              <ul>
+                <li>Form 1065 – Partnership Return (2 Schedule K-1s) : $500</li>
+                <li>Form 1120-S – S Corp Return (1 Schedule K-1) : $600</li>
+                <li>Form 1120 – C Corp Return (1 Schedule K-1) : $600</li>
+              </ul>
+              <div class="label" style="margin-top:1.2rem;">Additional Fees:</div>
+              <ul>
+                <li>Schedule K-1 : $50 each</li>
+                <li>Form 941: $75/quarter</li>
+                <li>W-2 Filing: $40 each</li>
+                <li>1099 Filing: $20 each</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Non-Profit Tax Prep -->
+          <div class="pricing-card-outer">
+            <div class="pricing-card-inner">
+              <h3>Non-Profit Tax Preparation</h3>
+              <div class="price">By Form Type</div>
+              <div class="label">Includes:</div>
+              <ul>
+                <li>Form 990-N – e-Postcard : $75</li>
+                <li>Form 990-EZ – Short Form : $300</li>
+                <li>Form 990 – Full Return : $600</li>
+                <li>Form 990-PF – Private Foundation : $600</li>
+                <li>Form 990-T – Unrelated Business Income : $250</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="book-note">
+          Base fees apply to standard filings. Complex returns may require custom quotes. $25 discount will be automatically applied at checkout for referred clients.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="join" id="join-referral">
+    <div class="container">
+      <h2>Want to Earn $25 Cash Per Referral?</h2>
+      <p style="max-width: 700px; margin: 0 auto 2.5rem; color: #4b5563; font-size: 1.1rem;">
+        Join our referral program in seconds — no commitment to file taxes required.<br>
+        Get your own referral link and earn $25 every time a friend files with us.
+      </p>
+
+      <a href="https://referrals.taxentric.com" class="btn btn-primary" style="font-size: 1.3rem; padding: 18px 48px;">
+        Join Referral Program →
+      </a>
+
+      <p style="margin-top: 2rem; font-size: 0.95rem; color: #6b7280;">
+        Already a member? <a href="https://referrals.taxentric.com">Go to your dashboard</a>.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 Taxentric Solutions. All rights reserved. <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Personalization from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const refName = urlParams.get('refName') || 'a friend';
+
+    document.getElementById('welcome').textContent = 
+      `Welcome! ${refName} invited you to save on professional tax prep`;
+  </script>
+</body>
+</html>
