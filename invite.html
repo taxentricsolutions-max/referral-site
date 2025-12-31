@@ -495,57 +495,38 @@
   </footer>
 
 <script>
-  // ────────────────────────────────────────────────
-  // URL params + logging
-  // ────────────────────────────────────────────────
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get('ref') || urlParams.get('code') || '';
 
-  // Your actual logging endpoint
   const LOG_URL = "https://script.google.com/macros/s/AKfycbzsLDNNDGpeSbEDm91Z__XuAviXIlMTNYEXg6b8AcK3scmFba9QxP2kPFJLrz5ChOm8/exec";
-
   const signupBtn = document.getElementById('signup-btn');
 
   if (signupBtn && ref) {
-    // Pass ref to TaxDome
     signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
 
-    signupBtn.addEventListener('click', function(e) {
-      // Do NOT preventDefault() — let the <a> href navigate normally
-
+    signupBtn.addEventListener('click', function () {
       const fullNameInput = document.getElementById('visitor-name');
-      const fullName = fullNameInput ? fullNameInput.value.trim() : '(not provided)';
+      const fullName = fullNameInput ? fullNameInput.value.trim() : '';
 
-      console.log("Button clicked");
-      console.log("Full name from input:", fullName);
-      console.log("Referral code:", ref);
-
-      // Prepare payload
       const payload = {
         referralCode: ref,
-        visitorName: fullName,
+        visitorName: fullName || '(not provided)',
         source: 'invite_page_signup_click',
-        notes: 'Clicked signup button',
         timestamp: new Date().toISOString()
       };
 
-      console.log("Sending payload:", payload);
+      console.log("Beacon payload:", payload);
 
-      // Fire fetch (fire-and-forget)
-      fetch(LOG_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      }).catch(err => {
-        console.log('Background fetch failed (normal during navigation):', err);
-      });
+      const blob = new Blob(
+        [JSON.stringify(payload)],
+        { type: 'application/json' }
+      );
 
-      // Navigation happens automatically via <a> href
+      navigator.sendBeacon(LOG_URL, blob);
+      // navigation continues automatically
     });
-  } else {
-    console.log("Signup button or ref not found — no handler attached");
   }
 </script>
+
 </body>
 </html>
