@@ -139,7 +139,59 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
     }
+.cta-section {
+  padding: 60px 0 80px;          /* More bottom space before join section */
+  background: white;             /* Clean separation from pricing */
+  text-align: center;
+}
 
+.name-cta-group {
+  max-width: 480px;              /* Controls overall width – adjust if needed */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;                   /* Nice space between label, input, button */
+}
+
+.name-label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.name-input {
+  width: 100%;
+  padding: 18px 24px;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #111827;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+.cta-section .btn-primary {
+  width: 100%;                   /* Full width of the group → same as input */
+  max-width: none;               /* Override any previous max-width */
+  padding: 18px 32px;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  min-height: 60px;              /* Matches input height feel */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
     section.pricing {
       padding: 60px 0;
       background: white;
@@ -403,24 +455,33 @@
   </section>
 
   <!-- New CTA section below pricing -->
-  <section class="cta-section">
-    <div class="container">
-      <div class="name-field-wrapper">
-        <label for="visitor-name">Full Name (Helps us track your referral)</label>
-        <input type="text" id="visitor-name" placeholder="Full name" />
-      </div>
-
-      <a href="https://portal.taxentric.com/en-us/signup/" class="btn btn-primary" id="signup-btn">
-        Sign Up for Tax Services → $25 Off
+  <!-- CTA section with name field + signup button -->
+<section class="cta-section">
+  <div class="container">
+    <div class="name-cta-group">
+      <label for="visitor-name" class="name-label">Sign Up for Tax Services → $25 Off</label>
+      <input 
+        type="text" 
+        id="visitor-name" 
+        placeholder="Full name" 
+        class="name-input"
+      />
+      <a 
+        href="https://portal.taxentric.com/en-us/signup/" 
+        class="btn btn-primary" 
+        id="signup-btn"
+      >
+        CLAIM YOUR $25 DISCOUNT
       </a>
     </div>
-  </section>
+  </div>
+</section>
 <section class="join" id="join-referral">
     <div class="container">
-      <h2>Want to Earn $25 Cash Per Referral?</h2>
-      <p>
+      <h2>Not ready to file yet? That’s totally fine.</h2>
+      <p style="margin-bottom: 2rem;">
         Join our referral program in seconds — no commitment to file taxes required.<br>
-        Get your own referral link and earn $25 every time a friend files with us.
+		Get your own referral link and earn <strong>$25</strong> every time a friend files with us.
       </p>
       <a href="https://referrals.taxentric.com" class="btn btn-primary" style="font-size: 1.3rem; padding: 18px 48px;">
         Join Referral Program →
