@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Taxentric – $25 Off Tax Prep + Earn Cash Referring Friends</title>
-  <meta name="description" content="Get $25 off your tax preparation when you file with Taxentric. Plus, join our referral program to earn $25 cash for every friend who files."/>
+  <title>Welcome to Taxentric Solutions! You've been invited to save on professional tax prep</title>
+  <meta name="description" content="Get $25 off your tax preparation when you file with Taxentric."/>
   
   <style>
     :root {
@@ -256,26 +256,86 @@
       .hero h1 { font-size: 2.2rem; }
       .hero .cta-buttons { flex-direction: column; }
       .logo { position: static; display: block; margin: 0 auto 20px; }
+
+.name-field-wrapper {
+      max-width: 500px;
+      margin: 3rem auto 2rem;
+      text-align: center;
+    }
+
+    .name-field-wrapper label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: #111827;
+    }
+
+    .name-field-wrapper input {
+      width: 100%;
+      padding: 18px 24px;               /* Matches button padding feel */
+      font-size: 1.3rem;                /* Same font size as button */
+      line-height: 1.5;
+      border: 2px solid #d1d5db;
+      border-radius: 8px;
+      box-sizing: border-box;
+      background: white;
+      color: #111827;
+      transition: border-color 0.2s;
+    }
+
+    .name-field-wrapper input:focus {
+      outline: none;
+      border-color: #f97316;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+    }
+
+    /* Make sure the button looks consistent with the field */
+    .cta-section .btn-primary {
+      font-size: 1.3rem;
+      padding: 18px 48px;
+      min-width: 320px;                 /* Helps match perceived width */
+      display: inline-block;
+    }
+
+    /* Spacing before the restored join section */
+    .join {
+      padding: 80px 0 60px;
+      background: #f9fafb;
+      text-align: center;
+    }
+
+    .join h2 {
+      font-size: 2.4rem;
+      margin-bottom: 1.5rem;
+      color: #111827;
+    }
+
+    .join p {
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      color: #4b5563;
+      font-size: 1.15rem;
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
-<img src="logo.png" alt="Taxentric Logo" class="logo">
+  <img src="logo.png" alt="Taxentric Logo" class="logo">
+
   <header class="hero">
     <div class="container">
       <h1 class="gradient-text" id="welcome">Welcome to Taxentric Solutions! You've been invited to save on professional tax prep</h1>
       <div class="discount">Claim <strong>$25 off</strong> your first filing when you sign up today.</div>
-      <p>Thanks to your friend’s referral, you’ll get expert tax preparation with transparent, upfront pricing.</p> 
-	  <p>Not ready to file yet? That’s totally fine. You can still join the referral program and earn $25 cash for every friend who files with us.</p>
-
-      <div class="cta-buttons">
-        <a href="https://portal.taxentric.com/en-us/signup" class="btn btn-primary">Sign Up for Tax Services → $25 Off</a>
-        <a href="https://referrals.taxentric.com" class="btn btn-secondary">Just Join the Referral Program (Earn Cash)</a>
+      <p>Thanks to your friend’s referral, you’ll get expert tax preparation with transparent, upfront pricing.</p>
+      
+      <div class="cta-buttons" style="margin-top: 2rem;">
+        <!-- No more "Join Referral Program" button here -->
       </div>
     </div>
   </header>
 
-  <section class="pricing" id="pricing">
+  <<section class="pricing" id="pricing">
     <div class="container">
       <div class="tax-pricing-section">
         <h2 class="gradient-text">Tax Preparation Pricing</h2>
@@ -342,62 +402,76 @@
     </div>
   </section>
 
-  <section class="join" id="join-referral">
+  <!-- New CTA section below pricing -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="name-field-wrapper">
+        <label for="visitor-name">Full Name (Helps us track your referral)</label>
+        <input type="text" id="visitor-name" placeholder="Full name" />
+      </div>
+
+      <a href="https://portal.taxentric.com/en-us/signup/" class="btn btn-primary" id="signup-btn">
+        Sign Up for Tax Services → $25 Off
+      </a>
+    </div>
+  </section>
+<section class="join" id="join-referral">
     <div class="container">
       <h2>Want to Earn $25 Cash Per Referral?</h2>
-      <p style="max-width: 700px; margin: 0 auto 2.5rem; color: #4b5563; font-size: 1.1rem;">
+      <p>
         Join our referral program in seconds — no commitment to file taxes required.<br>
         Get your own referral link and earn $25 every time a friend files with us.
       </p>
-
       <a href="https://referrals.taxentric.com" class="btn btn-primary" style="font-size: 1.3rem; padding: 18px 48px;">
         Join Referral Program →
       </a>
-
     </div>
   </section>
-
   <footer>
     <div class="container">
       <p>© 2022 Taxentric Solutions. All rights reserved. <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a></p>
     </div>
   </footer>
 
- 
   <script>
-  // Read URL params
-  const urlParams = new URLSearchParams(window.location.search);
-  const ref = urlParams.get('ref') || urlParams.get('code') || '';
+    // ────────────────────────────────────────────────
+    // URL params + logging
+    // ────────────────────────────────────────────────
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get('ref') || urlParams.get('code') || '';
 
-  // Logging setup – replace with your ACTUAL script URL
-  const LOG_URL = "https://script.google.com/macros/s/AKfycbzsLDNNDGpeSbEDm91Z__XuAviXIlMTNYEXg6b8AcK3scmFba9QxP2kPFJLrz5ChOm8/exec";
+    // Your logging endpoint – replace with your actual URL
+    const LOG_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
 
-  const signupBtn = document.querySelector('.btn-primary');
+    const signupBtn = document.getElementById('signup-btn');
 
-  if (signupBtn && ref) {
-    // Pass ref to TaxDome (optional)
-    signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
+    if (signupBtn && ref) {
+      // Pass ref to TaxDome
+      signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
 
-    signupBtn.addEventListener('click', function(e) {
-      // Debug logs – keep these for now
-      console.log("Button clicked! Referral code:", ref);
+      signupBtn.addEventListener('click', function(e) {
+        e.preventDefault(); // stop navigation briefly to log first
 
-      fetch(LOG_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          referralCode: ref,
-          source: 'invite_page_click',
-          notes: 'Test click on ' + new Date().toISOString()
-        })
-      })
-      .then(() => console.log("Log request sent (check sheet & Executions)"))
-      .catch(err => console.error("Fetch failed:", err));
-    });
-  } else {
-    console.log("No ref or button not found – no logging attached");
-  }
-</script>
+        const fullName = document.getElementById('visitor-name').value.trim() || '(not provided)';
+
+        // Log to Google Sheet
+        fetch(LOG_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            referralCode: ref,
+            visitorName: fullName,
+            source: 'invite_page_signup_click',
+            notes: 'Clicked signup button',
+            timestamp: new Date().toISOString()
+          })
+        }).catch(err => console.log('Log send failed (normal with no-cors):', err));
+
+        // Now proceed to TaxDome
+        window.location.href = signupBtn.href;
+      });
+    }
+  </script>
 </body>
 </html>
