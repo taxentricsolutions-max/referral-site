@@ -498,7 +498,7 @@
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get('ref') || urlParams.get('code') || '';
 
-  const LOG_URL = "https://script.google.com/macros/s/AKfycbzMvRtSQFd8dF2KSpUBfVONPavCz7Unj_fokR2IV0XoN6WNwS3BvYGLmIQltSmZQt8yKw/exec";
+  const LOG_URL = "https://script.google.com/macros/s/AKfycbyRrgOdZRQugAku_AH6FiR2AEs_UIqcIGnEcyU4sAMG5ErhXHTSIUTITNC85XR3IF-tZg/exec";
   const signupBtn = document.getElementById('signup-btn');
 
   if (signupBtn && ref) {
@@ -509,22 +509,17 @@
       const fullName = fullNameInput ? fullNameInput.value.trim() : '';
 
       const payload = {
-        referralCode: ref,
-        visitorName: fullName || '(not provided)',
-        source: 'invite_page_signup_click',
-        timestamp: new Date().toISOString()
-      };
+  referralCode: ref,
+  visitorName: fullName,
+  source: 'invite_page_signup_click',
+  timestamp: new Date().toISOString()
+};
 
-      console.log("Beacon payload:", payload);
+navigator.sendBeacon(
+  LOG_URL,
+  new Blob([JSON.stringify(payload)], { type: 'text/plain' })
+);
 
-      const blob = new Blob(
-        [JSON.stringify(payload)],
-        { type: 'application/json' }
-      );
-
-      navigator.sendBeacon(LOG_URL, blob);
-      // navigation continues automatically
-    });
   }
 </script>
 
