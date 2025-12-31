@@ -507,26 +507,37 @@
     const signupBtn = document.getElementById('signup-btn');
 
     if (signupBtn && ref) {
-      // Pass ref to TaxDome
-      signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
+  // Pass ref to TaxDome URL
+  signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
 
-      signupBtn.addEventListener('click', function(e) {
-  // Remove preventDefault for this test – let the <a> href work normally
-  // e.preventDefault();
+  signupBtn.addEventListener('click', function() {
+    const fullName = document.getElementById('visitor-name').value.trim() || '(not provided)';
 
-  const fullName = document.getElementById('visitor-name').value.trim() || '(not provided)';
+    console.log("Attempting to log:", {
+      referralCode: ref,
+      visitorName: fullName,
+      timestamp: new Date().toISOString()
+    });
 
-  console.log("Click detected – would log:", { 
-    referralCode: ref, 
-    visitorName: fullName 
+    // Fire fetch without waiting or blocking navigation
+    fetch(LOG_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        referralCode: ref,
+        visitorName: fullName,
+        source: 'invite_page_signup_click',
+        notes: 'Clicked signup',
+        timestamp: new Date().toISOString()
+      })
+    }).catch(err => {
+      console.log('Background log attempt failed (normal if page unloads fast):', err);
+    });
+
+    // Do NOT preventDefault or manually redirect — let the <a> tag do its job
   });
-
-  // Comment out the fetch entirely for this test
-  // fetch(...)
-
-  // Let the native <a> navigation happen
-});
-    }
+}
   </script>
 </body>
 </html>
