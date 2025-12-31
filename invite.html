@@ -509,18 +509,19 @@
       const fullName = fullNameInput ? fullNameInput.value.trim() : '';
 
       const payload = {
-  referralCode: ref,
-  visitorName: fullName,
-  source: 'invite_page_signup_click',
-  status: 'Pending',
-  notes: 'Verify sign up'
-};
+        referralCode: ref,
+        visitorName: fullName || '(not provided)',
+        source: 'invite_page_signup_click',
+        status: 'Pending',
+        notes: 'Verify sign up',
+        timestamp: new Date().toISOString()
+      };
 
-navigator.sendBeacon(
-  LOG_URL,
-  new Blob([JSON.stringify(payload)], { type: 'text/plain' })
-);
-
+      navigator.sendBeacon(
+        LOG_URL,
+        new Blob([JSON.stringify(payload)], { type: 'text/plain' })
+      );
+    });
   }
 </script>
 
