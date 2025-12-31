@@ -511,27 +511,21 @@
       signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
 
       signupBtn.addEventListener('click', function(e) {
-        e.preventDefault(); // stop navigation briefly to log first
+  // Remove preventDefault for this test – let the <a> href work normally
+  // e.preventDefault();
 
-        const fullName = document.getElementById('visitor-name').value.trim() || '(not provided)';
+  const fullName = document.getElementById('visitor-name').value.trim() || '(not provided)';
 
-        // Log to Google Sheet
-        fetch(LOG_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            referralCode: ref,
-            visitorName: fullName,
-            source: 'invite_page_signup_click',
-            notes: 'Clicked signup button',
-            timestamp: new Date().toISOString()
-          })
-        }).catch(err => console.log('Log send failed (normal with no-cors):', err));
+  console.log("Click detected – would log:", { 
+    referralCode: ref, 
+    visitorName: fullName 
+  });
 
-        // Now proceed to TaxDome
-        window.location.href = signupBtn.href;
-      });
+  // Comment out the fetch entirely for this test
+  // fetch(...)
+
+  // Let the native <a> navigation happen
+});
     }
   </script>
 </body>
