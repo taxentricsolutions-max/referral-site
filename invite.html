@@ -497,8 +497,8 @@
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get('ref') || urlParams.get('code') || '';
-
   const LOG_URL = "https://script.google.com/macros/s/AKfycbyRrgOdZRQugAku_AH6FiR2AEs_UIqcIGnEcyU4sAMG5ErhXHTSIUTITNC85XR3IF-tZg/exec";
+
   const signupBtn = document.getElementById('signup-btn');
 
   if (signupBtn && ref) {
@@ -506,21 +506,24 @@
 
     signupBtn.addEventListener('click', function () {
       const fullNameInput = document.getElementById('visitor-name');
-      const fullName = fullNameInput ? fullNameInput.value.trim() : '';
+      const fullName = fullNameInput ? fullNameInput.value.trim() : '(not provided)';
 
       const payload = {
         referralCode: ref,
-        visitorName: fullName || '(not provided)',
+        visitorName: fullName,
         source: 'invite_page_signup_click',
         status: 'Pending',
         notes: 'Verify sign up',
         timestamp: new Date().toISOString()
       };
 
-      navigator.sendBeacon(
-        LOG_URL,
-        new Blob([JSON.stringify(payload)], { type: 'text/plain' })
-      );
+      // Back to regular fetch – reliable and easy to debug
+      fetch(LOG_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).catch(err => console.log('Log send failed:', err));
     });
   }
 </script>
