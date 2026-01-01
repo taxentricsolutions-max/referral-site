@@ -56,6 +56,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!response.ok) throw new Error("Network error");
 
   const data = await response.json();
+console.log("SCRIPT RESPONSE:", data);
+
 
   if (data.status !== "success") throw new Error(data.message || "Failed");
 
