@@ -55,26 +55,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!response.ok) throw new Error("Network error");
 
-  const data = await response.json();
+const data = await response.json();
 console.log("SCRIPT RESPONSE:", data);
 
+if (!data.referralCode || !data.dashboardURL) {
+  throw new Error("Invalid server response");
+}
 
-  if (data.status !== "success") throw new Error(data.message || "Failed");
+// Show success UI
+successMsg.classList.remove("hidden");
+resultDiv.classList.remove("hidden");
 
-  // Success — show referral code, etc.
-  successMsg.classList.remove("hidden");
-  resultDiv.classList.remove("hidden");
+refCodeSpan.textContent = data.referralCode;
+dashboardLink.href = data.dashboardURL;
 
-  refCodeSpan.textContent = data.referralCode;
-  dashboardLink.href = data.dashboardURL;
+// Share links
+shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.referralURL)}`;
+shareTw.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return!")}&url=${encodeURIComponent(data.referralURL)}`;
+shareWa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return! " + data.referralURL)}`;
+shareSms.href = `sms:?body=${encodeURIComponent(
+  "Join me at Taxentric and get $25 off your tax return. Use my referral link: " + data.referralURL
+)}`;
 
-  shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.referralURL)}`;
-  shareTw.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return!")}&url=${encodeURIComponent(data.referralURL)}`;
-  shareWa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return! " + data.referralURL)}`;
-  const shareText = `Join me at Taxentric and get $25 off your tax return. Use my referral link to claim your discount: ${data.referralURL}`;
-  shareSms.href = `sms:?body=${encodeURIComponent(shareText)}`;
+form.reset();
 
-  form.reset();
 
 } catch (err) {
   console.error(err);
