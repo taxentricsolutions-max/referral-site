@@ -20,9 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
   )
     .then(res => res.json())
     .then(data => {
-      if (data.status !== "success") {
-        throw new Error(data.message || "Invalid response");
-      }
+      if (!data.referralCode) {
+  throw new Error("Invalid server response");
+}
+
 
       dashRefCode.textContent = data.referralCode;
       dashClicks.textContent = data.clicks;
