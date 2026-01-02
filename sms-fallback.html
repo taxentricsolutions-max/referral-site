@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share via SMS</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      background: #f9fafb;
+      color: #111827;
+    }
+    h1 { font-size: 24px; margin-bottom: 16px; }
+    p { font-size: 16px; margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    }
+    .copy-box {
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 24px auto;
+      max-width: 500px;
+      word-break: break-all;
+    }
+    @media (max-width: 600px) {
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Share via SMS</h1>
+
+  <p>Tap the button below to open your Messages app with the pre-filled message:</p>
+
+  <a id="smsButton" class="btn" href="#">Open Messages App</a>
+
+  <p style="margin-top: 32px;">If the button doesn't work, copy this text and paste it into your Messages app:</p>
+  <div class="copy-box" id="smsText"></div>
+
+  <script>
+    // Get the pre-filled text from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const text = decodeURIComponent(urlParams.get('text') || 'Join me at Taxentric and get $25 off your tax return! Use my referral link.');
+
+    // Display the text for copy-paste
+    document.getElementById('smsText').textContent = text;
+
+    // Build the sms: link
+    const smsLink = `sms:?body=${encodeURIComponent(text)}`;
+
+    // Set the button href
+    document.getElementById('smsButton').href = smsLink;
+
+    // Optional: Try to auto-open on mobile (some devices allow it)
+    if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+      window.location.href = smsLink;
+    }
+  </script>
+</body>
+</html>
