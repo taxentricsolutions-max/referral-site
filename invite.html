@@ -3,108 +3,207 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to Taxentric Solutions! You've been invited to save on professional tax prep</title>
-  <meta name="description" content="Get $25 off your tax preparation when you file with Taxentric."/>
-  
+  <title>Taxentric – $25 Off Tax Prep + Earn Cash Referring Friends</title>
+  <meta name="description" content="Get $25 off your tax preparation when you file with Taxentric. Plus, join our referral program to earn $25 cash for every friend who files."/>
+
   <style>
     :root {
-      --primary: #f97316;     /* orange start */
-      --secondary: #ef4444;   /* red end */
+      --primary: #f97316;        /* orange */
+      --secondary: #ef4444;      /* red */
       --text: #111827;
       --light: #f9fafb;
       --border: #d1d5db;
+      --warm-bg: #fffbeb;
+      --warm-border: #fee2e2;
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
-      font-family: system-ui, -apple-system, BlinkMacOSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--light);
       color: var(--text);
-      background: var(--light);
       line-height: 1.6;
     }
-
     .container {
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 20px;
-      position: relative;
     }
-
-    header.hero {
-      background: linear-gradient(135deg, #fffbeb 0%, #fee2e2 100%);
-      padding: 60px 0 40px;
-      text-align: center;
-      position: relative;
-    }
-
     .logo {
-  position: fixed;              /* Sticks to viewport */
-  top: 20px;                    /* Small offset from top edge */
-  left: 20px;                   /* Small offset from left edge */
-  height: 160px;                /* Slightly smaller to not dominate corner */
-  width: auto;
-  z-index: 1000;                /* Stays above other content */
-  transition: transform 0.3s ease;
-}
-
-.logo:hover {
-  transform: scale(1.05);
-}
-
-@media (max-width: 768px) {
-  .logo {
-    height: 90px;
-    top: 15px;
-    left: 15px;
-  }
-}
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      height: 160px;
+      width: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-
-    .gradient-text {
-      background: linear-gradient(270deg, #f97316, #ef4444, #f97316);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-size: 200% 200%;
-      animation: gradientMove 6s ease infinite;
-      display: inline-block;
+    .logo:hover {
+      transform: scale(1.05);
     }
-
+    @media (max-width: 768px) {
+      .logo {
+        height: 90px;
+        position: static;
+        margin: 1rem auto;
+        display: block;
+      }
+    }
+    header.hero {
+      background: linear-gradient(135deg, var(--warm-bg) 0%, var(--warm-border) 100%);
+      padding: 100px 0 60px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
     .hero h1 {
       font-size: 2.8rem;
       margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-
-    .hero .discount {
+    .discount {
       font-size: 1.5rem;
       font-weight: 600;
       color: #15803d;
-      margin: 0.5rem 0 1.5rem;
+      margin: 0.5rem 0 1rem;
     }
-
     .hero p {
       font-size: 1.2rem;
       max-width: 700px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1.5rem;
       color: #4b5563;
     }
-
-    .hero .cta-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
+    .section {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      margin-bottom: 32px;
+      overflow: hidden;
+      border: 1px solid rgba(249, 115, 22, 0.15);
     }
-
+    .section-header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 18px 24px;
+      font-size: 1.45rem;
+      font-weight: 600;
+      text-align: center;
+    }
+    .section-content {
+      padding: 26px;
+    }
+    .base-fee {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 20px 0;
+      text-align: center;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h3 {
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 18px;
+      font-size: 1.45rem;
+    }
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .price-item:last-child {
+      border-bottom: none;
+    }
+    .price-item strong {
+      flex: 1;
+      font-weight: 550;
+      color: var(--text);
+    }
+    .price {
+      font-weight: 700;
+      color: var(--secondary);
+      min-width: 100px;
+      text-align: right;
+    }
+    .additional-note {
+      font-size: 0.92rem;
+      color: #4b5563;
+      margin-top: 24px;
+      font-style: italic;
+      text-align: center;
+    }
+    .cta-section {
+      padding: 60px 0 80px;
+      background: white;
+      text-align: center;
+    }
+    .name-cta-group {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .name-label {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+    }
+    .name-input {
+      width: 100%;
+      padding: 18px 24px;
+      font-size: 1.3rem;
+      border: 2px solid #d1d5db;
+      border-radius: 8px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .name-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(249,115,22,0.15);
+    }
+    .cta-section .btn-primary {
+      width: 100%;
+      font-size: 1.3rem;
+      padding: 18px 32px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cta-section .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239,68,68,0.3);
+    }
+    section.join {
+      padding: 80px 0 60px;
+      background: var(--light);
+      text-align: center;
+    }
+    section.join h2 {
+      font-size: 2.4rem;
+      margin-bottom: 1.5rem;
+      color: #111827;
+    }
+    section.join p {
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+      color: #4b5563;
+      font-size: 1.15rem;
+    }
     .btn {
       display: inline-block;
       padding: 16px 32px;
@@ -115,104 +214,13 @@
       transition: all 0.2s;
       color: white;
     }
-
     .btn-primary {
-      background: linear-gradient(to right, #f97316, #ef4444);
-      border: 2px solid transparent;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
     }
-
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 8px 20px rgba(239,68,68,0.3);
     }
-
-    .btn-secondary {
-      background: white;
-      color: #f97316;
-      border: 2px solid transparent;
-      background-image: linear-gradient(white, white), linear-gradient(to right, #f97316, #ef4444);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
-    }
-
-    .btn-secondary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
-    }
-.cta-section {
-  padding: 60px 0 80px;          /* More bottom space before join section */
-  background: white;             /* Clean separation from pricing */
-  text-align: center;
-}
-
-.name-cta-group {
-  max-width: 480px;              /* Controls overall width – adjust if needed */
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;                   /* Nice space between label, input, button */
-}
-
-.name-label {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 0.5rem;
-}
-
-.name-input {
-  width: 100%;
-  padding: 18px 24px;
-  font-size: 1.3rem;
-  line-height: 1.5;
-  border: 2px solid #d1d5db;
-  border-radius: 8px;
-  background: white;
-  color: #111827;
-  box-sizing: border-box;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.name-input:focus {
-  outline: none;
-  border-color: #f97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
-}
-
-.cta-section .btn-primary {
-  width: 100%;                   /* Full width of the group → same as input */
-  max-width: none;               /* Override any previous max-width */
-  padding: 18px 32px;
-  font-size: 1.3rem;
-  border-radius: 8px;
-  min-height: 60px;              /* Matches input height feel */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-    section.pricing {
-      padding: 60px 0;
-      background: white;
-    }
-
-    section.join {
-      padding: 60px 0;
-      background: var(--light);
-      text-align: center;
-    }
-
-    section.join h2 {
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    section.join .btn {
-      font-size: 1.3rem;
-      padding: 18px 40px;
-    }
-
     footer {
       text-align: center;
       padding: 40px 0;
@@ -220,335 +228,242 @@
       font-size: 0.95rem;
       border-top: 1px solid var(--border);
     }
-
-    /* Your pricing styles (kept mostly unchanged) */
-    .tax-pricing-section {
-      font-family: inherit;
-      padding: 0;
-      background: transparent;
-      text-align: center;
-    }
-
-    .tax-pricing-section h2 {
-      font-size: 2.6rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .tax-pricing-grid {
-      display: grid;
-      gap: 30px;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      max-width: 1150px;
-      margin: auto;
-    }
-
-    .pricing-card-outer {
-      border: 2px solid #000;
-      border-radius: 20px;
-      background: #fff;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .pricing-card-inner {
-      background: #fff;
-      border: 2px solid #000;
-      border-radius: 16px;
-      padding: 28px 26px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-      text-align: left;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pricing-card-inner h3 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #000;
-    }
-
-    .pricing-card-inner .price {
-      font-size: 1.9rem;
-      font-weight: bold;
-      margin: 1.2rem 0 1rem;
-      border-bottom: 1px solid #000;
-      padding-bottom: 0.8rem;
-      color: #000;
-    }
-
-    .pricing-card-inner .label {
-      font-size: 1.15rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #000;
-    }
-
-    .pricing-card-inner ul {
-      list-style: disc;
-      padding-left: 1.6rem;
-      margin: 0;
-      color: #000;
-      font-size: 1.05rem;
-      line-height: 1.6;
-    }
-
-    .book-note {
-      margin-top: 3rem;
-      font-size: 0.95rem;
-      color: #4b5563;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
+      .section-content { padding: 18px; }
+      .price-item { flex-direction: column; gap: 6px; }
+      .price { text-align: left; }
+      header.hero { padding: 80px 0 50px; }
       .hero h1 { font-size: 2.2rem; }
-      .hero .cta-buttons { flex-direction: column; }
-      .logo { position: static; display: block; margin: 0 auto 20px; }
-
-.name-field-wrapper {
-      max-width: 500px;
-      margin: 3rem auto 2rem;
-      text-align: center;
-    }
-
-    .name-field-wrapper label {
-      display: block;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
-      font-size: 1.25rem;
-      color: #111827;
-    }
-
-    .name-field-wrapper input {
-      width: 100%;
-      padding: 18px 24px;               /* Matches button padding feel */
-      font-size: 1.3rem;                /* Same font size as button */
-      line-height: 1.5;
-      border: 2px solid #d1d5db;
-      border-radius: 8px;
-      box-sizing: border-box;
-      background: white;
-      color: #111827;
-      transition: border-color 0.2s;
-    }
-
-    .name-field-wrapper input:focus {
-      outline: none;
-      border-color: #f97316;
-      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
-    }
-
-    /* Make sure the button looks consistent with the field */
-    .cta-section .btn-primary {
-      font-size: 1.3rem;
-      padding: 18px 48px;
-      min-width: 320px;                 /* Helps match perceived width */
-      display: inline-block;
-    }
-
-    /* Spacing before the restored join section */
-    .join {
-      padding: 80px 0 60px;
-      background: #f9fafb;
-      text-align: center;
-    }
-
-    .join h2 {
-      font-size: 2.4rem;
-      margin-bottom: 1.5rem;
-      color: #111827;
-    }
-
-    .join p {
-      max-width: 700px;
-      margin: 0 auto 2.5rem;
-      color: #4b5563;
-      font-size: 1.15rem;
-      line-height: 1.6;
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Taxentric Logo" class="logo">
+
+  <img src="https://referrals.taxentric.com/logo.png" alt="Taxentric Solutions Logo" class="logo">
 
   <header class="hero">
     <div class="container">
-      <h1 class="gradient-text" id="welcome">Welcome to Taxentric Solutions! You've been invited to save on professional tax prep</h1>
+      <h1>Welcome to Taxentric Solutions!</h1>
       <div class="discount">Claim <strong>$25 off</strong> your first filing when you sign up today.</div>
       <p>Thanks to your friend’s referral, you’ll get expert tax preparation with transparent, upfront pricing.</p>
-      
-      <div class="cta-buttons" style="margin-top: 2rem;">
-        <!-- No more "Join Referral Program" button here -->
-      </div>
+      <p>Not ready to file yet? That’s totally fine. You can still join the referral program and earn $25 cash for every friend who files with us.</p>
     </div>
   </header>
 
-  <<section class="pricing" id="pricing">
+  <div class="container">
+
+    <!-- Individual -->
+    <div class="section">
+      <div class="section-header">Individual Tax Preparation</div>
+      <div class="section-content">
+        <div class="base-fee">$150 Base Fee</div>
+        <p style="text-align:center; margin-bottom: 24px;">
+          Includes Form 1040, one state return, standard credits/deductions, and basic e-filing.
+        </p>
+        <h3>Additional Fees (added only if applicable)</h3>
+        <div class="price-item">
+          <strong>Schedule A – Itemized Deductions</strong>
+          <span class="price">$50</span>
+        </div>
+        <div class="price-item">
+          <strong>Schedule B – Interest & Ordinary Dividends</strong>
+          <span class="price">$50</span>
+        </div>
+        <div class="price-item">
+          <strong>Schedule C – Business</strong>
+          <span class="price">$150 per business</span>
+        </div>
+        <div class="price-item">
+          <strong>Schedule D – Capital Gains/Losses</strong>
+          <span class="price"></span>
+        </div>
+        <div class="price-item" style="padding-left: 1.5rem;">
+          <strong>- Stocks (includes 10 transactions)</strong>
+          <span class="price">$100</span>
+        </div>
+        <div class="price-item" style="padding-left: 1.5rem;">
+          <strong>- Crypto (includes 25 transactions)</strong>
+          <span class="price">$150</span>
+        </div>
+        <div class="price-item" style="padding-left: 1.5rem;">
+          <strong>- Home sale (primary residence)</strong>
+          <span class="price">starting at $200</span>
+        </div>
+        <div class="price-item" style="padding-left: 1.5rem;">
+          <strong>- Rental/investment property sale</strong>
+          <span class="price">starting at $350</span>
+        </div>
+        <div class="price-item">
+          <strong>Schedule E – Supplemental Income & Loss</strong>
+          <span class="price">$150 base fee</span>
+        </div>
+        <div class="price-item">
+          <strong>Rental Property Reporting</strong>
+          <span class="price">$100 per property</span>
+        </div>
+        <div class="price-item">
+          <strong>Schedule F – Farm Income & Expenses</strong>
+          <span class="price">$300</span>
+        </div>
+        <div class="additional-note">
+          Note: Additional fees may apply for multiple states, complex credits, prior-year issues, etc.
+        </div>
+      </div>
+    </div>
+
+    <!-- Business -->
+    <div class="section">
+      <div class="section-header">Business Tax Preparation</div>
+      <div class="section-content">
+        <h3>Starting Fees</h3>
+        <p style="margin-bottom: 20px;">Includes basic return preparation, one state return (where applicable), and initial K-1s as noted.</p>
+        <div class="price-item">
+          <strong>Form 1065 – Partnership (includes 2 K-1s)</strong>
+          <span class="price">$500</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 1120-S – S Corporation (includes 1 K-1)</strong>
+          <span class="price">$600</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 1120 – C Corporation (includes 1 K-1)</strong>
+          <span class="price">$600</span>
+        </div>
+        <h3 style="margin-top: 32px;">Additional Fees</h3>
+        <div class="price-item">
+          <strong>Each additional Schedule K-1</strong>
+          <span class="price">$50</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 941 (quarterly)</strong>
+          <span class="price">$75 / quarter</span>
+        </div>
+        <div class="price-item">
+          <strong>W-2 Filing</strong>
+          <span class="price">$40 each</span>
+        </div>
+        <div class="price-item">
+          <strong>1099 Filing</strong>
+          <span class="price">$20 each</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Non-Profit -->
+    <div class="section">
+      <div class="section-header">Non-Profit Tax Preparation</div>
+      <div class="section-content">
+        <h3>By Form Type</h3>
+        <p style="margin-bottom: 20px;">Includes preparation of the specified Form 990-series return, e-filing (where available), and basic review.</p>
+        <div class="price-item">
+          <strong>Form 990-N – e-Postcard</strong>
+          <span class="price">$75</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 990-EZ – Short Form</strong>
+          <span class="price">$300</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 990 – Full Return</strong>
+          <span class="price">$600</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 990-PF – Private Foundation</strong>
+          <span class="price">$600</span>
+        </div>
+        <div class="price-item">
+          <strong>Form 990-T – Unrelated Business Income</strong>
+          <span class="price">$250</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="additional-note" style="margin-top: 2rem; text-align: center;">
+      Base fees apply to standard filings. Complex returns may require custom quotes.<br>
+      $25 discount will be automatically applied at checkout for referred clients.
+    </div>
+
+  </div>
+
+  <section class="cta-section">
     <div class="container">
-      <div class="tax-pricing-section">
-        <h2 class="gradient-text">Tax Preparation Pricing</h2>
-        <div class="tax-pricing-grid">
-          <!-- Individual Tax Prep -->
-          <div class="pricing-card-outer">
-            <div class="pricing-card-inner">
-              <h3>Individual Tax Preparation</h3>
-              <div class="price">$150 Base Fee</div>
-              <div class="label">Additional Fees:</div>
-              <ul>
-                <li>Schedule A – Itemized Deductions : $50</li>
-                <li>Schedule B – Interest & Dividends : $50</li>
-                <li>Schedule C – Business : $150</li>
-                <li>Schedule D – Capital Gains/Losses : $100</li>
-                <li>Schedule E – Supplemental Income & Loss : $150</li>
-                <li>Schedule F – Farm Income & Expenses : $300</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Business Tax Prep -->
-          <div class="pricing-card-outer">
-            <div class="pricing-card-inner">
-              <h3>Business Tax Preparation</h3>
-              <div class="price">Starting Fees</div>
-              <div class="label">Includes:</div>
-              <ul>
-                <li>Form 1065 – Partnership Return (2 Schedule K-1s) : $500</li>
-                <li>Form 1120-S – S Corp Return (1 Schedule K-1) : $600</li>
-                <li>Form 1120 – C Corp Return (1 Schedule K-1) : $600</li>
-              </ul>
-              <div class="label" style="margin-top:1.2rem;">Additional Fees:</div>
-              <ul>
-                <li>Schedule K-1 : $50 each</li>
-                <li>Form 941: $75/quarter</li>
-                <li>W-2 Filing: $40 each</li>
-                <li>1099 Filing: $20 each</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- Non-Profit Tax Prep -->
-          <div class="pricing-card-outer">
-            <div class="pricing-card-inner">
-              <h3>Non-Profit Tax Preparation</h3>
-              <div class="price">By Form Type</div>
-              <div class="label">Includes:</div>
-              <ul>
-                <li>Form 990-N – e-Postcard : $75</li>
-                <li>Form 990-EZ – Short Form : $300</li>
-                <li>Form 990 – Full Return : $600</li>
-                <li>Form 990-PF – Private Foundation : $600</li>
-                <li>Form 990-T – Unrelated Business Income : $250</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="book-note">
-          Base fees apply to standard filings. Complex returns may require custom quotes. $25 discount will be automatically applied at checkout for referred clients.
-        </div>
+      <div class="name-cta-group">
+        <label for="visitor-name" class="name-label"><h2>Sign Up for Tax Services</h2></label>
+        <input
+          type="text"
+          id="visitor-name"
+          placeholder="Full name"
+          class="name-input"
+        />
+        <a
+          href="https://portal.taxentric.com/en-us/signup/"
+          class="btn btn-primary"
+          id="signup-btn"
+        >
+          CLAIM YOUR $25 DISCOUNT
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- New CTA section below pricing -->
-  <!-- CTA section with name field + signup button -->
-<section class="cta-section">
-  <div class="container">
-    <div class="name-cta-group">
-      <label for="visitor-name" class="name-label"><h2>Sign Up for Tax Services</h2></label>
-      <input 
-        type="text" 
-        id="visitor-name" 
-        placeholder="Full name" 
-        class="name-input"
-      />
-      <a 
-        href="https://portal.taxentric.com/en-us/signup/" 
-        class="btn btn-primary" 
-        id="signup-btn"
-      >
-        CLAIM YOUR $25 DISCOUNT
-      </a>
-    </div>
-  </div>
-</section>
-<section class="join" id="join-referral">
+  <section class="join" id="join-referral">
     <div class="container">
       <h2>Not ready to file yet? That’s totally fine.</h2>
-      <p style="margin-bottom: 2rem;">
-        Join our referral program in seconds — no commitment to file taxes required.<br>
-		Get your own referral link and earn <strong>$25</strong> every time a friend files with us.
-      </p>
+      <p>Join our referral program in seconds — no commitment to file taxes required.<br>Get your own referral link and earn <strong>$25</strong> every time a friend files with us.</p>
       <a href="https://referrals.taxentric.com" class="btn btn-primary" style="font-size: 1.3rem; padding: 18px 48px;">
         Join Referral Program →
       </a>
     </div>
   </section>
+
   <footer>
     <div class="container">
-      <p>© 2022 Taxentric Solutions. All rights reserved. <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a></p>
+      <p>© 2026 Taxentric Solutions. All rights reserved.
+        <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a>
+      </p>
     </div>
   </footer>
 
 <script>
-  // ────────────────────────────────────────────────
-  // URL params + logging
-  // ────────────────────────────────────────────────
   const urlParams = new URLSearchParams(window.location.search);
   const ref = urlParams.get('ref') || urlParams.get('code') || '';
-
-  // Your actual logging endpoint
   const LOG_URL = "https://script.google.com/macros/s/AKfycbxLgVMGwCWZAhZ7ykFxrbgiA_C7JIQMXlarhH_x1Q_khrJbkAuF0qWEy18YmXHgXLfF8Q/exec";
 
   const signupBtn = document.getElementById('signup-btn');
-
   if (signupBtn && ref) {
-    // Pass ref to TaxDome
-    signupBtn.href = `https://portal.taxentric.com/en-us/signup/?ref=${encodeURIComponent(ref)}`;
-
-    signupBtn.addEventListener('click', function(e) {
-      // Do NOT preventDefault() — let the <a> href navigate normally
-
-      const fullNameInput = document.getElementById('visitor-name');
-      const fullName = fullNameInput ? fullNameInput.value.trim() : '(not provided)';
-
-      console.log("Button clicked");
-      console.log("Full name from input:", fullName);
-      console.log("Referral code:", ref);
-
-      // Prepare payload
-      const payload = {
-        referralCode: ref,
-        visitorName: fullName,
-        source: 'invite_page_signup_click',
-        status: 'Pending',
-		notes: 'Clicked signup button',
-        timestamp: new Date().toISOString()
-      };
-
-      console.log("Sending payload:", payload);
-
-      // Fire fetch (fire-and-forget)
+    signupBtn.href += `?ref=${encodeURIComponent(ref)}`;
+    signupBtn.addEventListener('click', () => {
+      const name = document.getElementById('visitor-name')?.value.trim() || '(not provided)';
       fetch(LOG_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      }).catch(err => {
-        console.log('Background fetch failed (normal during navigation):', err);
-      });
-
-      // Navigation happens automatically via <a> href
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        body: JSON.stringify({
+          referralCode: ref,
+          visitorName: name,
+          source: 'pricing_signup_click',
+          timestamp: new Date().toISOString()
+        })
+      }).catch(() => {});
     });
-  } else {
-    console.log("Signup button or ref not found — no handler attached");
+  }
+
+  const referralBtn = document.querySelector('#join-referral .btn-primary');
+  if (referralBtn && ref) {
+    referralBtn.addEventListener('click', () => {
+      fetch(LOG_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain;charset=utf-8'},
+        body: JSON.stringify({
+          referralCode: ref,
+          source: 'pricing_referral_join_click',
+          timestamp: new Date().toISOString()
+        })
+      }).catch(() => {});
+    });
   }
 </script>
-
 
 </body>
 </html>
