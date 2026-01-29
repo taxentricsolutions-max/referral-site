@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Taxentric $25 Referral</title>
   <link rel="stylesheet" href="styles.css">
-	<!-- Open Graph: Prioritize image, suppress text -->
+
+  <!-- reCAPTCHA v3 script - replace YOUR_SITE_KEY_HERE with your actual site key -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lfth1osAAAAADjieFotr6MOwsLFl9pc05YP88f5"></script>
+
+<!-- Open Graph: Prioritize image, suppress text -->
 <meta property="og:title" content="Taxentric Solutions Referral" />
 <meta property="og:description" content="Get $25 off your tax return this season." />
 <meta property="og:image" content="https://referrals.taxentric.com/referralmessage.png" />
@@ -16,7 +20,6 @@
 <meta property="og:url" content="https://referrals.taxentric.com/" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-
 <!-- Twitter/X: Large image, minimal text -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content=" " />
@@ -26,7 +29,6 @@
     (function() {
       const params = new URLSearchParams(window.location.search);
       const ref = params.get('ref');
-
       if (ref) {
         const query = window.location.search;
         const hash = window.location.hash;
@@ -39,7 +41,6 @@
 <body>
   <div class="page-bg"></div>
   <div class="page-overlay"></div>
-
   <header class="site-header">
   <div class="header-inner">
     <img src="logo.png" class="logo" alt="Taxentric" />
@@ -48,15 +49,12 @@
     </a>
   </div>
 </header>
-
   <main class="page-center">
     <div class="card">
-
       <h1>Join Our Referral Program</h1>
       <p class="subtitle">
         Earn cash every time a friend files with us.
       </p>
-
       <!-- SIGN UP -->
       <section id="signupSection">
         <form id="signup-form" class="space-y-5">
@@ -64,19 +62,17 @@
             <label for="name">Full Name</label>
             <input id="name" type="text" required />
           </div>
-
           <div class="space-y-2">
             <label for="email">Email Address</label>
             <input id="email" type="email" required />
           </div>
-
+          <!-- Hidden field for reCAPTCHA token -->
+          <input type="hidden" id="recaptcha-token" name="recaptcha-token">
           <button id="submit-btn" type="submit">Get Started</button>
         </form>
-
         <p id="success-message" class="hidden text-green-700 text-center mt-4">
           🎉 You’re signed up! Your referral links are below and in your email.
         </p>
-
         <div id="result" class="hidden mt-6 text-center">
           <p class="font-semibold mb-2">Your Code</p>
           <div class="copy-box">
@@ -90,34 +86,25 @@
             <a id="shareWa" target="_blank">WhatsApp</a>
             <a id="shareSms" target="_blank">SMS</a>
           </div>
-		  <div class="portal-button-container" style="margin-top: 30px; text-align: center;">
+  <div class="portal-button-container" style="margin-top: 30px; text-align: center;">
     <a href="https://portal.taxentric.com" target="_blank" class="portal-btn">
       Continue to Client Portal →
     </a>
   </div>
           <a id="dashboardLink" href="#" class="dashboard-link">Go to Dashboard</a>
         </div>
-
         <p class="legal">
           Rewards are earned only when a referred individual completes and files a paid tax return with Taxentric Solutions.
           Referral signups alone do not qualify for rewards. Rewards are issued after filing is confirmed.
           Taxentric Solutions reserves the right to verify referrals and deny rewards for fraud, abuse, or ineligible filings.
         </p>
-
       </section>
-
       <!-- FOOTER INSIDE CARD -->
       <div class="card-footer">
         © 2022 Taxentric Solutions. All rights reserved.
       </div>
-
     </div>
   </main>
-
   <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
