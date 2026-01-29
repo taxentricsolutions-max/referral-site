@@ -1,97 +1,119 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxApsamoSM4JF-FFzbz9utnbwYGIO9RaW1fD6IAAraC1s54vbKY4tuVWhLWieK9v8aW5A/exec";
-  /* ===============================
-     AUTO-FILL REFERRAL TRACKING
-  ================================ */
-  const params = new URLSearchParams(window.location.search);
-  const referredByFromURL = params.get("ref");
-  if (referredByFromURL) {
-    localStorage.setItem("referredBy", referredByFromURL);
-  }
-  const storedReferredBy = localStorage.getItem("referredBy") || "";
-  /* ===============================
-     DOM ELEMENTS
-  ================================ */
-  const form = document.querySelector("#signup-form");
-  const submitBtn = document.querySelector("#submit-btn");
-  const successMsg = document.querySelector("#success-message");
-  const resultDiv = document.querySelector("#result");
-  const refCodeSpan = document.querySelector("#refCode");
-  const copyBtn = document.querySelector("#copy-btn");
-  const shareFb = document.querySelector("#shareFb");
-  const shareTw = document.querySelector("#shareTw");
-  const shareWa = document.querySelector("#shareWa");
-  const shareSms = document.querySelector("#shareSms");
-  const dashboardLink = document.querySelector("#dashboardLink");
-  if (!form) {
-    console.error("Signup form not found");
-    return;
-  }
-  /* ===============================
-     FORM SUBMIT
-  ================================ */
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const name = document.querySelector("#name").value.trim();
-    const email = document.querySelector("#email").value.trim();
-    if (!name || !email) {
-      alert("Please enter your name and email.");
-      return;
-    }
-    submitBtn.textContent = "Submitting...";
-    submitBtn.disabled = true;
- try {
-  const response = await fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"  // ← This is the magic line
-    },
-    body: JSON.stringify({
-      name: name.trim(),
-      email: email.trim(),
-      referredBy: storedReferredBy || ""
-    })
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxApsamoSM4JF-FFzbz9utnbwYGIO9RaW1fD6IAAraC1s54vbKY4tuVWhLWieK9v8aW5A/exec";
+
+  /* ===============================
+     AUTO-FILL REFERRAL TRACKING
+  ================================= */
+  const params = new URLSearchParams(window.location.search);
+  const referredByFromURL = params.get("ref");
+  if (referredByFromURL) {
+    localStorage.setItem("referredBy", referredByFromURL);
+  }
+  const storedReferredBy = localStorage.getItem("referredBy") || "";
+
+  /* ===============================
+     DOM ELEMENTS
+  ================================= */
+  const form = document.querySelector("#signup-form");
+  const submitBtn = document.querySelector("#submit-btn");
+  const successMsg = document.querySelector("#success-message");
+  const resultDiv = document.querySelector("#result");
+  const refCodeSpan = document.querySelector("#refCode");
+  const copyBtn = document.querySelector("#copy-btn");
+  const shareFb = document.querySelector("#shareFb");
+  const shareTw = document.querySelector("#shareTw");
+  const shareWa = document.querySelector("#shareWa");
+  const shareSms = document.querySelector("#shareSms");
+  const dashboardLink = document.querySelector("#dashboardLink");
+
+  if (!form) {
+    console.error("Signup form not found");
+    return;
+  }
+
+  /* ===============================
+     FORM SUBMIT with reCAPTCHA v3
+  ================================= */
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.querySelector("#name").value.trim();
+    const email = document.querySelector("#email").value.trim();
+
+    if (!name || !email) {
+      alert("Please enter your name and email.");
+      return;
+    }
+
+    submitBtn.textContent = "Submitting...";
+    submitBtn.disabled = true;
+
+    try {
+      // Execute reCAPTCHA v3 - replace YOUR_SITE_KEY_HERE
+      const token = await new Promise((resolve, reject) => {
+        grecaptcha.ready(() => {
+          grecaptcha.execute('6Lfth1osAAAAADjieFotr6MOwsLFl9pc05YP88f5', { action: 'referral_signup' })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+
+      // Put token in hidden field
+      document.getElementById('recaptcha-token').value = token;
+
+      // Now send to your Google Apps Script backend (same as before)
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          referredBy: storedReferredBy || "",
+          recaptchaToken: token   // ← Added so backend can verify
+        })
+      });
+
+      if (!response.ok) throw new Error("Network error");
+
+      const data = await response.json();
+      console.log("SCRIPT RESPONSE:", data);
+
+      if (!data.referralCode || !data.dashboardURL) {
+        throw new Error("Invalid server response");
+      }
+
+      // Show success UI
+      successMsg.classList.remove("hidden");
+      resultDiv.classList.remove("hidden");
+      refCodeSpan.textContent = data.referralCode;
+      dashboardLink.href = data.dashboardURL;
+
+      // Share links
+      shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.referralURL)}`;
+      shareTw.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return!")}&url=${encodeURIComponent(data.referralURL)}`;
+      shareWa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return! " + data.referralURL)}`;
+      shareSms.href = `sms:?body=${encodeURIComponent(
+        "Join me at Taxentric and get $25 off your tax return. Use my referral link: " + data.referralURL
+      )}`;
+
+      form.reset();
+
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
+
+    submitBtn.textContent = "Get Started";
+    submitBtn.disabled = false;
   });
 
-  if (!response.ok) throw new Error("Network error");
-
-const data = await response.json();
-console.log("SCRIPT RESPONSE:", data);
-
-if (!data.referralCode || !data.dashboardURL) {
-  throw new Error("Invalid server response");
-}
-
-// Show success UI
-successMsg.classList.remove("hidden");
-resultDiv.classList.remove("hidden");
-
-refCodeSpan.textContent = data.referralCode;
-dashboardLink.href = data.dashboardURL;
-
-// Share links
-shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(data.referralURL)}`;
-shareTw.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return!")}&url=${encodeURIComponent(data.referralURL)}`;
-shareWa.href = `https://api.whatsapp.com/send?text=${encodeURIComponent("Join me at Taxentric and get $25 off your tax return! " + data.referralURL)}`;
-shareSms.href = `sms:?body=${encodeURIComponent(
-  "Join me at Taxentric and get $25 off your tax return. Use my referral link: " + data.referralURL
-)}`;
-
-form.reset();
-
-
-} catch (err) {
-  console.error(err);
-  alert("Something went wrong. Please try again.");
-}
-    submitBtn.textContent = "Get Started";
-    submitBtn.disabled = false;
-  });
-  /* ===============================
-     COPY CODE
-  ================================ */
-  copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(refCodeSpan.textContent);
-    alert("Referral code copied!");
-  });
+  /* ===============================
+     COPY CODE
+  ================================= */
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(refCodeSpan.textContent);
+    alert("Referral code copied!");
+  });
 });
