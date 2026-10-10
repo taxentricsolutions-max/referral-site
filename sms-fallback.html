@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share by text — Taxentric Solutions</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+</head>
+<body>
+  <main class="page-center">
+    <div class="card" style="text-align:center;">
+      <img src="logo.png" alt="Taxentric Solutions" style="height:64px;margin:0 auto 12px;display:block;">
+      <p class="eyebrow">Share by text</p>
+      <h1>Text your link to a friend</h1>
+      <p class="subtitle">Tap the button to open your messages with this text filled in.</p>
+      <a id="smsButton" class="btn" href="#">Open my messages</a>
+      <p class="muted" style="margin:24px 0 8px;">Button not working? Copy the message and paste it into a text:</p>
+      <div class="copy-row">
+        <span class="value" id="smsText" style="text-align:left;"></span>
+        <button id="copyBtn" class="btn" type="button">Copy</button>
+      </div>
+      <div class="card-footer">© <span data-year>2026</span> Taxentric Solutions. All rights reserved.</div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      TX.setYear();
+      var p = new URLSearchParams(window.location.search);
+      var raw = (p.get('text') || '').trim();
+      var ref = (p.get('ref') || '').trim();
+      var link = '';
+      if (/^https?:\/\//i.test(raw)) link = raw;                       // the email passes the referral link
+      else if (ref) link = location.origin + '/?ref=' + encodeURIComponent(ref);
+      var text = link
+        ? 'I use Taxentric Solutions for my taxes and bookkeeping and recommend them. You can get started here: ' + link
+        : (raw || 'I use Taxentric Solutions for my taxes and bookkeeping and recommend them: https://referrals.taxentric.com');
+      document.getElementById('smsText').textContent = text;
+      document.getElementById('smsButton').href = 'sms:?&body=' + encodeURIComponent(text);
+      document.getElementById('copyBtn').onclick = function (ev) { TX.copy(text, ev.currentTarget); };
+    })();
+  </script>
+</body>
+</html>
