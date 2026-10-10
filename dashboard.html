@@ -3,42 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Referral Dashboard</title>
+  <title>Referral Dashboard — Taxentric Solutions</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
 </head>
 <body>
   <div class="page-bg"></div>
   <div class="page-overlay"></div>
 
-  <header class="site-header">
-  <div class="header-inner">
-    <img src="logo.png" class="logo" alt="Taxentric" />
-    <a href="https://taxentric.com" class="back-link">
-      ← Back to Taxentric.com
-    </a>
+  <div class="layer">
+    <header class="site-header">
+      <img src="logo.png" class="logo" alt="Taxentric Solutions">
+      <a href="https://taxentric.com" class="back-link">← Taxentric.com</a>
+    </header>
+
+    <main class="page-center">
+      <div class="card">
+        <p class="eyebrow">Referral Dashboard</p>
+        <h1 id="dash-title">Your referrals</h1>
+        <p class="subtitle" id="dash-sub">Track your clicks, signups and rewards.</p>
+
+        <!-- Loading -->
+        <p id="dash-loading" class="muted" style="text-align:center;">Loading your dashboard…</p>
+
+        <!-- Code lookup (shown when no code is in the link, or the code isn't found) -->
+        <form id="lookup" class="hidden" novalidate>
+          <label for="lookup-code">Enter your referral code</label>
+          <div class="lookup">
+            <input id="lookup-code" type="text" maxlength="16" autocomplete="off" placeholder="e.g. 8F3A1C2D">
+            <button class="btn" type="submit">View</button>
+          </div>
+          <p id="dash-error" class="form-error hidden" role="alert"></p>
+          <p class="muted" style="margin-top:12px;">Your code is in the email you received when you joined. Not in the program yet? <a href="/">Join here</a>.</p>
+        </form>
+
+        <!-- Dashboard -->
+        <div id="dash" class="hidden">
+          <div class="stats">
+            <div class="stat highlight"><div class="num" id="s-earned">$0</div><div class="cap">Rewards earned</div></div>
+            <div class="stat"><div class="num" id="s-paid">$0</div><div class="cap">Paid to you</div></div>
+            <div class="stat"><div class="num" id="s-signups">0</div><div class="cap">Friends signed up</div></div>
+            <div class="stat"><div class="num" id="s-clicks">0</div><div class="cap">Link clicks</div></div>
+          </div>
+
+          <h2 style="margin-bottom:6px;">By service</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Service</th><th>Reward</th><th>Joined</th><th>Qualified</th><th>Earned</th></tr></thead>
+              <tbody id="s-table"></tbody>
+            </table>
+          </div>
+          <p class="muted" id="s-pending" style="margin-bottom:20px;"></p>
+
+          <label>Your referral link</label>
+          <div class="copy-row">
+            <span class="value" id="d-link"></span>
+            <button id="d-copy" class="btn" type="button">Copy</button>
+          </div>
+          <p class="muted">Rewards count once a friend's service is confirmed: a paid tax return filed, a monthly bookkeeping plan started, or an annual plan signed.</p>
+        </div>
+
+        <div class="card-footer">© <span data-year>2026</span> Taxentric Solutions. All rights reserved.</div>
+      </div>
+    </main>
   </div>
-</header>
-
-
-  <main class="page-center">
-    <div class="card">
-      <h1>Your Referral Dashboard</h1>
-      <p class="subtitle">Track your referrals, signups, and rewards.</p>
-
-      <div id="dashboardContent" class="hidden">
-        <p><strong>Referral Code:</strong> <span id="dashRefCode"></span></p>
-        <p><strong>Clicks:</strong> <span id="dashClicks"></span></p>
-        <p><strong>Signups:</strong> <span id="dashSignups"></span></p>
-        <p><strong>Rewards:</strong> $<span id="dashRewards"></span></p>
-      </div>
-
-      <p id="dashError" class="hidden text-red-700">Error loading dashboard. Please try again.</p>
-
-      <div class="card-footer">
-        © 2022 Taxentric Solutions. All rights reserved.
-      </div>
-    </div>
-  </main>
 
   <script src="dashboard.js"></script>
 </body>

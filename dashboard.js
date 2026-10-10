@@ -1,41 +1,80 @@
 document.addEventListener("DOMContentLoaded", () => {
+  TX.setYear();
 
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
+  const $ = (id) => document.getElementById(id);
+  const loading = $("dash-loading");
+  const lookup = $("lookup");
+  const dash = $("dash");
+  const errorEl = $("dash-error");
 
-  const dashRefCode = document.querySelector("#dashRefCode");
-  const dashClicks = document.querySelector("#dashClicks");
-  const dashSignups = document.querySelector("#dashSignups");
-  const dashRewards = document.querySelector("#dashRewards");
-  const dashContent = document.querySelector("#dashboardContent");
-  const dashError = document.querySelector("#dashError");
+  const clean = (v) => String(v || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
 
-  if (!code) {
-    dashError.textContent = "Referral code missing.";
-    dashError.classList.remove("hidden");
-    return;
+  function showLookup(message) {
+    loading.classList.add("hidden");
+    dash.classList.add("hidden");
+    lookup.classList.remove("hidden");
+    if (message) { errorEl.textContent = message; errorEl.classList.remove("hidden"); }
   }
 
-  fetch(`https://script.google.com/macros/s/AKfycbxApsamoSM4JF-FFzbz9utnbwYGIO9RaW1fD6IAAraC1s54vbKY4tuVWhLWieK9v8aW5A/exec?code=${encodeURIComponent(code)}`
-  )
-    .then(res => res.json())
-    .then(data => {
-      if (!data.referralCode) {
-  throw new Error("Invalid server response");
-}
-
-
-      dashRefCode.textContent = data.referralCode;
-      dashClicks.textContent = data.clicks;
-      dashSignups.textContent = data.signups;
-      dashRewards.textContent = data.rewards ?? "0";
-
-      dashContent.classList.remove("hidden");
-    })
-    .catch(err => {
+  async function load(code) {
+    loading.classList.remove("hidden");
+    lookup.classList.add("hidden");
+    errorEl.classList.add("hidden");
+    try {
+      const data = await TX.get({ code });
+      if (data.error || !data.referralCode) return showLookup("We couldn't find that referral code. Please check it and try again.");
+      render(data);
+    } catch (err) {
       console.error(err);
-      dashError.textContent = "Unable to load dashboard.";
-      dashError.classList.remove("hidden");
+      showLookup("We couldn't load your dashboard right now. Please try again in a moment.");
+    }
+  }
+
+  function render(d) {
+    if (d.firstName) $("dash-title").textContent = d.firstName + "'s referrals";
+    $("dash-sub").textContent = "Referral code " + d.referralCode;
+
+    $("s-earned").textContent = TX.money(d.earned != null ? d.earned : d.rewards);
+    $("s-paid").textContent = TX.money(d.paid);
+    $("s-signups").textContent = d.signups || 0;
+    $("s-clicks").textContent = d.clicks || 0;
+
+    const tbody = $("s-table");
+    tbody.innerHTML = "";
+    const services = d.services || {};
+    Object.keys(TAXENTRIC.SERVICES).forEach((key) => {
+      const conf = TAXENTRIC.SERVICES[key];
+      const s = services[key] || { signups: 0, qualified: 0, earned: 0, reward: conf.reward };
+      const tr = document.createElement("tr");
+      [conf.label, TX.money(s.reward || conf.reward), s.signups || 0, s.qualified || 0, TX.money(s.earned)].forEach((v) => {
+        const td = document.createElement("td");
+        td.textContent = v;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
     });
 
+    $("s-pending").textContent = d.pending
+      ? d.pending + (d.pending === 1 ? " friend is" : " friends are") + " signed up and waiting for their service to be confirmed."
+      : "";
+
+    const link = d.referralURL || (location.origin + "/?ref=" + d.referralCode);
+    $("d-link").textContent = link;
+    $("d-copy").onclick = (ev) => TX.copy(link, ev.currentTarget);
+
+    loading.classList.add("hidden");
+    lookup.classList.add("hidden");
+    dash.classList.remove("hidden");
+  }
+
+  lookup.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const code = clean($("lookup-code").value);
+    if (!code) return showLookup("Please enter your referral code.");
+    history.replaceState(null, "", "?code=" + code);
+    load(code);
+  });
+
+  const code = clean(new URLSearchParams(location.search).get("code"));
+  if (code) load(code); else showLookup();
 });

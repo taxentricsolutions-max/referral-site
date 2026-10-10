@@ -3,108 +3,141 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taxentric $25 Referral</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Taxentric Referral Program — Earn up to $250 per referral</title>
+  <meta name="description" content="Refer friends to Taxentric Solutions and earn $50 for tax preparation, $100 for monthly bookkeeping, and $250 for annual plans.">
 
-  <!-- reCAPTCHA v3 script - replace YOUR_SITE_KEY_HERE with your actual site key -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6Lfth1osAAAAADjieFotr6MOwsLFl9pc05YP88f5"></script>
-
-<!-- Open Graph: Prioritize image, suppress text -->
-<meta property="og:title" content="Taxentric Solutions Referral" />
-<meta property="og:description" content="Get $25 off your tax return this season." />
-<meta property="og:image" content="https://referrals.taxentric.com/referralmessage.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Sign up with Taxentric Solutions and get $25 off" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:url" content="https://referrals.taxentric.com/" />
-<meta property="og:type" content="website" />
-<meta property="og:locale" content="en_US" />
-<!-- Twitter/X: Large image, minimal text -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content=" " />
-<meta name="twitter:description" content=" " />
-<meta name="twitter:image" content="https://referrals.taxentric.com/referralmessage.png" />
   <script>
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      const ref = params.get('ref');
-      if (ref) {
-        const query = window.location.search;
-        const hash = window.location.hash;
-        window.location.replace("/invite.html" + query + hash);
-      }
-      // If no ?ref → continue loading this page normally
+    // Referral links (?ref=CODE) go straight to the invite page
+    (function () {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('ref')) window.location.replace('/invite.html' + window.location.search + window.location.hash);
     })();
   </script>
+
+  <!-- Link previews when the referral link is shared -->
+  <meta property="og:title" content="Taxentric Solutions: tax preparation, bookkeeping &amp; annual plans">
+  <meta property="og:description" content="Clear, upfront pricing for tax preparation, monthly bookkeeping and annual plans.">
+  <meta property="og:image" content="https://referrals.taxentric.com/share.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="Taxentric Solutions: tax preparation, bookkeeping and annual plans">
+  <meta property="og:url" content="https://referrals.taxentric.com/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://referrals.taxentric.com/share.jpg">
+
+  <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6Lfth1osAAAAADjieFotr6MOwsLFl9pc05YP88f5" async defer></script>
 </head>
 <body>
   <div class="page-bg"></div>
   <div class="page-overlay"></div>
-  <header class="site-header">
-  <div class="header-inner">
-    <img src="logo.png" class="logo" alt="Taxentric" />
-    <a href="https://taxentric.com" class="back-link">
-      ← Back to Taxentric.com
-    </a>
-  </div>
-</header>
-  <main class="page-center">
-    <div class="card">
-      <h1>Join Our Referral Program</h1>
-      <p class="subtitle">
-        Earn cash every time a friend files with us.
-      </p>
-      <!-- SIGN UP -->
-      <section id="signupSection">
-        <form id="signup-form" class="space-y-5">
-          <div class="space-y-2">
-            <label for="name">Full Name</label>
-            <input id="name" type="text" required />
+
+  <div class="layer">
+    <header class="site-header">
+      <img src="logo.png" class="logo" alt="Taxentric Solutions">
+      <a href="https://taxentric.com" class="back-link">← Taxentric.com</a>
+    </header>
+
+    <main class="page-center">
+      <div class="card">
+
+        <!-- SIGN UP -->
+        <section id="signupSection">
+          <p class="eyebrow">Referral Program</p>
+          <h1>Earn up to <span class="gradient-text">$250</span> for every friend you refer</h1>
+          <p class="subtitle">Share your link. When a friend becomes a client, you get paid.</p>
+
+          <div class="rewards">
+            <div class="reward">
+              <div class="amount gradient-text">$50</div>
+              <div class="label">Tax Preparation</div>
+              <div class="when">Friend files a paid tax return</div>
+            </div>
+            <div class="reward">
+              <div class="amount gradient-text">$100</div>
+              <div class="label">Monthly Bookkeeping</div>
+              <div class="when">Friend starts a monthly plan</div>
+            </div>
+            <div class="reward">
+              <div class="amount gradient-text">$250</div>
+              <div class="label">Annual Plan</div>
+              <div class="when">Friend signs up for an annual plan</div>
+            </div>
           </div>
-          <div class="space-y-2">
-            <label for="email">Email Address</label>
-            <input id="email" type="email" required />
+
+          <form id="signup-form" novalidate>
+            <div class="field">
+              <label for="name">Full name</label>
+              <input id="name" type="text" autocomplete="name" required maxlength="80">
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" type="email" autocomplete="email" required maxlength="120">
+            </div>
+            <!-- Honeypot: hidden from people, bots fill it in -->
+            <div class="hp-field" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <button id="submit-btn" class="btn" type="submit">Get my referral link</button>
+            <p id="form-error" class="form-error hidden" role="alert"></p>
+            <p class="recaptcha-note">Protected by reCAPTCHA. Google's <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms</a> apply.</p>
+          </form>
+
+          <ol class="steps">
+            <li><span><strong>Sign up</strong> and get your personal referral link.</span></li>
+            <li><span><strong>Share it</strong> by text, email or social media.</span></li>
+            <li><span><strong>Get paid</strong> once your friend's service qualifies. Track everything on your dashboard.</span></li>
+          </ol>
+        </section>
+
+        <!-- RESULT -->
+        <section id="result" class="hidden" aria-live="polite">
+          <div class="success-head">
+            <div class="big">🎉</div>
+            <h1 id="result-title">You're in!</h1>
+            <p class="subtitle" id="result-sub">Here's your referral link. We've also emailed it to you.</p>
           </div>
-          <!-- Hidden field for reCAPTCHA token -->
-          <input type="hidden" id="recaptcha-token" name="recaptcha-token">
-          <button id="submit-btn" type="submit">Get Started</button>
-        </form>
-        <p id="success-message" class="hidden text-green-700 text-center mt-4">
-          🎉 You’re signed up! Your referral links are below and in your email.
-        </p>
-        <div id="result" class="hidden mt-6 text-center">
-          <p class="font-semibold mb-2">Your Code</p>
-          <div class="copy-box">
-            <span id="refCode"></span>
-            <button id="copy-btn" type="button">Copy</button>
+
+          <label>Your referral link</label>
+          <div class="copy-row">
+            <span class="value" id="refLink"></span>
+            <button id="copy-link" class="btn" type="button">Copy</button>
           </div>
-          <p class="share-label">Share your link</p>
+
+          <label>Your code</label>
+          <div class="copy-row">
+            <span class="value" id="refCode"></span>
+            <button id="copy-code" class="btn btn-outline" type="button">Copy</button>
+          </div>
+
+          <label>Share it</label>
           <div class="share-buttons">
-            <a id="shareFb" target="_blank">Facebook</a>
-            <a id="shareTw" target="_blank">Twitter</a>
-            <a id="shareWa" target="_blank">WhatsApp</a>
-            <a id="shareSms" target="_blank">SMS</a>
+            <a id="shareSms" href="#">Text</a>
+            <a id="shareWa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+            <a id="shareFb" href="#" target="_blank" rel="noopener">Facebook</a>
+            <a id="shareEmail" href="#">Email</a>
           </div>
-  <div class="portal-button-container" style="margin-top: 30px; text-align: center;">
-    <a href="https://portal.taxentric.com" target="_blank" class="portal-btn">
-      Continue to Client Portal →
-    </a>
-  </div>
-          <a id="dashboardLink" href="#" class="dashboard-link">Go to Dashboard</a>
+
+          <div class="stack">
+            <a id="dashboardLink" href="#" class="btn">Go to my dashboard</a>
+            <a href="https://portal.taxentric.com" class="btn btn-outline" target="_blank" rel="noopener">Client portal</a>
+          </div>
+        </section>
+
+        <div class="legal">
+          <p><strong>Program terms.</strong> Rewards are earned only when a referred friend becomes a new paying client: $50 when they file a paid tax return, $100 when they start a monthly bookkeeping plan, and $250 when they sign up for an annual plan. Referral signups alone do not qualify. Rewards are issued after the service is confirmed.</p>
+          <p>Taxentric Solutions may verify referrals and deny rewards for fraud, abuse, self-referrals or ineligible services. Program terms may change at any time.</p>
         </div>
-        <p class="legal">
-          Rewards are earned only when a referred individual completes and files a paid tax return with Taxentric Solutions.
-          Referral signups alone do not qualify for rewards. Rewards are issued after filing is confirmed.
-          Taxentric Solutions reserves the right to verify referrals and deny rewards for fraud, abuse, or ineligible filings.
-        </p>
-      </section>
-      <!-- FOOTER INSIDE CARD -->
-      <div class="card-footer">
-        © 2022 Taxentric Solutions. All rights reserved.
+        <div class="card-footer">© <span data-year>2026</span> Taxentric Solutions. All rights reserved.</div>
       </div>
-    </div>
-  </main>
+    </main>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
