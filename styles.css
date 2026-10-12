@@ -141,7 +141,7 @@ input:focus-visible, button:focus-visible, a:focus-visible, .choice input:focus-
 .stack { display: grid; gap: 10px; }
 
 /* ---------- How it works / legal ---------- */
-.steps { list-style: none; counter-reset: step; display: grid; gap: 10px; margin: 26px 0 0; }
+.steps { list-style: none; counter-reset: step; display: grid; gap: 10px; margin: 22px 0 22px; }
 .steps li { counter-increment: step; display: flex; gap: 12px; font-size: .9rem; color: var(--ink-muted); }
 .steps li::before {
   content: counter(step); flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
