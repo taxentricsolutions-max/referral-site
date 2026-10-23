@@ -100,80 +100,12 @@
       <p class="lead">Tax preparation, bookkeeping and year-round support from a team that keeps pricing clear and upfront.</p>
     </section>
 
-    <section class="claim" id="claim">
-      <!-- Service choice -->
-      <div class="panel">
-        <h2>1. What can we help you with?</h2>
-        <p class="muted">Pick the service you're most interested in. You can add more later.</p>
-        <div class="choices" role="radiogroup" aria-label="Service">
-          <label class="choice">
-            <input type="radio" name="service" value="tax_prep" checked>
-            <span>
-              <span class="title">Tax Preparation</span>
-              <span class="desc">Individual, business and nonprofit returns</span>
-              <span class="from"><small>from</small>$150</span>
-            </span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="service" value="bookkeeping">
-            <span>
-              <span class="title">Monthly Bookkeeping</span>
-              <span class="desc">Categorization, reconciliation and monthly reports</span>
-              <span class="from"><small>from</small>$75/mo</span>
-            </span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="service" value="annual_plan">
-            <span>
-              <span class="title">Annual Plan</span>
-              <span class="desc">Tax prep, bookkeeping and advisory bundled into one plan</span>
-              <span class="from"><small>priced</small>to fit</span>
-            </span>
-          </label>
-        </div>
-      </div>
-
-      <!-- Contact form -->
-      <div class="panel" id="form-panel">
-        <h2>2. Tell us about you</h2>
-        <p class="muted" id="form-sub">We'll note who referred you, then take you to create your secure client portal account.</p>
-        <form id="client-form" novalidate>
-          <div class="field">
-            <label for="c-name">Full name</label>
-            <input id="c-name" type="text" autocomplete="name" required maxlength="80">
-          </div>
-          <div class="field">
-            <label for="c-email">Email address</label>
-            <input id="c-email" type="email" autocomplete="email" required maxlength="120">
-          </div>
-          <div class="field">
-            <label for="c-phone">Phone <span class="optional">(optional)</span></label>
-            <input id="c-phone" type="tel" autocomplete="tel" maxlength="30">
-          </div>
-          <div class="hp-field" aria-hidden="true">
-            <label for="c-website">Website</label>
-            <input id="c-website" type="text" tabindex="-1" autocomplete="off">
-          </div>
-          <button id="client-btn" class="btn" type="submit">Get started</button>
-          <p id="client-error" class="form-error hidden" role="alert"></p>
-          <p class="recaptcha-note">Protected by reCAPTCHA. Google's <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms</a> apply.</p>
-        </form>
-
-        <div id="client-done" class="done hidden" aria-live="polite">
-          <div class="big">✅</div>
-          <h2>You're all set!</h2>
-          <p class="muted" style="margin:8px 0 18px;">Next, create your free client portal account. That's where you'll upload documents and message our team.</p>
-          <a id="portal-link" class="btn" href="https://portal.taxentric.com/en-us/signup">Create my portal account →</a>
-        </div>
-      </div>
-    </section>
-
     <!-- PRICING -->
     <section class="pricing" id="pricing">
       <h2><span class="gradient-text">Pricing</span></h2>
       <p class="muted">Base fees for standard situations. We confirm your final fee after reviewing your documents, before any work begins.</p>
 
-      <details class="price-group" open>
+      <details class="price-group">
         <summary>Individual tax returns <span class="tag">from $150</span></summary>
         <div class="price-body">
           <div class="price-col">
@@ -276,6 +208,74 @@
           <p class="note">State filing fees, registered agent services and expedite fees are separate.</p>
         </div>
       </details>
+    </section>
+
+    <section class="claim" id="claim">
+      <!-- Service choice -->
+      <div class="panel">
+        <h2>1. What can we help you with?</h2>
+        <p class="muted">Pick the service you're most interested in. You can add more later.</p>
+        <div class="choices" role="radiogroup" aria-label="Service">
+          <label class="choice">
+            <input type="radio" name="service" value="tax_prep" checked>
+            <span>
+              <span class="title">Tax Preparation</span>
+              <span class="desc">Individual, business and nonprofit returns</span>
+              <span class="from"><small>from</small>$150</span>
+            </span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="service" value="bookkeeping">
+            <span>
+              <span class="title">Monthly Bookkeeping</span>
+              <span class="desc">Categorization, reconciliation and monthly reports</span>
+              <span class="from"><small>from</small>$75/mo</span>
+            </span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="service" value="annual_plan">
+            <span>
+              <span class="title">Annual Plan</span>
+              <span class="desc">Tax prep, bookkeeping and advisory bundled into one plan</span>
+              <span class="from"><small>priced</small>to fit</span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Contact form -->
+      <div class="panel" id="form-panel">
+        <h2>2. Tell us about you</h2>
+        <p class="muted" id="form-sub">We'll note who referred you, then take you to create your secure client portal account.</p>
+        <form id="client-form" novalidate>
+          <div class="field">
+            <label for="c-name">Full name</label>
+            <input id="c-name" type="text" autocomplete="name" required maxlength="80">
+          </div>
+          <div class="field">
+            <label for="c-email">Email address</label>
+            <input id="c-email" type="email" autocomplete="email" required maxlength="120">
+          </div>
+          <div class="field">
+            <label for="c-phone">Phone <span class="optional">(optional)</span></label>
+            <input id="c-phone" type="tel" autocomplete="tel" maxlength="30">
+          </div>
+          <div class="hp-field" aria-hidden="true">
+            <label for="c-website">Website</label>
+            <input id="c-website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <button id="client-btn" class="btn" type="submit">Get started</button>
+          <p id="client-error" class="form-error hidden" role="alert"></p>
+          <p class="recaptcha-note">Protected by reCAPTCHA. Google's <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms</a> apply.</p>
+        </form>
+
+        <div id="client-done" class="done hidden" aria-live="polite">
+          <div class="big">✅</div>
+          <h2>You're all set!</h2>
+          <p class="muted" style="margin:8px 0 18px;">Next, create your free client portal account. That's where you'll upload documents and message our team.</p>
+          <a id="portal-link" class="btn" href="https://portal.taxentric.com/en-us/signup">Create my portal account →</a>
+        </div>
+      </div>
     </section>
 
     <!-- JOIN -->
