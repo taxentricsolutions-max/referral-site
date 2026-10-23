@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unsubscribe | Taxentric Solutions</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script>
+    // Web app URL for the unsubscribe Google Sheet
+    window.UNSUB_URL = "https://script.google.com/macros/s/AKfycbziwmaJXzy_qyUHd_BcggqM304CFanAFlGS8wjafdUrkJ2VpymtKZCH4ZnX3E53w-al/exec";
+  </script>
+</head>
+<body>
+  <main class="page-center">
+    <div class="card" style="text-align:center;">
+      <img src="logo.png" alt="Taxentric Solutions" style="height:64px;margin:0 auto 12px;display:block;">
+
+      <div id="formView">
+        <p class="eyebrow">Email preferences</p>
+        <h1>Unsubscribe</h1>
+        <p class="subtitle">Confirm your email and we'll stop sending you marketing emails.</p>
+        <form id="unsubForm" novalidate style="text-align:left;">
+          <div class="field">
+            <label for="email">Your email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="reason">Why are you leaving? <span class="optional">(optional)</span></label>
+            <input type="text" id="reason" name="reason" maxlength="200" placeholder="Too many emails, not relevant, etc.">
+          </div>
+          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p id="err" class="form-error hidden" role="alert"></p>
+          <button id="submitBtn" class="btn" type="submit">Unsubscribe</button>
+        </form>
+        <p class="legal" style="text-align:center;">Clients will still get messages about their own tax work through the client portal.</p>
+      </div>
+
+      <div id="doneView" class="hidden">
+        <p class="eyebrow">All set</p>
+        <h1>You're unsubscribed</h1>
+        <p class="subtitle"><span id="doneEmail"></span> won't get any more marketing emails from us. Changes can take a few days to fully take effect.</p>
+        <a class="btn" href="https://taxentric.com">Visit taxentric.com</a>
+      </div>
+
+      <div class="card-footer">© 2023 Taxentric Solutions. All rights reserved.</div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var form = document.getElementById('unsubForm');
+      var emailEl = document.getElementById('email');
+      var err = document.getElementById('err');
+      var btn = document.getElementById('submitBtn');
+      var pre = (p.get('email') || '').trim();
+      // Ignore unfilled merge codes like [EMAIL] or {{email}}
+      if (pre && /^[^\s@\[\]{}]+@[^\s@\[\]{}]+\.[^\s@\[\]{}]+$/.test(pre)) emailEl.value = pre;
+      var source = (p.get('src') || 'email').slice(0, 40);
+
+      function showErr(msg) { err.textContent = msg; err.classList.remove('hidden'); }
+
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        err.classList.add('hidden');
+        var email = emailEl.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showErr('Please enter a valid email.'); return; }
+        btn.disabled = true; btn.textContent = 'One moment...';
+        fetch(window.UNSUB_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            email: email,
+            reason: document.getElementById('reason').value.trim(),
+            source: source,
+            website: form.website.value
+          })
+        }).then(function (r) { return r.json(); }).then(function (res) {
+          if (!res.ok) throw new Error(res.error || 'Something went wrong.');
+          document.getElementById('doneEmail').textContent = email;
+          document.getElementById('formView').classList.add('hidden');
+          document.getElementById('doneView').classList.remove('hidden');
+        }).catch(function (e) {
+          showErr((e && e.message && e.message.indexOf('valid') > -1) ? e.message :
+            'Something went wrong. Please try again, or email support@taxentric.com and we\'ll remove you.');
+          btn.disabled = false; btn.textContent = 'Unsubscribe';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
