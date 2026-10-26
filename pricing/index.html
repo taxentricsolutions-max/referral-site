@@ -17,7 +17,13 @@
   .tx-toggle small{display:block;font-weight:500;font-size:12px;opacity:.85;margin-top:2px}
   .tx-frames iframe{display:block;width:100%;border:0;height:900px;background:#FFF9F0}
   .tx-frames iframe[hidden]{display:none}
-  @media(max-width:420px){.tx-toggle button{font-size:14px}.tx-toggle small{font-size:11px}}
+  .tx-cta{max-width:760px;margin:8px auto 48px;padding:28px 20px;background:#fff;border:1px solid #F2E4C5;border-radius:16px;text-align:center}
+  .tx-cta-wrap{padding:0 16px}
+  .tx-cta h2{margin:0 0 8px;font-size:26px;font-weight:800;line-height:1.2}
+  .tx-cta p{margin:0 auto 20px;max-width:520px;color:#78716C;font-size:16px;line-height:1.55;font-weight:500}
+  .tx-cta a{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 28px;border-radius:999px;background:linear-gradient(90deg,#F97316,#DC2626);color:#fff;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 12px 24px -12px rgba(220,38,38,.6)}
+  .tx-cta a:focus-visible{outline:3px solid #F59E0B;outline-offset:2px}
+  @media(max-width:420px){.tx-toggle button{font-size:14px}.tx-toggle small{font-size:11px}.tx-cta h2{font-size:22px}}
 </style>
 </head>
 <body>
@@ -30,6 +36,13 @@
 <div class="tx-frames">
   <iframe id="tx-est" title="Fee estimator" src="https://referrals.taxentric.com/pricing/estimator.html"></iframe>
   <iframe id="tx-plans" title="Annual plans" hidden data-src="https://referrals.taxentric.com/pricing/plans.html"></iframe>
+</div>
+<div class="tx-cta-wrap">
+  <div class="tx-cta">
+    <h2>Not sure what you need?</h2>
+    <p>Book a free 15-minute call and we'll point you to the right service.</p>
+    <a href="https://calendly.com/taxentric-support/15min" target="_top">Book my call</a>
+  </div>
 </div>
 <script>
 (function(){
