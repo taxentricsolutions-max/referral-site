@@ -50,8 +50,10 @@
   tabE.onclick=function(){show("est")};
   tabP.onclick=function(){show("plans")};
 
-  /* Open on Annual plans when the page link ends in #annual-plans */
-  try{var hash=(window.top.location.hash||location.hash||"").toLowerCase();if(hash.indexOf("plan")>-1)show("plans")}catch(e){if(location.hash.toLowerCase().indexOf("plan")>-1)show("plans")}
+  /* Open on Annual plans on the annual plans page, or when the link ends in #annual-plans */
+  var where="";try{where=(window.top.location.pathname+window.top.location.hash).toLowerCase()}catch(e){}
+  where+=(location.pathname+location.hash).toLowerCase();
+  if(/annual|#.*plan/.test(where))show("plans");
 
   function pageScrollTo(frame,y){
     try{
