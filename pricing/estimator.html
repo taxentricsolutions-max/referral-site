@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fee Estimator | Taxentric Solutions</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF9F0;--soft:#FFF3DA;--white:#FFF;--ink:#292524;--mu:#78716C;--line:#F2E4C5;--or:#F97316;--red:#DC2626;--amb:#F59E0B}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+button{font-family:inherit}
+.gt{background:linear-gradient(90deg,var(--or),var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bg{background:linear-gradient(90deg,var(--or),var(--red))}
+.fr:focus-visible{outline:3px solid var(--amb);outline-offset:2px}
+.hero{max-width:760px;margin:0 auto;padding:3.5rem 1.5rem 2rem;text-align:center}
+.hero .eb{text-transform:uppercase;letter-spacing:.2em;font-size:.75rem;font-weight:800;color:var(--or);margin:0}
+.hero h1{font-size:2.3rem;font-weight:900;line-height:1.15;margin:.75rem 0 0}
+@media(min-width:640px){.hero h1{font-size:3rem}}
+.hero p.lead{color:var(--mu);font-size:1.1rem;line-height:1.6;margin:1rem auto 0;max-width:34rem}
+.wrap{max-width:640px;margin:0 auto;padding:0 1.25rem 4rem}
+.card{background:var(--white);border:1px solid var(--line);border-radius:1.25rem;padding:1.75rem}
+@media(min-width:640px){.card{padding:2.5rem}}
+.bar{height:6px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:1.75rem}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--or),var(--red));transition:width .3s}
+.head{text-align:center;margin-bottom:1.5rem}
+.tag{display:inline-block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--or);margin-bottom:.5rem}
+h2{font-size:1.45rem;font-weight:800;margin:0;line-height:1.3}
+.sub{font-size:.92rem;color:var(--mu);margin:.6rem 0 0;line-height:1.55}
+.cost{display:inline-block;margin-top:.75rem;font-size:.8rem;font-weight:700;color:var(--or);background:var(--soft);padding:.25rem .7rem;border-radius:99px}
+.list{display:grid;gap:.6rem}
+.ch{display:flex;align-items:center;gap:.85rem;width:100%;text-align:left;padding:1rem 1.1rem;border-radius:1rem;border:1.5px solid var(--line);background:var(--white);cursor:pointer;color:var(--ink);transition:border-color .15s,background .15s}
+.ch:hover{border-color:var(--amb)}
+.ch.on{border-color:var(--or);background:var(--soft)}
+.mk{width:1.35rem;height:1.35rem;min-width:1.35rem;border:2px solid var(--line);display:flex;align-items:center;justify-content:center}
+.r .mk{border-radius:99px}.x .mk{border-radius:.35rem}
+.ch.on .mk{border-color:var(--or);background:var(--or)}
+.mk svg{width:.7rem;height:.7rem;opacity:0}.ch.on .mk svg{opacity:1}
+.tx{flex:1;min-width:0}
+.tt{display:block;font-weight:700;font-size:.97rem}
+.ts{display:block;font-size:.8rem;color:var(--mu);margin-top:.15rem;line-height:1.45}
+.pr{font-weight:800;font-size:.85rem;color:var(--mu);white-space:nowrap;padding-left:.5rem}
+.pr.qt{color:var(--or)}
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.ynb{padding:1.15rem;border-radius:1rem;border:1.5px solid var(--line);background:var(--white);font-weight:800;font-size:1.1rem;cursor:pointer;color:var(--ink);transition:all .15s}
+.ynb:hover{border-color:var(--amb)}
+.ynb.on{border-color:var(--or);background:var(--or);color:#fff}
+.howmany{margin-top:1.25rem;padding:1rem 1.1rem;border-radius:1rem;background:var(--soft);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.howmany b{font-size:.95rem}
+.ctr{display:flex;align-items:center;gap:.5rem}
+.cb{width:2.4rem;height:2.4rem;border-radius:99px;border:1px solid var(--line);background:var(--white);color:var(--or);font-weight:800;font-size:1.15rem;cursor:pointer}
+.cb:hover{background:var(--or);color:#fff}
+.cv{min-width:2.6rem;text-align:center;font-weight:800;font-size:1.05rem}
+.num{display:block;width:100%;max-width:14rem;margin:0 auto;padding:1rem;border-radius:1rem;border:1.5px solid var(--line);font-weight:800;font-size:1.2rem;text-align:center}
+.bkf{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--line)}
+.bkf b{font-size:1.3rem;color:var(--red)}
+.lnk{background:none;border:0;padding:0;color:var(--or);font-weight:700;font-size:.8rem;text-decoration:underline;cursor:pointer;margin-top:.75rem}
+.tiers{font-size:.78rem;color:var(--mu);margin-top:.6rem;display:grid;gap:.3rem}
+.tiers div{display:flex;justify-content:space-between;gap:1rem}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:1.75rem}
+.bp{background:var(--or);color:#fff;font-weight:700;padding:.8rem 1.6rem;border-radius:99px;border:0;cursor:pointer;font-size:.95rem}
+.bp:hover{background:var(--red)}.bp:disabled{opacity:.4;cursor:not-allowed}
+.bgh{background:none;border:0;color:var(--mu);font-weight:700;padding:.8rem .5rem;cursor:pointer;font-size:.95rem}
+.run{margin-top:1.5rem;padding:.8rem 1.1rem;border-radius:.9rem;background:var(--bg);display:flex;justify-content:space-between;align-items:center;font-size:.85rem;font-weight:600;color:var(--mu)}
+.run b{color:var(--red);font-size:1.05rem}
+.grp{margin-bottom:1rem}.grp h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:var(--or);margin:0 0 .4rem}
+.li{display:flex;justify-content:space-between;gap:1rem;font-size:.9rem;padding:.4rem 0;border-bottom:1px solid var(--line)}
+.li span:last-child{font-weight:700;white-space:nowrap}
+.tot{margin-top:1.25rem;padding-top:1rem;border-top:2px solid var(--line);display:grid;gap:.4rem}
+.tot div{display:flex;justify-content:space-between;align-items:baseline}
+.big{font-size:2rem;font-weight:900;color:var(--red)}
+.note{font-size:.85rem;color:var(--or);margin-top:.75rem}
+.fine{font-size:.8rem;color:var(--mu);line-height:1.55;margin:1rem 0}
+.em{width:100%;padding:.85rem 1rem;border-radius:.9rem;border:2px solid var(--line);font-size:1rem}
+.err{color:var(--red);font-size:.75rem;margin-top:.25rem;display:none}.err.v{display:block}
+.send{display:block;width:100%;margin-top:1rem;padding:.9rem;border-radius:99px;border:0;color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+.send:disabled{opacity:.7}
+.ghost{display:block;width:100%;margin-top:.6rem;padding:.6rem;border-radius:99px;border:1px solid var(--line);background:none;color:var(--mu);font-weight:600;cursor:pointer}
+.more{text-align:center;color:var(--mu);font-size:.95rem;margin-top:1.5rem}
+.more a{color:var(--or);font-weight:700;text-decoration:none}
+@media(max-width:480px){.hero h1{font-size:2rem}h2{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<section class="hero">
+<p class="eb">Fee Estimator</p>
+<h1>What will it <span class="gt">cost?</span></h1>
+<p class="lead">Answer a few quick questions and see your price. It only takes a couple of minutes.</p>
+</section>
+<div class="wrap">
+<div class="card"><div class="bar"><i id="bar"></i></div><div id="step"></div></div>
+
+</div>
+<script>
+(function(){
+var EJ_KEY="tertdNKSBb52NULGv",EJ_SVC="service_c0emmbq",EJ_TPL="template_6stryys";
+var SIGNUP="https://portal.taxentric.com/en-us/signup",HOME="https://taxentric.com/";
+var CHK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>';
+
+/* ===== Group names (used on the estimate and in the email) ===== */
+var G={personal:"Personal tax return",amend:"Fixing a filed return",business:"Business tax return",nonprofit:"Nonprofit tax return",books:"Monthly bookkeeping",planning:"Tax planning & advice",formation:"Starting a business or nonprofit",irs:"IRS help & monitoring"};
+
+/* ===== Questions. Types: pick (choose many), one (choose one), yn (yes/no), tx, hrs, ac ===== */
+var Q={
+ top:{ty:"pick",h:"What do you need help with?",s:"Choose everything you need.",o:[
+  {id:"taxes",t:"Taxes",s:"Personal, business, or nonprofit tax returns"},
+  {id:"books",t:"Bookkeeping",s:"Keeping your business books every month"},
+  {id:"formation",t:"Starting a business or nonprofit",s:"Choosing the right type and filing the paperwork"},
+  {id:"planning",t:"Tax planning or advice",s:"Questions answered, or a plan to lower next year's taxes"},
+  {id:"irs",t:"The IRS",s:"Payment plans, penalties, letters, or IRS monitoring"}]},
+ taxes:{ty:"pick",g:"",h:"Which taxes do you need help with?",s:"Choose everything that applies.",o:[
+  {id:"personal",t:"My personal taxes",s:"Your yearly federal and state return"},
+  {id:"business",t:"My business's taxes",s:"Partnership, S-corporation, or C-corporation"},
+  {id:"nonprofit",t:"My nonprofit's taxes",s:"The yearly report nonprofits send the IRS"},
+  {id:"amend",t:"Fixing a return I already filed",s:"Correct a mistake or add something that was left off"}]},
+
+ /* ----- Personal ----- */
+ p1:{ty:"one",g:"personal",h:"Did you get a W-2 from an employer this year?",s:"A W-2 is the form your employer sends you, usually in January, showing what you were paid.",o:[
+  {id:"y",t:"Yes",s:"Includes your federal return, 1 state return, and e-filing",p:150,n:"Personal tax return"},
+  {id:"n",t:"No",s:"My income was from self-employment, gig work, 1099s, retirement, or Social Security",p:100,n:"Personal tax return (no W-2)"}]},
+ pa:{ty:"yn",g:"personal",h:"Did you pay mortgage interest, property taxes, large medical bills, or make donations?",s:"We'll check whether listing these out lowers your taxes.",p:50,n:"Mortgage, property taxes, medical, or donations (Sch. A)"},
+ pb:{ty:"yn",g:"personal",h:"Did you earn more than $1,500 in bank interest or stock dividends?",s:"You'd see this on a Form 1099-INT or 1099-DIV.",p:50,n:"Bank interest or dividends (Sch. B)"},
+ pc:{ty:"yn",g:"personal",h:"Did you work for yourself?",s:"Freelance, gig work (like rideshare or delivery), a side business, or income on a 1099-NEC.",p:150,q:"How many businesses?",n:"Self-employment income (Sch. C)"},
+ pd:{ty:"yn",g:"personal",h:"Did you sell stocks, crypto, or other investments?",s:"You'd usually get a Form 1099-B.",p:100,n:"Investment sales (Sch. D)"},
+ ph:{ty:"yn",g:"personal",h:"Did you sell the home you live in?",p:200,n:"Sale of main home"},
+ pr:{ty:"yn",g:"personal",h:"Did you sell a rental property or land you invested in?",p:300,n:"Sale of rental or investment property"},
+ pk:{ty:"yn",g:"personal",h:"Did you get a K-1?",s:"A K-1 shows your share of a business you partly own, or of an estate or trust.",p:100,n:"K-1 income (Sch. E)"},
+ pe:{ty:"yn",g:"personal",h:"Do you rent out a property?",s:"Including a room, a house, or a vacation home.",p:150,q:"How many properties?",n:"Rental property income (Sch. E)"},
+ pf:{ty:"yn",g:"personal",h:"Do you own or run a farm?",p:300,n:"Farm income (Sch. F)"},
+ ps:{ty:"yn",g:"personal",h:"Did you live or work in more than one state?",s:"Your price already includes 1 state.",p:25,q:"How many other states?",n:"Additional state returns"},
+ pq:{ty:"yn",g:"personal",h:"Do you want help with quarterly tax payments?",s:"If you're self-employed or don't have taxes taken out of your pay, we'll figure out what to pay the IRS each quarter.",p:75,q:"How many quarters?",max:4,n:"Quarterly tax payment help"},
+ px:{ty:"yn",g:"personal",h:"Do you need more time to file?",s:"We'll file an extension, which usually gives you 6 more months. Any tax you owe is still due by the original deadline.",p:25,n:"Extension"},
+
+ /* ----- Fixing a filed return ----- */
+ a1:{ty:"one",g:"amend",h:"Who prepared the return you need to fix?",s:"If Taxentric didn't prepare that year's return, choose the first option, even if you're a client now.",o:[
+  {id:"ot",t:"Someone else",s:"Another tax preparer, tax software, or I did it myself",p:150,n:"Fix a filed return"},
+  {id:"tx",t:"Taxentric prepared it",p:75,n:"Fix a filed return (originally by Taxentric)"},
+  {id:"cx",t:"It's complicated",s:"Lots of stock trades, foreign accounts, more than one year, or an IRS audit",quote:1,n:"Complex fix"}]},
+ a2:{ty:"pick",g:"amend",h:"What needs to change on that return?",s:"Choose everything that needs fixing.",o:[
+  {id:"w",t:"W-2 income",s:"You got a corrected W-2, or one was left off",inc:1,n:"W-2 income (corrected or missing W-2)"},
+  {id:"a",t:"Itemized deductions",s:"Mortgage interest, property taxes, medical bills, or donations",p:50,n:"Itemized deductions (Sch. A)"},
+  {id:"b",t:"Bank interest or stock dividends",p:50,n:"Interest or dividends (Sch. B)"},
+  {id:"c",t:"Self-employment income/expenses",s:"Freelance, gig work, or a side business",p:150,q:"How many businesses?",n:"Self-employment income/expenses (Sch. C)"},
+  {id:"d",t:"Sale of stocks, crypto, or investments",s:"Gains or losses",p:100,n:"Investment sales, gains/losses (Sch. D)"},
+  {id:"h",t:"Sale of the home you live in",p:200,n:"Sale of main home"},
+  {id:"r",t:"Sale of a rental or investment property",p:300,n:"Sale of rental or investment property"},
+  {id:"k",t:"K-1 income/expenses",s:"From a partnership, S-corp, estate, or trust",p:100,n:"K-1 income/expenses (Sch. E)"},
+  {id:"e",t:"Rental property income/expenses",p:150,q:"How many properties?",n:"Rental property income/expenses (Sch. E)"},
+  {id:"f",t:"Farm income/expenses",p:300,n:"Farm income/expenses (Sch. F)"}]},
+
+ /* ----- Business ----- */
+ b1:{ty:"one",g:"business",h:"What kind of business is it?",s:"Your price includes 1 state return.",o:[
+  {id:"pt",t:"Partnership or multi-member LLC",s:"Two or more owners (Form 1065)",p:600,n:"Partnership return (Form 1065)"},
+  {id:"sc",t:"S-corporation",s:"A corporation or LLC that chose S-corp tax status (Form 1120-S)",p:700,n:"S-corporation return (Form 1120-S)"},
+  {id:"cc",t:"C-corporation",s:"A regular corporation (Form 1120)",p:800,n:"C-corporation return (Form 1120)"},
+  {id:"ns",t:"I'm not sure",s:"We'll check your paperwork and let you know",quote:1,n:"Business return (type to confirm)"}]},
+ bk:{ty:"yn",g:"business",h:"",s:"Each owner gets a K-1 form showing their share of the business.",p:50,q:"How many more owners?",n:"Additional owner K-1s"},
+ bp:{ty:"yn",g:"business",h:"Do you need us to file quarterly payroll taxes?",s:"If you have employees, payroll taxes are reported every quarter (Form 941).",p:75,q:"How many quarters?",max:4,n:"Quarterly payroll filings (Form 941)"},
+ bw:{ty:"yn",g:"business",h:"Do you need W-2 forms for employees?",s:"The yearly pay form each employee gets.",p:40,q:"How many employees?",n:"Employee W-2s"},
+ bn:{ty:"yn",g:"business",h:"Do you need 1099 forms for contractors?",s:"The yearly form for freelancers and contractors you paid.",p:20,q:"How many contractors?",n:"Contractor 1099s"},
+ bx:{ty:"yn",g:"business",h:"Does your business need more time to file?",s:"We'll file an extension. Any tax owed is still due by the original deadline.",p:25,n:"Business extension"},
+
+ /* ----- Nonprofit ----- */
+ n1:{ty:"one",g:"nonprofit",h:"About how much does your nonprofit bring in each year?",s:"This tells us which IRS form your nonprofit files.",o:[
+  {id:"n",t:"$50,000 or less",s:"Form 990-N (e-Postcard)",p:75,n:"Form 990-N"},
+  {id:"ez",t:"Less than $200,000",s:"And less than $500,000 in assets (Form 990-EZ)",p:300,n:"Form 990-EZ"},
+  {id:"f",t:"$200,000 or more",s:"Or $500,000 or more in assets (Form 990)",p:600,n:"Form 990"},
+  {id:"pf",t:"We're a private foundation",s:"Form 990-PF",p:600,n:"Form 990-PF"},
+  {id:"ns",t:"I'm not sure",s:"We'll help you figure it out",quote:1,n:"Nonprofit return (form to confirm)"}]},
+ n2:{ty:"yn",g:"nonprofit",h:"Did your nonprofit earn money from something outside its mission?",s:"For example, renting out space or selling unrelated products (Form 990-T).",p:250,n:"Form 990-T"},
+
+ /* ----- Bookkeeping ----- */
+ k1:{ty:"tx",g:"books",h:"How many transactions does your business have each month?",s:"A transaction is any money in or out, like a sale, bill payment, card purchase, or transfer. Not sure? Count the lines on last month's bank and card statements."},
+ k2:{ty:"yn",g:"books",h:"Is this for a nonprofit that tracks money by grant or program?",s:"Nonprofit fund accounting",p:50,r:"mo",n:"Nonprofit fund accounting"},
+ k3:{ty:"yn",g:"books",h:"Do you need help with anything else?",s:"Setting up QuickBooks, catching up on past months, paying bills, sending invoices, sales tax, inventory, or 1099s.",quote:1,n:"Other bookkeeping services"},
+
+ /* ----- Planning ----- */
+ t1:{ty:"hrs",g:"planning",h:"How much time would you like with us?",s:"$125 per hour, billed in 15-minute increments. Bring any tax question, or let's make a plan to lower next year's taxes.",p:125},
+
+ /* ----- Formation ----- */
+ f1:{ty:"one",g:"formation",h:"What would you like to start?",s:"Includes filing with your state, your business tax ID number (EIN), and your operating rules. State fees are separate.",o:[
+  {id:"llc",t:"LLC",s:"A popular choice for small businesses and freelancers",p:300,n:"LLC setup"},
+  {id:"pt",t:"Partnership",s:"Two or more owners sharing a business",p:400,n:"Partnership setup"},
+  {id:"co",t:"Corporation",s:"S-corp or C-corp. Includes bylaws.",p:500,n:"Corporation setup"},
+  {id:"np",t:"Nonprofit",s:"A charity, church, or community organization",p:250,n:"Nonprofit setup"},
+  {id:"ns",t:"I'm not sure yet",s:"We'll help you choose",quote:1,n:"Business setup (type to decide)"}]},
+ f2:{ty:"one",g:"formation",h:"Do you also want help getting tax-exempt status?",s:"It's a separate application to the IRS. It can free your nonprofit from federal income tax and let donors deduct their gifts.",o:[
+  {id:"no",t:"Not right now"},
+  {id:"sm",t:"Yes, we expect $50,000 or less a year",s:"With $250,000 or less in assets",p:350,n:"Tax-exempt application (smaller)"},
+  {id:"lg",t:"Yes, we expect more than that, or we're a church",s:"Churches must use the full IRS application, so they choose this option. Includes a 1-hour consultation and bylaws.",p:750,n:"Tax-exempt application (full application)"}]},
+
+ /* ----- IRS ----- */
+ i1:{ty:"yn",g:"irs",h:"Do you owe the IRS and need a payment plan?",s:"We'll help you set up monthly payments.",p:100,n:"IRS payment plan help"},
+ i2:{ty:"yn",g:"irs",h:"Were you charged penalties you'd like removed?",s:"We'll prepare a request asking the IRS to remove them or refund what you paid.",p:400,n:"Penalty relief request"},
+ i3:{ty:"yn",g:"irs",h:"Did you get a different letter from the IRS?",s:"We'll review it and give you a price.",quote:1,n:"Other IRS letter"},
+ i4:{ty:"yn",g:"irs",h:"Would you like an early warning about IRS problems?",s:"IRS Document Monitoring: we watch your IRS file and alert you to missing forms or new penalties.",p:25,r:"yr",n:"IRS Document Monitoring"}
+};
+var TIERS=[[25,75,0,0],[50,75,3,25],[100,150,3,50],[200,300,1.5,100],[400,450,.75,200],[800,600,.5,400],[2000,800,.35,800]];
+function bkFee(tx){if(tx<=0)return 0;for(var i=0;i<TIERS.length;i++){var t=TIERS[i];if(tx<=t[0])return t[1]+(tx-t[3])*t[2]}return -1}
+
+/* ===== State ===== */
+var A={},cur="top",tierOpen=false,body=[];
+function money(n){n=Math.round(n*100)/100;return"$"+n.toLocaleString("en-US",n%1?{minimumFractionDigits:2,maximumFractionDigits:2}:{})}
+function has(k,v){return(A[k]||[]).indexOf(v)>-1}
+function flow(){var f=["top"];
+ if(has("top","taxes")){f.push("taxes");
+  if(has("taxes","personal"))f.push("p1","pa","pb","pc","pd","ph","pr","pk","pe","pf","ps","pq","px");
+  if(has("taxes","business")){f.push("b1");if(A.b1==="pt"||A.b1==="sc")f.push("bk");f.push("bp","bw","bn","bx")}
+  if(has("taxes","nonprofit"))f.push("n1","n2");
+  if(has("taxes","amend")){f.push("a1");if(A.a1&&A.a1!=="cx"){f.push("a2");(A.a2||[]).forEach(function(i){if(!amItem(i).inc)f.push("ac_"+i)})}}}
+ if(has("top","books")){f.push("k1");if(has("top","taxes")&&has("taxes","nonprofit"))f.push("k2");f.push("k3")}
+ if(has("top","formation")){f.push("f1");if(A.f1==="np")f.push("f2")}
+ if(has("top","planning"))f.push("t1");
+ if(has("top","irs"))f.push("i1","i2","i3","i4");
+ if(f.length>1&&(f.length>2||!has("top","taxes")))f.push("review");
+ return f}
+function amItem(id){var o=Q.a2.o;for(var i=0;i<o.length;i++)if(o[i].id===id)return o[i]}
+function step(k){if(k.indexOf("ac_")===0){var it=amItem(k.slice(3));return{ty:"ac",g:"amend",it:it,h:it.t+": what needs fixing?"}}return Q[k]}
+
+/* ===== Pricing ===== */
+function lines(){var L=[];flow().forEach(function(k){var s=step(k);if(!s||!s.g)return;var v=A[k];
+ if(k==="a2")(v||[]).forEach(function(id){var it=amItem(id);if(it.inc)L.push({g:s.g,n:it.n,a:0,inc:1})});
+ if(s.ty==="one"&&v)s.o.forEach(function(o){if(o.id===v&&(o.p||o.quote))L.push({g:s.g,n:o.n,a:o.p||0,qt:o.quote})});
+ if(s.ty==="yn"&&v>0)L.push({g:s.g,n:s.n+(v>1?" (x"+v+")":""),a:(s.p||0)*v,r:s.r,qt:s.quote});
+ if(s.ty==="ac"&&v&&v.k){var it=s.it,c=v.c||1;L.push({g:s.g,n:it.n+(v.k==="ad"?": add":": correct")+(c>1?" (x"+c+")":""),a:(v.k==="ad"?it.p:it.p/2)*c})}
+ if(s.ty==="tx"&&v>0){var f=bkFee(v),nm="Bookkeeping ("+v.toLocaleString()+" transactions/month)";L.push(f<0?{g:s.g,n:nm,a:0,qt:1}:{g:s.g,n:nm,a:f,r:"mo"})}
+ if(s.ty==="hrs"&&v>0)L.push({g:s.g,n:"Tax planning & advice ("+v+(v===1?" hour)":" hours)"),a:s.p*v})});return L}
+function totals(L){var t={once:0,mo:0,yr:0,qt:[]};L.forEach(function(l){if(l.qt)t.qt.push(l.n);else if(l.r==="mo")t.mo+=l.a;else if(l.r==="yr")t.yr+=l.a;else t.once+=l.a});return t}
+function totalText(t){var p=[];if(t.once||(!t.mo&&!t.yr&&!t.qt.length))p.push(money(t.once));if(t.mo)p.push(money(t.mo)+"/mo");if(t.yr)p.push(money(t.yr)+"/yr");if(!p.length)p.push("Custom price");return p.join(" + ")}
+
+/* ===== Rendering ===== */
+var stepEl=document.getElementById("step"),barEl=document.getElementById("bar");
+function choice(cls,on,t,s,right,attrs){return'<button type="button" class="ch '+cls+(on?" on":"")+' fr" '+attrs+'><span class="mk">'+CHK+'</span><span class="tx"><span class="tt">'+t+'</span>'+(s?'<span class="ts">'+s+'</span>':"")+'</span>'+(right||"")+'</button>'}
+function ptag(o){if(o.inc)return'<span class="pr">Included</span>';if(o.quote)return'<span class="pr qt">Custom price</span>';if(!o.p)return"";return'<span class="pr">'+money(o.p)+'</span>'}
+function counter(val,attrs){return'<span class="ctr"><button type="button" class="cb fr" data-d="-1" '+attrs+' aria-label="Fewer">−</button><span class="cv">'+val+'</span><button type="button" class="cb fr" data-d="1" '+attrs+' aria-label="More">+</button></span>'}
+function costTag(s){if(s.quote)return'<span class="cost">We\'ll send you a price</span>';if(!s.p)return"";return'<span class="cost">'+(s.q?"Adds "+money(s.p)+" each":"Adds "+money(s.p))+(s.r?" per "+(s.r==="mo"?"month":"year"):"")+'</span>'}
+function headHTML(s,k){var tag=s.g?G[s.g]:"";var h=s.h;if(k==="bk")h=A.b1==="pt"?"Does your partnership have more than 2 owners?":"Does your S-corporation have more than 1 owner?";
+ return'<div class="head">'+(tag?'<span class="tag">'+tag+'</span>':"")+'<h2>'+h+'</h2>'+(s.s?'<p class="sub">'+s.s+'</p>':"")+(s.ty==="yn"?costTag(s):"")+'</div>'}
+
+function render(){var f=flow(),i=f.indexOf(cur);if(i<0){cur=f[f.length-1];i=f.length-1}
+ barEl.style.width=(f.length>1?Math.round(i/(f.length-1)*100):0)+"%";
+ if(cur==="review"){stepEl.innerHTML=review();return fit()}
+ var s=step(cur),v=A[cur],h=headHTML(s,cur),nav=true,canNext=true;
+ if(s.ty==="pick"){h+='<div class="list">';s.o.forEach(function(o){h+=choice("x",has(cur,o.id),o.t,o.s,cur==="a2"?ptag(o):"",'data-pick="'+o.id+'"')});h+='</div>';canNext=(A[cur]||[]).length>0}
+ if(s.ty==="one"){h+='<div class="list">';s.o.forEach(function(o){h+=choice("r",v===o.id,o.t,o.s,ptag(o),'data-one="'+o.id+'"')});h+='</div>';canNext=!!v}
+ if(s.ty==="yn"){h+='<div class="yn"><button type="button" class="ynb fr'+(v>0?" on":"")+'" data-yn="1">Yes</button><button type="button" class="ynb fr'+(v===0?" on":"")+'" data-yn="0">No</button></div>';
+  if(s.q&&v>0)h+='<div class="howmany"><b>'+s.q+'</b>'+counter(v,'data-cnt="1"')+'</div>';canNext=v!==undefined}
+ if(s.ty==="ac"){var it=s.it,av=v||{};h+='<div class="list">'+choice("r",av.k==="ad",'It was left off the return',"",'<span class="pr">'+money(it.p)+'</span>','data-ac="ad"')+choice("r",av.k==="co",'It was on the return, but it was wrong',"",'<span class="pr">'+money(it.p/2)+'</span>','data-ac="co"')+'</div>';
+  if(it.q&&av.k)h+='<div class="howmany"><b>'+it.q+'</b>'+counter(av.c||1,'data-acc="1"')+'</div>';canNext=!!av.k}
+ if(s.ty==="tx"){var fe=bkFee(v||0);h+='<input type="number" class="num fr" id="txin" min="0" step="1" inputmode="numeric" placeholder="e.g. 100" value="'+(v||"")+'"><div class="bkf"><span style="font-weight:700;font-size:.9rem">Your monthly price</span><b id="txfee">'+(fe<0?"Custom price":money(fe)+"/mo")+'</b></div><p class="ts" id="txnote">'+(fe<0?"Over 2,000 transactions a month is priced individually.":"Based on standard bank and credit card accounts.")+'</p><button type="button" class="lnk fr" id="tiersBtn">'+(tierOpen?"Hide pricing details":"See how pricing works")+'</button>';
+  if(tierOpen){h+='<div class="tiers"><span>The cost per transaction goes down as volume goes up. Example: 120 transactions = $300 + (20 × $1.50) = $330/mo.</span>';TIERS.forEach(function(t,j){var lo=j?TIERS[j-1][0]+1:1;h+='<div><span>'+lo+" to "+t[0].toLocaleString()+'</span><span>'+money(t[1])+(t[2]?" + "+money(t[2])+" each over "+t[3]:" flat")+'</span></div>'});h+='<div><span>Over 2,000</span><span>Custom price</span></div></div>'}
+  canNext=v>0}
+ if(s.ty==="hrs"){var hv=v||0;h+='<div class="howmany" style="margin-top:0"><b>'+(hv?hv+(hv===1?" hour":" hours")+" · "+money(s.p*hv):"Hours")+'</b>'+counter(hv,'data-hrs="1"')+'</div>';canNext=hv>0}
+ if(cur!=="top"&&cur!=="taxes")h+='<div class="run"><span>Your estimate so far</span><b>'+totalText(totals(lines()))+'</b></div>';
+ h+='<div class="nav">'+(i>0?'<button type="button" class="bgh fr" id="back">Back</button>':'<span></span>')+'<button type="button" class="bp fr" id="next"'+(canNext?"":" disabled")+'>'+(f[i+1]==="review"?"See my estimate":"Continue")+'</button></div>';
+ stepEl.innerHTML=h;fit()}
+
+function review(){var L=lines(),t=totals(L),seen=[],h='<div class="head"><h2>Your estimate</h2><p class="sub">Here\'s what you selected.</p></div>';
+ L.forEach(function(l){if(seen.indexOf(l.g)<0)seen.push(l.g)});
+ if(!L.length)h+='<p class="sub" style="text-align:center">Nothing selected yet. Go back to add a service.</p>';
+ seen.forEach(function(g){h+='<div class="grp"><h3>'+G[g]+'</h3>';L.filter(function(l){return l.g===g}).forEach(function(l){h+='<div class="li"><span>'+l.n+'</span><span>'+(l.inc?"Included":l.qt?"Custom price":money(l.a)+(l.r?"/"+l.r:""))+'</span></div>'});h+='</div>'});
+ h+='<div class="tot">';
+ if(t.once||(!t.mo&&!t.yr&&!t.qt.length))h+='<div><span style="font-weight:700">Due once</span><span class="big">'+money(t.once)+'</span></div>';
+ if(t.mo)h+='<div><span style="font-weight:700">Monthly</span><span class="big">'+money(t.mo)+'<small style="font-size:1rem">/mo</small></span></div>';
+ if(t.yr)h+='<div><span style="font-weight:700">Yearly</span><span class="big" style="font-size:1.4rem">'+money(t.yr)+'/yr</span></div>';
+ h+='</div>';
+ if(t.qt.length)h+='<p class="note"><b>We\'ll send you a custom price for:</b> '+t.qt.join(", ")+'</p>';
+ h+='<p class="fine">This is an estimate, not a final price. We confirm your price after reviewing your documents, before any work begins. Enter your email to get a copy. New clients will be asked to create a free client portal account. We\'ll follow up within 24 hours.</p>';
+ h+='<label for="em" style="font-weight:700;font-size:.9rem;display:block;margin-bottom:.3rem">Your email</label><input type="email" id="em" class="em fr" placeholder="you@example.com" required><p class="err" id="emErr">Please enter a valid email address.</p>';
+ h+='<button type="button" class="send bg fr" id="send">Email me my estimate</button><button type="button" class="ghost fr" id="back">Back</button><button type="button" class="ghost fr" id="reset">Start over</button>';
+ body=[];
+ seen.forEach(function(g){body.push(G[g].toUpperCase());L.filter(function(l){return l.g===g}).forEach(function(l){body.push("• "+l.n+": "+(l.inc?"Included":l.qt?"Custom price":money(l.a)+(l.r?"/"+l.r:"")))});body.push("")});
+ if(t.once||(!t.mo&&!t.yr&&!t.qt.length))body.push("Due once: "+money(t.once));if(t.mo)body.push("Monthly: "+money(t.mo)+"/mo");if(t.yr)body.push("Yearly: "+money(t.yr)+"/yr");
+ if(t.qt.length)body.push("","Items marked \"Custom price\" will be priced after we review your details.");
+ return h}
+
+/* ===== Events ===== */
+var timer;
+function go(d){clearTimeout(timer);var f=flow(),i=f.indexOf(cur);cur=f[Math.max(0,Math.min(f.length-1,i+d))];render();if(window.TXscroll){TXscroll(0)}else{try{stepEl.scrollIntoView({block:"nearest"})}catch(e){}}}
+function auto(){clearTimeout(timer);timer=setTimeout(function(){go(1)},220)}
+stepEl.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var d=b.dataset,s=step(cur);
+ if(b.id==="next")return go(1);if(b.id==="back")return go(-1);
+ if(b.id==="reset"){A={};cur="top";return render()}
+ if(b.id==="tiersBtn"){tierOpen=!tierOpen;return render()}
+ if(b.id==="send")return send(b);
+ if(b.id==="mNew")return goTop(SIGNUP);if(b.id==="mOld")return goTop(HOME);
+ if(d.pick){var arr=A[cur]=A[cur]||[],k=arr.indexOf(d.pick);if(k>-1)arr.splice(k,1);else arr.push(d.pick);
+  var ord=s.o.map(function(o){return o.id});arr.sort(function(x,y){return ord.indexOf(x)-ord.indexOf(y)});return render()}
+ if(d.one){A[cur]=d.one;render();return auto()}
+ if(d.yn!==undefined){if(d.yn==="1"){var was=A[cur]>0;A[cur]=was?A[cur]:1;render();if(!s.q)auto()}else{A[cur]=0;render();auto()}return}
+ if(d.cnt){A[cur]=Math.max(1,Math.min(s.max||50,A[cur]+(+d.d)));return render()}
+ if(d.ac){var av=A[cur]=A[cur]||{};av.k=d.ac;av.c=av.c||1;render();if(!s.it.q)auto();return}
+ if(d.acc){A[cur].c=Math.max(1,Math.min(50,(A[cur].c||1)+(+d.d)));return render()}
+ if(d.hrs){A[cur]=Math.max(0,Math.min(40,(A[cur]||0)+(+d.d)*.5));return render()}});
+stepEl.addEventListener("input",function(e){if(e.target.id!=="txin")return;var v=Math.max(0,Math.round(+e.target.value||0));A[cur]=v;var fe=bkFee(v);
+ document.getElementById("txfee").textContent=fe<0?"Custom price":money(fe)+"/mo";
+ document.getElementById("txnote").textContent=fe<0?"Over 2,000 transactions a month is priced individually.":"Based on standard bank and credit card accounts.";
+ document.getElementById("next").disabled=!(v>0);
+ var r=stepEl.querySelector(".run b");if(r)r.textContent=totalText(totals(lines()))});
+
+try{emailjs.init(EJ_KEY)}catch(e){}
+function send(b){var em=document.getElementById("em"),er=document.getElementById("emErr");
+ if(!em.value||!em.checkValidity()){er.textContent="Please enter a valid email address.";er.classList.add("v");em.focus();return}er.classList.remove("v");
+ b.disabled=true;b.textContent="Sending...";
+ emailjs.send(EJ_SVC,EJ_TPL,{to_email:"support@taxentric.com",cc_email:em.value,from_email:em.value,estimate_body:body.join("\n")})
+ .then(function(){barEl.style.width="100%";stepEl.innerHTML='<div class="head"><h2>Your estimate is on its way!</h2><p class="sub">Check your inbox for a copy. One quick question so we can point you to the right place:</p></div><button type="button" class="send bg fr" id="mNew">I\'m a new client. Sign me up</button><button type="button" class="ghost fr" id="mOld">I\'m already a client</button>';fit()})
+ .catch(function(err){b.disabled=false;b.textContent="Email me my estimate";er.textContent="Something went wrong sending your estimate. Please try again.";er.classList.add("v");console.error(err)})}
+function goTop(u){try{window.top.location.href=u}catch(e){window.open(u,"_blank","noopener")}}
+
+/* Resize the GoDaddy embed box to fit, so there's no inner scrollbar */
+function fit(){try{var fr=window.frameElement;if(!fr)return;var h=Math.ceil(document.body.scrollHeight);fr.style.height=h+"px";fr.setAttribute("height",h);document.documentElement.style.overflow="hidden"}catch(e){}}
+window.addEventListener("load",fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(document.body);
+render();
+})();
+</script>
+<script>
+/* Embedded on taxentric.com: report height to the pricing page and ask it to scroll */
+(function(){
+if(window.parent===window)return;
+var de=document.documentElement;de.classList.add("tx-embed");
+var st=document.createElement("style");st.textContent="html.tx-embed,html.tx-embed body{min-height:0!important;height:auto!important;overflow:hidden!important}html.tx-embed .modal-overlay{position:absolute!important;align-items:flex-start!important}";document.head.appendChild(st);
+var last=0;
+function send(){var h=Math.ceil(document.body.getBoundingClientRect().height+parseFloat(getComputedStyle(document.body).marginTop||0)+parseFloat(getComputedStyle(document.body).marginBottom||0));if(Math.abs(h-last)>1){last=h;parent.postMessage({tx:"height",h:h},"*")}}
+window.TXscroll=function(y){parent.postMessage({tx:"scroll",y:Math.max(0,y||0)},"*")};
+window.addEventListener("load",send);if(window.ResizeObserver)new ResizeObserver(send).observe(document.body);setInterval(send,800);send();
+var clickY=0;document.addEventListener("click",function(e){clickY=e.pageY},true);
+var m=document.querySelector(".modal-overlay");
+if(m&&window.MutationObserver)new MutationObserver(function(){if(m.classList.contains("visible")){var y=Math.max(16,clickY-180);var b=m.querySelector(".modal-box");if(b)b.style.marginTop=y+"px";TXscroll(y-24)}}).observe(m,{attributes:true,attributeFilter:["class"]});
+})();
+</script>
+</body>
+</html>

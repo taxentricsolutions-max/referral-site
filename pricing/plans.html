@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Find Your Annual Plan | Taxentric Solutions</title>
+<meta name="description" content="Answer a few questions to find your Taxentric Solutions annual plan, built for independent contractors and small business owners." />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg-cream:#FFF9F0;
+--bg-amber-soft:#FFF3DA;
+--card-white:#FFFFFF;
+--ink:#292524;
+--ink-muted:#78716C;
+--border-soft:#F2E4C5;
+--orange:#F97316;
+--red:#DC2626;
+--amber:#F59E0B;
+--green:#16A34A;
+--green-soft:#F0FDF4;
+}
+*{ font-family:'Inter', system-ui, sans-serif; }
+body{ background:var(--bg-cream); color:var(--ink); }
+.brand-gradient{ background:linear-gradient(90deg,var(--orange) 0%, var(--red) 100%); }
+.brand-gradient-text{
+background:linear-gradient(90deg,var(--orange) 0%, var(--red) 100%);
+-webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.focus-ring:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+.wizard-card{ background:var(--card-white); border:1px solid var(--border-soft); border-radius:1.25rem; padding:2rem; max-width:680px; margin:0 auto; }
+@media (min-width:640px){ .wizard-card{ padding:2.5rem; } }
+.step-dots{ display:flex; align-items:center; justify-content:center; gap:.4rem; margin-bottom:1.75rem; flex-wrap:wrap; }
+.step-dot{ width:.5rem; height:.5rem; border-radius:9999px; background:var(--border-soft); transition:background-color .25s ease, width .25s ease; }
+.step-dot.done{ background:var(--orange); }
+.step-dot.current{ background:var(--red); width:1.4rem; }
+.choice-card{
+display:flex; align-items:flex-start; gap:.85rem; padding:1.1rem 1.2rem; border-radius:1rem;
+border:1.5px solid var(--border-soft); cursor:pointer; transition:border-color .18s ease, background-color .18s ease;
+text-align:left; width:100%; background:var(--card-white);
+}
+.choice-card:hover{ border-color:var(--amber); }
+.choice-card.selected{ border-color:var(--orange); background:var(--bg-amber-soft); }
+.choice-mark{
+width:1.35rem; height:1.35rem; min-width:1.35rem; border-radius:9999px; border:2px solid var(--border-soft);
+display:flex; align-items:center; justify-content:center; margin-top:.1rem; transition:border-color .18s ease, background-color .18s ease;
+}
+.choice-card.selected .choice-mark{ border-color:var(--orange); background:var(--orange); }
+.choice-mark svg{ width:.7rem; height:.7rem; opacity:0; transition:opacity .15s ease; }
+.choice-card.selected .choice-mark svg{ opacity:1; }
+.choice-title{ font-weight:700; font-size:.95rem; }
+.choice-sub{ font-size:.8rem; color:var(--ink-muted); margin-top:.15rem; }
+.choice-price{ margin-left:auto; font-weight:800; font-size:.85rem; white-space:nowrap; padding-left:.75rem; color:var(--ink-muted); }
+.btn-primary{ background:var(--orange); color:#fff; font-weight:700; padding:.75rem 1.5rem; border-radius:9999px; transition:background-color .15s ease; }
+.btn-primary:hover{ background:var(--red); }
+.btn-primary:disabled{ opacity:.4; cursor:not-allowed; }
+.btn-ghost{ color:var(--ink-muted); font-weight:700; padding:.75rem 1rem; border-radius:9999px; }
+.btn-ghost:hover{ background:var(--bg-amber-soft); }
+.wizard-step{ display:none; }
+.wizard-step.active{ display:block; }
+.select-input{
+width:100%; padding:1rem 1.1rem; border-radius:1rem; border:1.5px solid var(--border-soft);
+font-weight:700; font-size:.95rem; background:var(--card-white); color:var(--ink);
+appearance:none; -webkit-appearance:none;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23F97316' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>");
+background-repeat:no-repeat; background-position:right 1.1rem center;
+}
+.select-input:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+.manual-tx-input{
+width:100%; max-width:12rem; padding:1rem 1.1rem; border-radius:1rem; border:1.5px solid var(--border-soft);
+font-weight:700; font-size:.95rem; background:var(--card-white); color:var(--ink); text-align:left;
+}
+.manual-tx-input:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+.stack-row{ display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem; padding:.6rem 0; border-bottom:1px solid var(--border-soft); }
+.stack-row:last-child{ border-bottom:none; }
+.stack-label{ font-size:.85rem; font-weight:600; }
+.stack-sub{ font-size:.72rem; color:var(--ink-muted); }
+.stack-value{ font-size:.85rem; font-weight:700; white-space:nowrap; color:var(--ink-muted); }
+.stack-value.free .was{ text-decoration:line-through; margin-right:.35rem; }
+.stack-value.free .now{ color:var(--green); font-weight:800; }
+.bonus-tag{
+display:inline-block; font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+padding:.1rem .45rem; border-radius:9999px; background:var(--green-soft); color:var(--green); margin-left:.4rem;
+}
+.discount-badge{
+display:inline-block; font-size:.75rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+padding:.3rem .7rem; border-radius:9999px; background:var(--green-soft); color:var(--green); border:1px solid var(--green);
+}
+.plan-badge{
+display:inline-block; font-size:.7rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em;
+padding:.3rem .75rem; border-radius:9999px; background:var(--bg-amber-soft); color:var(--orange); border:1px solid var(--orange);
+}
+.info-note{ background:var(--bg-amber-soft); border-radius:.85rem; padding:.9rem 1rem; font-size:.78rem; color:var(--ink-muted); }
+.field-error{ color:var(--red); font-size:.75rem; margin-top:.25rem; display:none; }
+.field-error.visible{ display:block; }
+.email-send-btn.is-sending{ opacity:.7; pointer-events:none; }
+.modal-overlay{
+display:none; position:fixed; inset:0; z-index:50;
+background:rgba(41,37,36,0.5);
+align-items:center; justify-content:center; padding:1rem;
+}
+.modal-overlay.visible{ display:flex; }
+.modal-box{
+background:var(--card-white); border-radius:1rem; padding:2rem;
+max-width:420px; width:100%; text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+</style>
+</head>
+<body class="min-h-screen">
+<section class="max-w-3xl mx-auto px-6 pt-16 pb-10 text-center">
+<p class="uppercase tracking-[0.2em] text-xs font-bold" style="color:var(--orange);">Annual Plans</p>
+<h1 class="mt-3 text-4xl sm:text-5xl font-black leading-tight">
+Choose <span class="brand-gradient-text">your annual plan</span>
+</h1>
+<p class="mt-4 max-w-xl mx-auto text-base sm:text-lg" style="color:var(--ink-muted);">
+For independent contractors and small business owners. Answer a few questions and we'll
+recommend a plan and show you the price. Each plan covers one business.
+</p>
+</section>
+<section class="max-w-3xl mx-auto px-6 pb-20">
+<div class="wizard-card">
+<div class="step-dots" id="step-dots"></div>
+<!-- Step: identify -->
+<div class="wizard-step" data-step="identify">
+<h2 class="text-xl font-extrabold mb-1">What type of business do you have?</h2>
+<p class="text-sm mb-5" style="color:var(--ink-muted);">This tells us which plan fits you.</p>
+<div class="space-y-3" id="identify-choices">
+<button type="button" class="choice-card" data-plan="ic">
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span>
+<span class="choice-title block">Solo Plan</span>
+<span class="choice-sub">You work for yourself: freelancers, independent contractors, sole owners, and single-member LLCs</span>
+</span>
+</button>
+<button type="button" class="choice-card" data-plan="sbo">
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span>
+<span class="choice-title block">Enterprise Plan</span>
+<span class="choice-sub">Partnerships, S-corporations, C-corporations, and nonprofits</span>
+</span>
+</button>
+<button type="button" class="choice-card" data-plan="growth">
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span>
+<span class="choice-title block">My situation is more complex</span>
+<span class="choice-sub">More than one business, very high transaction volume, or you're not sure. Let's talk.</span>
+</span>
+</button>
+</div>
+<div class="mt-7 flex justify-end">
+<button type="button" class="btn-primary focus-ring" id="identify-next" disabled>Continue</button>
+</div>
+</div>
+<!-- Step: sbo registered? -->
+<div class="wizard-step" data-step="registered">
+<h2 class="text-xl font-extrabold mb-1">Is your business already registered with your state?</h2>
+<p class="text-sm mb-5" style="color:var(--ink-muted);">Registered means you've filed the paperwork that makes your business official with the state, such as Articles of Organization for an LLC.</p>
+<div class="space-y-3" id="registered-choices">
+<button type="button" class="choice-card" data-registered="yes">
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span>
+<span class="choice-title block">Yes, it's registered</span>
+<span class="choice-sub">My business is already set up with the state</span>
+</span>
+</button>
+<button type="button" class="choice-card" data-registered="no">
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span>
+<span class="choice-title block">Not yet</span>
+<span class="choice-sub">I still need to set up my business. Help starting your business is 50% off.</span>
+</span>
+</button>
+</div>
+<div class="mt-7 flex justify-between">
+<button type="button" class="btn-ghost focus-ring" data-back>Back</button>
+</div>
+</div>
+<!-- Step: sbo entity type (not yet registered) -->
+<div class="wizard-step" data-step="sbo-entity-type">
+<h2 class="text-xl font-extrabold mb-1">What type of business are you setting up?</h2>
+<p class="text-sm mb-5" style="color:var(--ink-muted);">We'll match the right business tax return and take 50% off helping you start your business.</p>
+<div class="space-y-3" id="sbo-entity-choices"></div>
+<div class="mt-7 flex justify-between">
+<button type="button" class="btn-ghost focus-ring" data-back>Back</button>
+</div>
+</div>
+<!-- Step: sbo return type -->
+<div class="wizard-step" data-step="sbo-return">
+<h2 class="text-xl font-extrabold mb-1">Which tax return does your business file?</h2>
+<p class="text-sm mb-5" style="color:var(--ink-muted);">Not sure? Check last year's business return or ask us. If your business gives you a K-1 (the form showing your share of the profit), your personal return is included free.</p>
+<div class="space-y-3" id="sbo-return-choices"></div>
+<div class="mt-7 flex justify-between">
+<button type="button" class="btn-ghost focus-ring" data-back>Back</button>
+<button type="button" class="btn-primary focus-ring" id="sbo-return-next" disabled>Continue</button>
+</div>
+</div>
+<!-- Step: bookkeeping -->
+<div class="wizard-step" data-step="bookkeeping">
+<h2 class="text-xl font-extrabold mb-1">How many transactions does your business have each month?</h2>
+<p class="text-sm mb-5" style="color:var(--ink-muted);">A transaction is any money in or out, like a sale, bill payment, card purchase, or transfer. Not sure? Count the lines on last month's bank and card statements. Bookkeeping includes sorting your transactions, matching your books to your bank, and a monthly profit and loss report.</p>
+<label for="bookkeeping-tx-manual-input" class="block text-sm font-bold mb-2">
+Transactions per month
+</label>
+<input type="number" id="bookkeeping-tx-manual-input" class="manual-tx-input focus-ring" min="0" step="1" inputmode="numeric" value="100" placeholder="e.g. 100">
+<div class="mt-5 pt-5 border-t flex items-center justify-between" style="border-color:var(--border-soft);">
+<span class="text-sm font-bold">Estimated bookkeeping cost for the year</span>
+<span id="bookkeeping-fee-display" class="text-lg font-black" style="color:var(--red);">$0/yr</span>
+</div>
+<p id="bookkeeping-detail" class="text-xs mt-2" style="color:var(--ink-muted);"></p>
+<button type="button" id="bookkeeping-tier-toggle" class="mt-4 text-xs font-bold underline focus-ring" style="color:var(--orange);" aria-expanded="false">
+See how pricing works
+</button>
+<div id="bookkeeping-tier-table" class="hidden mt-3 space-y-1.5 text-xs" style="color:var(--ink-muted);">
+<p>Monthly prices are shown below. The cost of each transaction goes down as your volume goes up. Example: 120 transactions = $300 + (20 × $1.50) = $330 a month.</p>
+<div class="flex justify-between"><span>1 – 25 transactions</span><span class="font-semibold">$75/mo flat</span></div>
+<div class="flex justify-between"><span>26 – 50 transactions</span><span class="font-semibold">$75 + $3.00 each over 25</span></div>
+<div class="flex justify-between"><span>51 – 100 transactions</span><span class="font-semibold">$150 + $3.00 each over 50</span></div>
+<div class="flex justify-between"><span>101 – 200 transactions</span><span class="font-semibold">$300 + $1.50 each over 100</span></div>
+<div class="flex justify-between"><span>201 – 400 transactions</span><span class="font-semibold">$450 + $0.75 each over 200</span></div>
+<div class="flex justify-between"><span>401 – 800 transactions</span><span class="font-semibold">$600 + $0.50 each over 400</span></div>
+<div class="flex justify-between"><span>801 – 2,000 transactions</span><span class="font-semibold">$800 + $0.35 each over 800</span></div>
+<div class="flex justify-between"><span>2,000+ transactions</span><span class="font-semibold">Custom price</span></div>
+</div>
+<div class="mt-7 flex justify-between">
+<button type="button" class="btn-ghost focus-ring" data-back>Back</button>
+<button type="button" class="btn-primary focus-ring" id="bookkeeping-next">See my plan</button>
+</div>
+</div>
+<!-- Step: results -->
+<div class="wizard-step" data-step="results">
+<p class="text-center"><span class="plan-badge" id="results-plan-badge">Your Plan</span></p>
+<h2 class="text-2xl font-extrabold text-center mt-2 mb-1" id="results-headline">Plan Name</h2>
+<p class="text-sm text-center mb-6" style="color:var(--ink-muted);" id="results-tagline">Plan description.</p>
+<div id="stack-list"></div>
+<div class="info-note mt-4 hidden" id="bonus-note"></div>
+<div class="mt-5 pt-5 border-t space-y-2" style="border-color:var(--border-soft);">
+<div class="flex items-center justify-between text-sm">
+<span style="color:var(--ink-muted);">Total value if purchased separately</span>
+<span id="total-value" class="font-bold">$0</span>
+</div>
+<div class="flex items-center justify-between text-sm" id="discount-row">
+<span style="color:var(--ink-muted);">25% off your business tax return when you pay for the year at signing</span>
+<span id="discount-amount" class="font-bold" style="color:var(--green);">–$0</span>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t text-center" style="border-color:var(--border-soft);">
+<span class="discount-badge" id="discount-badge-label">Discounted total due at signing</span>
+<p class="mt-3 text-xs font-semibold uppercase tracking-wide" style="color:var(--ink-muted);">Your price for the year</p>
+<p class="text-4xl font-black mt-1" id="final-price" style="color:var(--red);">$0</p>
+<p class="mt-2 text-xs font-semibold" style="color:var(--green);" id="savings-line"></p>
+</div>
+<div id="quote-note" class="mt-4 text-xs text-center hidden" style="color:var(--orange);"></div>
+<p class="mt-5 text-xs text-center" style="color:var(--ink-muted);">This is an estimate, not a final price. We confirm your price after reviewing your documents, before any work begins. Each plan covers one business. If you have more than one, you'll need a plan for each.</p>
+<div class="mt-4">
+<label for="prospect-email-results" class="block text-sm font-bold mb-1">Your email</label>
+<input type="email" id="prospect-email-results" required
+class="w-full p-3 rounded-xl border-2 focus-ring"
+style="border-color:var(--border-soft);"
+placeholder="you@example.com">
+<p id="email-error-results" class="field-error">Please enter a valid email address.</p>
+</div>
+<a id="email-plan-link" href="#" class="email-send-btn mt-4 block text-center font-semibold py-3 rounded-full text-white brand-gradient focus-ring">
+Email me my plan
+</a>
+<button type="button" id="start-over" class="mt-3 w-full text-center text-sm font-semibold py-2 rounded-full border focus-ring" style="border-color:var(--border-soft); color:var(--ink-muted);">
+Start over
+</button>
+</div>
+<!-- Step: growth -->
+<div class="wizard-step" data-step="growth">
+<p class="text-center"><span class="plan-badge">Growth Plan</span></p>
+<h2 class="text-2xl font-extrabold text-center mt-2 mb-3">Let's build a custom plan</h2>
+<p class="text-sm text-center mb-6" style="color:var(--ink-muted);">
+Plans for more than one business or very high transaction volume are priced individually, so we
+can get your price right. Enter your email and we'll follow up with a plan built around your numbers.
+</p>
+<div class="info-note">
+Growth Plans include the same benefits: bookkeeping, tax preparation, 25% off your business
+tax return when you pay for the year at signing, a free tax extension if you need one, 1 year of IRS
+Document Monitoring, and 50% off help starting a business if you need it.
+</div>
+<div class="mt-4">
+<label for="prospect-email-growth" class="block text-sm font-bold mb-1">Your email</label>
+<input type="email" id="prospect-email-growth" required
+class="w-full p-3 rounded-xl border-2 focus-ring"
+style="border-color:var(--border-soft);"
+placeholder="you@example.com">
+<p id="email-error-growth" class="field-error">Please enter a valid email address.</p>
+</div>
+<a id="email-growth-link" href="#" class="email-send-btn mt-4 block text-center font-semibold py-3 rounded-full text-white brand-gradient focus-ring">
+Contact me about a Growth Plan
+</a>
+<button type="button" id="growth-back" class="mt-3 w-full text-center text-sm font-semibold py-2 rounded-full border focus-ring" style="border-color:var(--border-soft); color:var(--ink-muted);">
+Back
+</button>
+</div>
+</div>
+</section>
+<div id="client-status-modal" class="modal-overlay">
+<div class="modal-box">
+<h3 class="text-lg font-extrabold mb-2">Your plan is on its way!</h3>
+<p class="text-sm mb-6" style="color:var(--ink-muted);">One quick question so we can point you to the right place:</p>
+<button type="button" id="btn-new-client" class="block w-full text-center font-semibold py-3 rounded-full text-white brand-gradient focus-ring mb-3">
+I'm a new client. Sign me up
+</button>
+<button type="button" id="btn-existing-client" class="block w-full text-center font-semibold py-3 rounded-full border focus-ring" style="border-color:var(--border-soft); color:var(--ink-muted);">
+I'm already a client
+</button>
+</div>
+</div>
+<script>
+(function(){
+emailjs.init("tertdNKSBb52NULGv");
+var EMAILJS_SERVICE_ID = "service_c0emmbq";
+var EMAILJS_TEMPLATE_ID = "template_qodrosi";
+var TAXDOME_SIGNUP_URL = "https://portal.taxentric.com/en-us/signup";
+var TAXENTRIC_HOME_URL = "https://taxentric.com/";
+var statusModal = document.getElementById('client-status-modal');
+var newClientBtn = document.getElementById('btn-new-client');
+var existingClientBtn = document.getElementById('btn-existing-client');
+function goTop(url){
+try{
+window.top.location.href = url;
+} catch(err){
+window.open(url, '_blank', 'noopener');
+}
+}
+newClientBtn.addEventListener('click', function(){
+goTop(TAXDOME_SIGNUP_URL);
+});
+existingClientBtn.addEventListener('click', function(){
+goTop(TAXENTRIC_HOME_URL);
+});
+function wireEmailSend(linkEl, inputEl, errorEl, subjectFn, getBodyLines){
+linkEl.addEventListener('click', function(e){
+e.preventDefault();
+if(!inputEl.value || !inputEl.checkValidity()){
+errorEl.classList.add('visible');
+inputEl.focus();
+return;
+}
+errorEl.classList.remove('visible');
+var originalText = linkEl.textContent;
+linkEl.classList.add('is-sending');
+linkEl.textContent = 'Sending...';
+emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+to_email: "support@taxentric.com",
+cc_email: inputEl.value,
+from_email: inputEl.value,
+subject: subjectFn(),
+estimate_body: getBodyLines().join('\n')
+}).then(function(){
+linkEl.classList.remove('is-sending');
+linkEl.textContent = originalText;
+statusModal.classList.add('visible');
+}).catch(function(err){
+linkEl.classList.remove('is-sending');
+linkEl.textContent = originalText;
+alert('Something went wrong sending your plan. Please try again.');
+console.error(err);
+});
+});
+}
+var state = {
+plan: null,
+registered: null,
+sboReturnType: null,
+entityType: null,
+bookkeepingTx: 100
+};
+var SBO_RETURN_OPTIONS = [
+{ id:'partnership', title:'Partnership', sub:'Form 1065, includes K-1s for 2 owners', price:600, passthrough:true },
+{ id:'scorp', title:'S-Corporation', sub:'Form 1120-S, includes 1 owner K-1', price:700, passthrough:true },
+{ id:'ccorp', title:'C-Corporation', sub:'Form 1120', price:800, passthrough:false },
+{ id:'nonprofit_ez', title:'Nonprofit, smaller', sub:'Form 990-EZ: yearly income under $200,000 and assets under $500,000', price:300, passthrough:false },
+{ id:'nonprofit_full', title:'Nonprofit, larger or private foundation', sub:'Form 990 or Form 990-PF', price:600, passthrough:false }
+];
+var ENTITY_TYPE_OPTIONS = [
+{ id:'partnership', title:'Partnership', sub:'Two or more owners, such as a multi-member LLC', returnType:'partnership' },
+{ id:'corporation', title:'Corporation', sub:'Taxed as a C-corporation unless you choose S-corporation status', returnType:'ccorp' },
+{ id:'nonprofit', title:'Nonprofit', sub:'A 501(c)(3) or other tax-exempt organization', returnType:'nonprofit_ez' }
+];
+var BK_TIERS = [
+{ max:25,   base:75,  rate:0,    prevCap:0   },
+{ max:50,   base:75,  rate:3.00, prevCap:25  },
+{ max:100,  base:150, rate:3.00, prevCap:50  },
+{ max:200,  base:300, rate:1.50, prevCap:100 },
+{ max:400,  base:450, rate:0.75, prevCap:200 },
+{ max:800,  base:600, rate:0.50, prevCap:400 },
+{ max:2000, base:800, rate:0.35, prevCap:800 }
+];
+function calcBookkeepingFee(tx){
+if(tx <= 0) return { fee:0, overCap:false };
+for(var i=0;i<BK_TIERS.length;i++){
+var t = BK_TIERS[i];
+if(tx <= t.max){
+return { fee: t.base + (tx - t.prevCap) * t.rate, overCap:false };
+}
+}
+return { fee:0, overCap:true };
+}
+var PLANS = {
+ic: {
+name: 'Solo Plan',
+tagline: 'For freelancers, independent contractors, sole owners, and single-member LLCs.',
+personalReturnBonusLabel: 'Personal tax return (Form 1040) with 1 state and 1 Schedule C'
+},
+sbo: {
+name: 'Enterprise Plan',
+tagline: 'For partnerships, S-corporations, C-corporations, and nonprofits.'
+}
+};
+var BUSINESS_RETURN_DISCOUNT_RATE = 0.25;
+var currentStepId = 'identify';
+var planBodyLines = [];
+function getSboOption(){ return SBO_RETURN_OPTIONS.find(o => o.id === state.sboReturnType); }
+function isPassthrough(){ var o = getSboOption(); return o ? o.passthrough : false; }
+function visibleSteps(){
+if(state.plan === 'growth') return ['identify','growth'];
+var steps = ['identify'];
+if(state.plan === 'ic' || state.plan === 'sbo'){
+steps.push('registered');
+}
+if(state.plan === 'sbo'){
+if(state.registered === true){
+steps.push('sbo-return');
+} else if(state.registered === false){
+steps.push('sbo-entity-type');
+}
+}
+steps.push('bookkeeping');
+steps.push('results');
+return steps;
+}
+function renderDots(){
+if(currentStepId === 'results' || currentStepId === 'growth'){
+document.getElementById('step-dots').innerHTML = '';
+return;
+}
+var steps = visibleSteps();
+var currentIndex = steps.indexOf(currentStepId);
+var dotsEl = document.getElementById('step-dots');
+dotsEl.innerHTML = '';
+steps.forEach((id, i) => {
+if(id === 'results' || id === 'growth') return;
+var dot = document.createElement('span');
+dot.className = 'step-dot' + (i < currentIndex ? ' done' : '') + (i === currentIndex ? ' current' : '');
+dotsEl.appendChild(dot);
+});
+}
+function showStep(id){
+currentStepId = id;
+document.querySelectorAll('.wizard-step').forEach(el => {
+el.classList.toggle('active', el.dataset.step === id);
+});
+renderDots();
+if(id === 'registered') renderRegisteredChoices();
+if(id === 'sbo-entity-type') renderEntityChoices();
+if(id === 'sbo-return') renderSboChoices();
+if(id === 'bookkeeping') renderBookkeepingInput();
+if(id === 'results') renderResults();
+if(window.TXscroll) TXscroll(0);
+}
+function goNext(){
+var steps = visibleSteps();
+var idx = steps.indexOf(currentStepId);
+if(idx < steps.length - 1) showStep(steps[idx + 1]);
+}
+function goBack(){
+var steps = visibleSteps();
+var idx = steps.indexOf(currentStepId);
+if(idx > 0) showStep(steps[idx - 1]);
+}
+var identifyNextBtn = document.getElementById('identify-next');
+document.querySelectorAll('#identify-choices .choice-card').forEach(card => {
+card.addEventListener('click', () => {
+document.querySelectorAll('#identify-choices .choice-card').forEach(c => c.classList.remove('selected'));
+card.classList.add('selected');
+state.plan = card.dataset.plan;
+state.registered = null;
+state.sboReturnType = null;
+state.entityType = null;
+state.bookkeepingTx = 100;
+identifyNextBtn.disabled = false;
+});
+});
+identifyNextBtn.addEventListener('click', () => {
+if(state.plan === 'growth') showStep('growth');
+else goNext();
+});
+var registeredChoicesWrap = document.getElementById('registered-choices');
+function renderRegisteredChoices(){
+registeredChoicesWrap.querySelectorAll('.choice-card').forEach(card => {
+var val = card.dataset.registered === 'yes';
+card.classList.toggle('selected', state.registered === val);
+});
+}
+registeredChoicesWrap.querySelectorAll('.choice-card').forEach(card => {
+card.addEventListener('click', () => {
+var isRegistered = card.dataset.registered === 'yes';
+state.registered = isRegistered;
+if(isRegistered){
+state.entityType = null;
+} else {
+state.sboReturnType = null;
+}
+renderRegisteredChoices();
+goNext();
+});
+});
+var entityChoicesWrap = document.getElementById('sbo-entity-choices');
+function renderEntityChoices(){
+entityChoicesWrap.innerHTML = '';
+ENTITY_TYPE_OPTIONS.forEach(opt => {
+var card = document.createElement('button');
+card.type = 'button';
+card.className = 'choice-card' + (state.entityType === opt.id ? ' selected' : '');
+card.innerHTML = `
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span><span class="choice-title block">${opt.title}</span><span class="choice-sub">${opt.sub}</span></span>`;
+card.addEventListener('click', () => {
+state.entityType = opt.id;
+state.sboReturnType = opt.returnType;
+renderEntityChoices();
+goNext();
+});
+entityChoicesWrap.appendChild(card);
+});
+}
+var sboNextBtn = document.getElementById('sbo-return-next');
+function renderSboChoices(){
+var wrap = document.getElementById('sbo-return-choices');
+sboNextBtn.disabled = !state.sboReturnType;
+wrap.innerHTML = '';
+SBO_RETURN_OPTIONS.forEach(opt => {
+var card = document.createElement('button');
+card.type = 'button';
+card.className = 'choice-card' + (state.sboReturnType === opt.id ? ' selected' : '');
+card.innerHTML = `
+<span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+<span><span class="choice-title block">${opt.title}</span><span class="choice-sub">${opt.sub}</span></span>
+<span class="choice-price">$${opt.price}/yr</span>`;
+card.addEventListener('click', () => {
+state.sboReturnType = opt.id;
+renderSboChoices();
+sboNextBtn.disabled = false;
+});
+wrap.appendChild(card);
+});
+}
+sboNextBtn.addEventListener('click', goNext);
+var bookkeepingNextBtn = document.getElementById('bookkeeping-next');
+var bookkeepingManualInput = document.getElementById('bookkeeping-tx-manual-input');
+var bookkeepingFeeDisplay = document.getElementById('bookkeeping-fee-display');
+var bookkeepingDetail = document.getElementById('bookkeeping-detail');
+var bookkeepingTierToggle = document.getElementById('bookkeeping-tier-toggle');
+var bookkeepingTierTable = document.getElementById('bookkeeping-tier-table');
+bookkeepingTierToggle.addEventListener('click', () => {
+var nowHidden = bookkeepingTierTable.classList.toggle('hidden');
+bookkeepingTierToggle.setAttribute('aria-expanded', nowHidden ? 'false' : 'true');
+bookkeepingTierToggle.textContent = nowHidden ? 'See how pricing works' : 'Hide pricing details';
+});
+function getBookkeepingTx(){
+var tx = Math.round(Number(bookkeepingManualInput.value));
+if(isNaN(tx) || tx < 0) tx = 0;
+return tx;
+}
+function updateBookkeepingDisplay(){
+var tx = getBookkeepingTx();
+var result = calcBookkeepingFee(tx);
+if(result.overCap){
+bookkeepingFeeDisplay.textContent = 'Custom price';
+bookkeepingDetail.textContent = 'Over 2,000 transactions a month is priced individually. We will follow up with a custom price.';
+} else {
+bookkeepingFeeDisplay.textContent = '$' + (result.fee * 12).toLocaleString(undefined,{maximumFractionDigits:2}) + '/yr';
+bookkeepingDetail.textContent = 'Based on standard bank and credit card accounts. Accounts like Stripe, Shopify, or foreign currency may cost more.';
+}
+}
+bookkeepingManualInput.addEventListener('input', () => {
+state.bookkeepingTx = getBookkeepingTx();
+updateBookkeepingDisplay();
+});
+bookkeepingManualInput.addEventListener('blur', () => {
+bookkeepingManualInput.value = getBookkeepingTx();
+});
+function renderBookkeepingInput(){
+bookkeepingManualInput.value = state.bookkeepingTx;
+updateBookkeepingDisplay();
+}
+bookkeepingNextBtn.addEventListener('click', goNext);
+document.querySelectorAll('[data-back]').forEach(btn => btn.addEventListener('click', goBack));
+document.getElementById('growth-back').addEventListener('click', () => showStep('identify'));
+var ENTITY_FORMATION_MAP = {
+ic: { label: 'LLC formation', value: 300 },
+partnership: { label: 'Partnership formation', value: 400 },
+scorp: { label: 'Corporation formation', value: 500 },
+ccorp: { label: 'Corporation formation', value: 500 },
+nonprofit_ez: { label: 'Nonprofit formation', value: 250 },
+nonprofit_full: { label: 'Nonprofit formation', value: 250 }
+};
+var ENTITY_FORMATION_DISCOUNT_RATE = 0.5;
+var MONITORING_BONUS_LABEL = 'IRS Document Monitoring, 1 year';
+var MONITORING_BONUS_VALUE = 25;
+function getEntityFormationBonus(){
+if(state.registered !== false) return null;
+var key = null;
+if(state.plan === 'ic'){
+key = 'ic';
+} else if(state.plan === 'sbo'){
+var opt = getSboOption();
+key = opt ? opt.id : null;
+}
+var item = key ? ENTITY_FORMATION_MAP[key] : null;
+if(!item) return null;
+return { label: item.label, value: item.value, chargedAmount: item.value * ENTITY_FORMATION_DISCOUNT_RATE };
+}
+function getSboBonuses(){
+const opt = getSboOption();
+if(!opt) return [];
+if(opt.id === 'partnership'){
+return [
+
+];
+}
+else if(opt.id === 'scorp' || opt.id === 'ccorp'){
+return [
+{ label: 'Quarterly payroll tax returns for the owner (Form 941), 4 per year', value: 300 },
+{ label: 'W-2 for the owner', value: 40 }
+];
+}
+else if(opt.id.includes('nonprofit')){
+return [
+{ label: 'Nonprofit fund accounting, 12 months', value: 600 }
+];
+}
+return [];
+}
+function renderResults(){
+const plan = PLANS[state.plan];
+const bkTx = state.bookkeepingTx;
+const bk = calcBookkeepingFee(bkTx);
+const sboOpt = getSboOption();
+document.getElementById('results-plan-badge').textContent = plan.name;
+document.getElementById('results-headline').textContent = plan.name;
+document.getElementById('results-tagline').textContent = plan.tagline;
+let coreRaw = 0;
+let businessReturnAmount = 0;
+let rows = '';
+if(state.plan === 'sbo' && sboOpt){
+coreRaw += sboOpt.price;
+businessReturnAmount = sboOpt.price;
+rows += `<div class="stack-row"><span class="stack-label">${sboOpt.title} business tax return</span><span class="stack-value">$${sboOpt.price.toLocaleString()}/yr</span></div>`;
+}
+let hasQuote = false;
+const bkLabel = `Bookkeeping, ${bkTx.toLocaleString()} transactions/month`;
+if(bk.overCap){
+hasQuote = true;
+rows += `<div class="stack-row"><span class="stack-label">${bkLabel}</span><span class="stack-value">Custom price</span></div>`;
+} else {
+const bkAnnual = bk.fee * 12;
+coreRaw += bkAnnual;
+rows += `<div class="stack-row"><span class="stack-label">${bkLabel}</span><span class="stack-value">$${bkAnnual.toLocaleString()}/yr</span></div>`;
+}
+let bonuses = [];
+if(state.plan === 'ic'){
+bonuses = [
+{ label: plan.personalReturnBonusLabel, value: 300, chargedAmount: 0 }
+];
+} else if(state.plan === 'sbo'){
+bonuses = getSboBonuses().map(b => Object.assign({ chargedAmount: 0 }, b));
+if(isPassthrough()){
+bonuses.unshift({ label: 'Personal tax return (Form 1040) with 1 state and Schedule E for your K-1', value: 300, chargedAmount: 0 });
+}
+}
+const entityBonus = getEntityFormationBonus();
+if(entityBonus) bonuses.push(entityBonus);
+bonuses.push({ label: 'Tax extension filing, if you need more time', value: 25, chargedAmount: 0 });
+bonuses.push({ label: MONITORING_BONUS_LABEL, value: MONITORING_BONUS_VALUE, chargedAmount: 0 });
+const bonusTotal = bonuses.reduce((sum, b) => sum + b.value, 0);
+const bonusChargedTotal = bonuses.reduce((sum, b) => sum + (b.chargedAmount || 0), 0);
+bonuses.forEach(b => {
+const charged = b.chargedAmount || 0;
+rows += `<div class="stack-row"><span class="stack-label">${b.label}<span class="bonus-tag">${charged > 0 ? '50% off' : 'Free'}</span></span>
+<span class="stack-value free"><span class="was">$${b.value.toLocaleString()}</span><span class="now">$${charged.toLocaleString()}</span></span></div>`;
+});
+document.getElementById('stack-list').innerHTML = rows;
+const totalValue = coreRaw + bonusTotal;
+const hasBusinessReturnDiscount = state.plan === 'sbo' && businessReturnAmount > 0;
+const discountAmount = hasBusinessReturnDiscount ? businessReturnAmount * BUSINESS_RETURN_DISCOUNT_RATE : 0;
+const finalPrice = coreRaw - discountAmount + bonusChargedTotal;
+const savings = totalValue - finalPrice;
+document.getElementById('total-value').textContent = '$' + totalValue.toLocaleString();
+document.getElementById('discount-amount').textContent = '–$' + discountAmount.toLocaleString();
+document.getElementById('final-price').textContent = '$' + finalPrice.toLocaleString();
+document.getElementById('discount-row').classList.toggle('hidden', !hasBusinessReturnDiscount);
+document.getElementById('discount-badge-label').textContent = hasBusinessReturnDiscount ? 'Discounted total due at signing' : 'Total due at signing';
+document.getElementById('savings-line').textContent = hasQuote ? '' :
+`You get $${totalValue.toLocaleString()} in value for $${finalPrice.toLocaleString()}${hasBusinessReturnDiscount ? `. You save $${savings.toLocaleString()}.` : ''}`;
+const quoteNote = document.getElementById('quote-note');
+quoteNote.classList.toggle('hidden', !hasQuote);
+if(hasQuote) quoteNote.textContent = "Your bookkeeping volume needs a custom price. We'll follow up with an exact number before your plan is final.";
+let bodyLines = [
+`${plan.name.toUpperCase()} (covers one business)`,
+''
+];
+if(state.plan === 'sbo' && sboOpt){
+bodyLines.push(`${sboOpt.title} business tax return: $${sboOpt.price}/yr`);
+}
+const bkPrice = bk.overCap ? 'Custom price' : `$${(bk.fee*12).toLocaleString()}/yr`;
+bodyLines.push(`Bookkeeping, ${bkTx.toLocaleString()} transactions/month: ${bkPrice}`);
+bodyLines.push('');
+bodyLines.push(`Bonus services included ($${bonusTotal} total value):`);
+bonuses.forEach(b => {
+const charged = b.chargedAmount || 0;
+bodyLines.push(charged > 0
+? `• ${b.label}, 50% off: $${b.value.toLocaleString()} → $${charged.toLocaleString()}`
+: `• ${b.label} (free)`);
+});
+bodyLines.push('');
+bodyLines.push(`Total value if purchased separately: $${totalValue.toLocaleString()}`);
+if(hasBusinessReturnDiscount){
+bodyLines.push(`25% off business tax return (paid for the year at signing): –$${discountAmount.toLocaleString()}`);
+}
+if(bonusChargedTotal > 0){
+bodyLines.push(`Discounted bonus services due at signing: $${bonusChargedTotal.toLocaleString()}`);
+}
+bodyLines.push(`Annual price: $${finalPrice.toLocaleString()}`);
+if(hasQuote) bodyLines.push('','Bookkeeping will be priced after we review your transaction volume.');
+planBodyLines = bodyLines;
+}
+wireEmailSend(
+document.getElementById('email-plan-link'),
+document.getElementById('prospect-email-results'),
+document.getElementById('email-error-results'),
+function(){ return `My Taxentric ${PLANS[state.plan] ? PLANS[state.plan].name : 'Plan'}`; },
+function(){ return planBodyLines; }
+);
+wireEmailSend(
+document.getElementById('email-growth-link'),
+document.getElementById('prospect-email-growth'),
+document.getElementById('email-error-growth'),
+function(){ return 'Growth Plan inquiry'; },
+function(){
+return [
+'GROWTH PLAN REQUEST',
+'',
+"A custom plan for more than one business or high transaction volume. We'll follow up to build a plan around your numbers."
+];
+}
+);
+document.getElementById('start-over').addEventListener('click', () => {
+state = { plan: null, registered: null, sboReturnType: null, entityType: null, bookkeepingTx: 100 };
+document.querySelectorAll('#identify-choices .choice-card').forEach(c => c.classList.remove('selected'));
+document.getElementById('identify-next').disabled = true;
+document.getElementById('sbo-return-next').disabled = true;
+bookkeepingManualInput.value = 100;
+document.getElementById('prospect-email-results').value = '';
+document.getElementById('email-error-results').classList.remove('visible');
+document.getElementById('prospect-email-growth').value = '';
+document.getElementById('email-error-growth').classList.remove('visible');
+showStep('identify');
+});
+showStep('identify');
+})();
+</script>
+<script>
+/* Embedded on taxentric.com: report height to the pricing page and ask it to scroll */
+(function(){
+if(window.parent===window)return;
+var de=document.documentElement;de.classList.add("tx-embed");
+var st=document.createElement("style");st.textContent="html.tx-embed,html.tx-embed body{min-height:0!important;height:auto!important;overflow:hidden!important}html.tx-embed .modal-overlay{position:absolute!important;align-items:flex-start!important}";document.head.appendChild(st);
+var last=0;
+function send(){var h=Math.ceil(document.body.getBoundingClientRect().height+parseFloat(getComputedStyle(document.body).marginTop||0)+parseFloat(getComputedStyle(document.body).marginBottom||0));if(Math.abs(h-last)>1){last=h;parent.postMessage({tx:"height",h:h},"*")}}
+window.TXscroll=function(y){parent.postMessage({tx:"scroll",y:Math.max(0,y||0)},"*")};
+window.addEventListener("load",send);if(window.ResizeObserver)new ResizeObserver(send).observe(document.body);setInterval(send,800);send();
+var clickY=0;document.addEventListener("click",function(e){clickY=e.pageY},true);
+var m=document.querySelector(".modal-overlay");
+if(m&&window.MutationObserver)new MutationObserver(function(){if(m.classList.contains("visible")){var y=Math.max(16,clickY-180);var b=m.querySelector(".modal-box");if(b)b.style.marginTop=y+"px";TXscroll(y-24)}}).observe(m,{attributes:true,attributeFilter:["class"]});
+})();
+</script>
+</body>
+</html>

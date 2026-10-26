@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing | Taxentric Solutions</title>
+<link rel="icon" href="https://referrals.taxentric.com/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;background:#FFF9F0;font-family:Inter,system-ui,sans-serif;color:#292524}
+  .tx-wrap{max-width:1100px;margin:0 auto;padding:28px 16px 0}
+  .tx-toggle{display:flex;gap:4px;max-width:520px;margin:0 auto;padding:5px;background:#fff;border:1px solid #F2E4C5;border-radius:999px;box-shadow:0 6px 18px -10px rgba(194,65,12,.35)}
+  .tx-toggle button{flex:1;min-height:48px;border:0;border-radius:999px;background:transparent;font:700 15px Inter,system-ui,sans-serif;color:#78716C;cursor:pointer;padding:0 14px;line-height:1.2}
+  .tx-toggle button[aria-selected="true"]{background:linear-gradient(90deg,#F97316,#DC2626);color:#fff}
+  .tx-toggle button:focus-visible{outline:3px solid #F59E0B;outline-offset:2px}
+  .tx-toggle small{display:block;font-weight:500;font-size:12px;opacity:.85;margin-top:2px}
+  .tx-frames iframe{display:block;width:100%;border:0;height:900px;background:#FFF9F0}
+  .tx-frames iframe[hidden]{display:none}
+  @media(max-width:420px){.tx-toggle button{font-size:14px}.tx-toggle small{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="tx-wrap">
+  <div class="tx-toggle" role="tablist" aria-label="Pricing options">
+    <button type="button" role="tab" id="tx-tab-est" aria-selected="true" aria-controls="tx-est">One service<small>See your price</small></button>
+    <button type="button" role="tab" id="tx-tab-plans" aria-selected="false" aria-controls="tx-plans">Annual plans<small>Bundle and save</small></button>
+  </div>
+</div>
+<div class="tx-frames">
+  <iframe id="tx-est" title="Fee estimator" src="https://referrals.taxentric.com/pricing/estimator.html"></iframe>
+  <iframe id="tx-plans" title="Annual plans" hidden data-src="https://referrals.taxentric.com/pricing/plans.html"></iframe>
+</div>
+<script>
+(function(){
+  var est=document.getElementById("tx-est"),plans=document.getElementById("tx-plans");
+  var tabE=document.getElementById("tx-tab-est"),tabP=document.getElementById("tx-tab-plans");
+  var frames=[est,plans];
+
+  /* Grow this GoDaddy embed box to fit, so there's no inner scrollbar */
+  function fitOuter(){try{var fr=window.frameElement;if(!fr)return;var h=Math.ceil(document.body.scrollHeight);fr.style.height=h+"px";fr.setAttribute("height",h);document.documentElement.style.overflow="hidden"}catch(e){}}
+
+  function show(which){
+    var p=which==="plans";
+    if(p&&!plans.src)plans.src=plans.getAttribute("data-src");
+    plans.hidden=!p;est.hidden=p;
+    tabP.setAttribute("aria-selected",p);tabE.setAttribute("aria-selected",!p);
+    setTimeout(fitOuter,50);
+  }
+  tabE.onclick=function(){show("est")};
+  tabP.onclick=function(){show("plans")};
+
+  /* Open on Annual plans when the page link ends in #annual-plans */
+  try{var hash=(window.top.location.hash||location.hash||"").toLowerCase();if(hash.indexOf("plan")>-1)show("plans")}catch(e){if(location.hash.toLowerCase().indexOf("plan")>-1)show("plans")}
+
+  function pageScrollTo(frame,y){
+    try{
+      var win=window.frameElement?window.parent:window;
+      var outerTop=window.frameElement?window.frameElement.getBoundingClientRect().top:0;
+      var top=outerTop+frame.getBoundingClientRect().top+y;
+      var vh=win.innerHeight;
+      if(top<0||top>vh*0.7)win.scrollBy({top:top-90,behavior:"smooth"});
+    }catch(e){}
+  }
+
+  window.addEventListener("message",function(e){
+    if(e.origin!=="https://referrals.taxentric.com"||!e.data)return;
+    var f=frames.filter(function(x){return x.contentWindow===e.source})[0];if(!f||f.hidden)return;
+    if(e.data.tx==="height"){f.style.height=(e.data.h+8)+"px";fitOuter()}
+    if(e.data.tx==="scroll")pageScrollTo(f,e.data.y||0);
+  });
+  window.addEventListener("load",fitOuter);
+})();
+</script>
+</body>
+</html>
