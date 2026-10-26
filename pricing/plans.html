@@ -281,7 +281,7 @@ can get your price right. Enter your email and we'll follow up with a plan built
 </p>
 <div class="info-note">
 Growth Plans include the same benefits: bookkeeping, tax preparation, 25% off your business
-tax return when you pay for the year at signing, a free tax extension if you need one, 1 year of IRS
+tax return when you pay for the year at signing, a bonus tax extension if you need one, 1 year of IRS
 Document Monitoring, and 50% off help starting a business if you need it.
 </div>
 <div class="mt-4">
@@ -685,7 +685,7 @@ const bonusTotal = bonuses.reduce((sum, b) => sum + b.value, 0);
 const bonusChargedTotal = bonuses.reduce((sum, b) => sum + (b.chargedAmount || 0), 0);
 bonuses.forEach(b => {
 const charged = b.chargedAmount || 0;
-rows += `<div class="stack-row"><span class="stack-label">${b.label}<span class="bonus-tag">${charged > 0 ? '50% off' : 'Free'}</span></span>
+rows += `<div class="stack-row"><span class="stack-label">${b.label}<span class="bonus-tag">${charged > 0 ? '50% off' : 'Bonus'}</span></span>
 <span class="stack-value free"><span class="was">$${b.value.toLocaleString()}</span><span class="now">$${charged.toLocaleString()}</span></span></div>`;
 });
 document.getElementById('stack-list').innerHTML = rows;
@@ -719,7 +719,7 @@ bonuses.forEach(b => {
 const charged = b.chargedAmount || 0;
 bodyLines.push(charged > 0
 ? `• ${b.label}, 50% off: $${b.value.toLocaleString()} → $${charged.toLocaleString()}`
-: `• ${b.label} (free)`);
+: `• ${b.label} (bonus, included)`);
 });
 bodyLines.push('');
 bodyLines.push(`Total value if purchased separately: $${totalValue.toLocaleString()}`);
