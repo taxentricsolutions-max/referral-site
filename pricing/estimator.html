@@ -211,7 +211,7 @@ function flow(){var f=["top"];
   if(has("taxes","business")){f.push("b1");if(A.b1==="pt"||A.b1==="sc")f.push("bk");f.push("bp","bw","bn","bx")}
   if(has("taxes","nonprofit"))f.push("n1","n2");
   if(has("taxes","amend")){f.push("a1");if(A.a1&&A.a1!=="cx"){f.push("a2");(A.a2||[]).forEach(function(i){if(!amItem(i).inc)f.push("ac_"+i)})}}}
- if(has("top","books")){f.push("k1");if(has("top","taxes")&&has("taxes","nonprofit"))f.push("k2");f.push("k3")}
+ if(has("top","books")){f.push("k1");if(!has("top","taxes")||has("taxes","nonprofit"))f.push("k2");f.push("k3")}
  if(has("top","formation")){f.push("f1");if(A.f1==="np")f.push("f2")}
  if(has("top","planning"))f.push("t1");
  if(has("top","irs"))f.push("i1","i2","i3","i4");
