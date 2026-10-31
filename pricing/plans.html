@@ -646,7 +646,7 @@ return { label: item.label, value: item.value, bonusPrice: item.value * ENTITY_F
 }
 /* Included with every plan, no matter how you pay */
 function getIncludedItems(){
-var items = [{ label: 'Bookkeeping account setup and chart of accounts', value: 0 }];
+var items = [{ label: 'Bookkeeping account setup', value: 150 }, { label: 'Chart of accounts, set up for your business', value: 200 }];
 var opt = getSboOption();
 if(state.plan === 'ic'){
 items.push({ label: PLANS.ic.personalReturnBonusLabel, value: 300 });
