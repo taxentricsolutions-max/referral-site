@@ -82,6 +82,17 @@ font-weight:700; font-size:.95rem; background:var(--card-white); color:var(--ink
 .stack-value{ font-size:.85rem; font-weight:700; white-space:nowrap; color:var(--ink-muted); }
 .stack-value.free .was{ text-decoration:line-through; margin-right:.35rem; }
 .stack-value.free .now{ color:var(--green); font-weight:800; }
+.stack-head{ margin:1rem 0 .1rem; font-size:.7rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--orange); }
+.stack-row.muted .stack-label{ color:var(--ink-muted); }
+.stack-value .full{ color:var(--ink); }
+.tag{ display:inline-block; font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; padding:.1rem .45rem; border-radius:9999px; margin-left:.4rem; vertical-align:1px; }
+.tag-included{ background:var(--bg-amber-soft); color:#C2410C; }
+.tag-bonus{ background:var(--green-soft); color:var(--green); }
+.tag-off{ background:#F5F5F4; color:var(--ink-muted); }
+.pay-options{ display:grid; grid-template-columns:repeat(3,1fr); gap:.4rem; padding:.35rem; margin:0 0 1rem; background:var(--bg-cream); border:1px solid var(--border-soft); border-radius:1rem; }
+.pay-opt{ border:0; background:transparent; cursor:pointer; font-family:inherit; border-radius:.75rem; padding:.6rem .4rem; font-weight:800; font-size:.85rem; color:var(--ink-muted); line-height:1.2; }
+.pay-opt small{ display:block; font-weight:600; font-size:.68rem; margin-top:.15rem; }
+.pay-opt[aria-checked="true"]{ background:linear-gradient(90deg,var(--orange),var(--red)); color:#fff; }
 .bonus-tag{
 display:inline-block; font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
 padding:.1rem .45rem; border-radius:9999px; background:var(--green-soft); color:var(--green); margin-left:.4rem;
@@ -119,7 +130,8 @@ Choose <span class="brand-gradient-text">your annual plan</span>
 </h1>
 <p class="mt-4 max-w-xl mx-auto text-base sm:text-lg" style="color:var(--ink-muted);">
 For independent contractors and small business owners. Answer a few questions and we'll
-recommend a plan and show you the price. Each plan covers one business.
+recommend a plan and show you the price. Pay in full at signing for bonuses and discounts, or
+split it into 3 or 6 payments. Each plan covers one business.
 </p>
 </section>
 <section class="max-w-3xl mx-auto px-6 pb-20">
@@ -172,7 +184,7 @@ recommend a plan and show you the price. Each plan covers one business.
 <span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
 <span>
 <span class="choice-title block">Not yet</span>
-<span class="choice-sub">I still need to set up my business. Help starting your business is 50% off.</span>
+<span class="choice-sub">I still need to set up my business. Help starting it is 50% off when you pay for the year at signing.</span>
 </span>
 </button>
 </div>
@@ -183,7 +195,7 @@ recommend a plan and show you the price. Each plan covers one business.
 <!-- Step: sbo entity type (not yet registered) -->
 <div class="wizard-step" data-step="sbo-entity-type">
 <h2 class="text-xl font-extrabold mb-1">What type of business are you setting up?</h2>
-<p class="text-sm mb-5" style="color:var(--ink-muted);">We'll match the right business tax return and take 50% off helping you start your business.</p>
+<p class="text-sm mb-5" style="color:var(--ink-muted);">We'll match the right tax return. Help starting your business is 50% off when you pay for the year at signing.</p>
 <div class="space-y-3" id="sbo-entity-choices"></div>
 <div class="mt-7 flex justify-between">
 <button type="button" class="btn-ghost focus-ring" data-back>Back</button>
@@ -191,8 +203,8 @@ recommend a plan and show you the price. Each plan covers one business.
 </div>
 <!-- Step: sbo return type -->
 <div class="wizard-step" data-step="sbo-return">
-<h2 class="text-xl font-extrabold mb-1">Which tax return does your business file?</h2>
-<p class="text-sm mb-5" style="color:var(--ink-muted);">Not sure? Check last year's business return or ask us. If your business gives you a K-1 (the form showing your share of the profit), your personal return is included free.</p>
+<h2 class="text-xl font-extrabold mb-1" id="sbo-return-title">Which tax return does your business file?</h2>
+<p class="text-sm mb-5" style="color:var(--ink-muted);" id="sbo-return-help">Not sure? Check last year's business return or ask us. If your business gives you a K-1 (the form showing your share of the profit), your personal return is included.</p>
 <div class="space-y-3" id="sbo-return-choices"></div>
 <div class="mt-7 flex justify-between">
 <button type="button" class="btn-ghost focus-ring" data-back>Back</button>
@@ -236,6 +248,11 @@ See how pricing works
 <p class="text-center"><span class="plan-badge" id="results-plan-badge">Your Plan</span></p>
 <h2 class="text-2xl font-extrabold text-center mt-2 mb-1" id="results-headline">Plan Name</h2>
 <p class="text-sm text-center mb-6" style="color:var(--ink-muted);" id="results-tagline">Plan description.</p>
+<div class="pay-options" id="pay-options" role="radiogroup" aria-label="How would you like to pay?">
+<button type="button" class="pay-opt focus-ring" role="radio" data-pay="full" aria-checked="true">Pay in full<small>Includes bonuses</small></button>
+<button type="button" class="pay-opt focus-ring" role="radio" data-pay="3" aria-checked="false">3 payments<small>No bonuses</small></button>
+<button type="button" class="pay-opt focus-ring" role="radio" data-pay="6" aria-checked="false">6 payments<small>No bonuses</small></button>
+</div>
 <div id="stack-list"></div>
 <div class="info-note mt-4 hidden" id="bonus-note"></div>
 <div class="mt-5 pt-5 border-t space-y-2" style="border-color:var(--border-soft);">
@@ -243,14 +260,10 @@ See how pricing works
 <span style="color:var(--ink-muted);">Total value if purchased separately</span>
 <span id="total-value" class="font-bold">$0</span>
 </div>
-<div class="flex items-center justify-between text-sm" id="discount-row">
-<span style="color:var(--ink-muted);">25% off your business tax return when you pay for the year at signing</span>
-<span id="discount-amount" class="font-bold" style="color:var(--green);">–$0</span>
-</div>
 </div>
 <div class="mt-6 pt-6 border-t text-center" style="border-color:var(--border-soft);">
 <span class="discount-badge" id="discount-badge-label">Discounted total due at signing</span>
-<p class="mt-3 text-xs font-semibold uppercase tracking-wide" style="color:var(--ink-muted);">Your price for the year</p>
+<p class="mt-3 text-xs font-semibold uppercase tracking-wide" style="color:var(--ink-muted);" id="price-caption">Your price for the year</p>
 <p class="text-4xl font-black mt-1" id="final-price" style="color:var(--red);">$0</p>
 <p class="mt-2 text-xs font-semibold" style="color:var(--green);" id="savings-line"></p>
 </div>
@@ -280,9 +293,9 @@ Plans for more than one business or very high transaction volume are priced indi
 can get your price right. Enter your email and we'll follow up with a plan built around your numbers.
 </p>
 <div class="info-note">
-Growth Plans include the same benefits: bookkeeping, tax preparation, 25% off your business
-tax return when you pay for the year at signing, a bonus tax extension if you need one, 1 year of IRS
-Document Monitoring, and 50% off help starting a business if you need it.
+Growth Plans include the same benefits: bookkeeping with account setup, tax preparation, a tax extension
+if you need one, and 1 year of IRS Document Monitoring. Pay for the year in full at signing and you also get
+25% off your business tax return and 50% off help starting a business if you need it.
 </div>
 <div class="mt-4">
 <label for="prospect-email-growth" class="block text-sm font-bold mb-1">Your email</label>
@@ -371,19 +384,22 @@ plan: null,
 registered: null,
 sboReturnType: null,
 entityType: null,
-bookkeepingTx: 100
+bookkeepingTx: 100,
+payOption: 'full'
 };
 var SBO_RETURN_OPTIONS = [
-{ id:'partnership', title:'Partnership', sub:'Form 1065, includes K-1s for 2 owners', price:600, passthrough:true },
-{ id:'scorp', title:'S-Corporation', sub:'Form 1120-S, includes 1 owner K-1', price:700, passthrough:true },
-{ id:'ccorp', title:'C-Corporation', sub:'Form 1120', price:800, passthrough:false },
-{ id:'nonprofit_ez', title:'Nonprofit, smaller', sub:'Form 990-EZ: yearly income under $200,000 and assets under $500,000', price:300, passthrough:false },
-{ id:'nonprofit_full', title:'Nonprofit, larger or private foundation', sub:'Form 990 or Form 990-PF', price:600, passthrough:false }
+{ id:'partnership', title:'Partnership', sub:'Form 1065, includes K-1s for 2 owners', price:600, passthrough:true, returnLabel:'Partnership business tax return (Form 1065)' },
+{ id:'scorp', title:'S-Corporation', sub:'Form 1120-S, includes 1 owner K-1', price:700, passthrough:true, returnLabel:'S-Corporation business tax return (Form 1120-S)' },
+{ id:'ccorp', title:'C-Corporation', sub:'Form 1120', price:800, passthrough:false, returnLabel:'C-Corporation business tax return (Form 1120)' },
+{ id:'nonprofit_n', title:'Nonprofit, very small', sub:'Form 990-N (e-Postcard): usually brings in $50,000 or less a year', price:75, passthrough:false, nonprofit:true, returnLabel:'Nonprofit yearly IRS return (Form 990-N)' },
+{ id:'nonprofit_ez', title:'Nonprofit, smaller', sub:'Form 990-EZ: brings in less than $200,000 a year and has less than $500,000 in assets', price:300, passthrough:false, nonprofit:true, returnLabel:'Nonprofit yearly IRS return (Form 990-EZ)' },
+{ id:'nonprofit_full', title:'Nonprofit, larger', sub:'Form 990: brings in $200,000 or more a year, or has $500,000 or more in assets', price:600, passthrough:false, nonprofit:true, returnLabel:'Nonprofit yearly IRS return (Form 990)' },
+{ id:'nonprofit_pf', title:'Private foundation', sub:'Form 990-PF', price:600, passthrough:false, nonprofit:true, returnLabel:'Private foundation yearly IRS return (Form 990-PF)' }
 ];
 var ENTITY_TYPE_OPTIONS = [
 { id:'partnership', title:'Partnership', sub:'Two or more owners, such as a multi-member LLC', returnType:'partnership' },
 { id:'corporation', title:'Corporation', sub:'Taxed as a C-corporation unless you choose S-corporation status', returnType:'ccorp' },
-{ id:'nonprofit', title:'Nonprofit', sub:'A 501(c)(3) or other tax-exempt organization', returnType:'nonprofit_ez' }
+{ id:'nonprofit', title:'Nonprofit', sub:'A 501(c)(3) or other tax-exempt organization', returnType:null }
 ];
 var BK_TIERS = [
 { max:25,   base:75,  rate:0,    prevCap:0   },
@@ -431,6 +447,7 @@ if(state.registered === true){
 steps.push('sbo-return');
 } else if(state.registered === false){
 steps.push('sbo-entity-type');
+if(state.entityType === 'nonprofit') steps.push('sbo-return');
 }
 }
 steps.push('bookkeeping');
@@ -486,6 +503,7 @@ state.registered = null;
 state.sboReturnType = null;
 state.entityType = null;
 state.bookkeepingTx = 100;
+state.payOption = 'full';
 identifyNextBtn.disabled = false;
 });
 });
@@ -524,8 +542,8 @@ card.innerHTML = `
 <span class="choice-mark"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
 <span><span class="choice-title block">${opt.title}</span><span class="choice-sub">${opt.sub}</span></span>`;
 card.addEventListener('click', () => {
+if(state.entityType !== opt.id) state.sboReturnType = opt.returnType;
 state.entityType = opt.id;
-state.sboReturnType = opt.returnType;
 renderEntityChoices();
 goNext();
 });
@@ -537,7 +555,12 @@ function renderSboChoices(){
 var wrap = document.getElementById('sbo-return-choices');
 sboNextBtn.disabled = !state.sboReturnType;
 wrap.innerHTML = '';
-SBO_RETURN_OPTIONS.forEach(opt => {
+var npOnly = state.registered === false && state.entityType === 'nonprofit';
+document.getElementById('sbo-return-title').textContent = npOnly ? 'Which yearly IRS return will your nonprofit file?' : 'Which tax return does your business file?';
+document.getElementById('sbo-return-help').textContent = npOnly
+? "Most new nonprofits start with the smallest return. Pick the one that matches what you expect to bring in. Not sure? Pick your best guess and we'll confirm it with you."
+: "Not sure? Check last year's business return or ask us. If your business gives you a K-1 (the form showing your share of the profit), your personal return is included.";
+SBO_RETURN_OPTIONS.filter(o => !npOnly || o.nonprofit).forEach(opt => {
 var card = document.createElement('button');
 card.type = 'button';
 card.className = 'choice-card' + (state.sboReturnType === opt.id ? ' selected' : '');
@@ -600,139 +623,155 @@ ic: { label: 'LLC formation', value: 300 },
 partnership: { label: 'Partnership formation', value: 400 },
 scorp: { label: 'Corporation formation', value: 500 },
 ccorp: { label: 'Corporation formation', value: 500 },
+nonprofit_n: { label: 'Nonprofit formation', value: 250 },
 nonprofit_ez: { label: 'Nonprofit formation', value: 250 },
-nonprofit_full: { label: 'Nonprofit formation', value: 250 }
+nonprofit_full: { label: 'Nonprofit formation', value: 250 },
+nonprofit_pf: { label: 'Nonprofit formation', value: 250 }
 };
 var ENTITY_FORMATION_DISCOUNT_RATE = 0.5;
-var MONITORING_BONUS_LABEL = 'IRS Document Monitoring, 1 year';
-var MONITORING_BONUS_VALUE = 25;
-function getEntityFormationBonus(){
+var PAY_OPTIONS = {
+full: { label: 'Pay in full at signing', count: 1 },
+'3': { label: '3 payments', count: 3 },
+'6': { label: '6 payments', count: 6 }
+};
+function money(n){ return '$' + Number(n).toLocaleString(undefined,{minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits:2}); }
+function getEntityFormation(){
 if(state.registered !== false) return null;
 var key = null;
-if(state.plan === 'ic'){
-key = 'ic';
-} else if(state.plan === 'sbo'){
-var opt = getSboOption();
-key = opt ? opt.id : null;
-}
+if(state.plan === 'ic'){ key = 'ic'; }
+else if(state.plan === 'sbo'){ var opt = getSboOption(); key = opt ? opt.id : null; }
 var item = key ? ENTITY_FORMATION_MAP[key] : null;
 if(!item) return null;
-return { label: item.label, value: item.value, chargedAmount: item.value * ENTITY_FORMATION_DISCOUNT_RATE };
+return { label: item.label, value: item.value, bonusPrice: item.value * ENTITY_FORMATION_DISCOUNT_RATE, bonusText: '50% off' };
 }
-function getSboBonuses(){
-const opt = getSboOption();
-if(!opt) return [];
-if(opt.id === 'partnership'){
-return [
-
-];
+/* Included with every plan, no matter how you pay */
+function getIncludedItems(){
+var items = [{ label: 'Bookkeeping account setup and chart of accounts', value: 0 }];
+var opt = getSboOption();
+if(state.plan === 'ic'){
+items.push({ label: PLANS.ic.personalReturnBonusLabel, value: 300 });
+} else if(opt && opt.passthrough){
+items.push({ label: 'Personal tax return (Form 1040) with 1 state and Schedule E for your K-1', value: 300 });
 }
-else if(opt.id === 'scorp' || opt.id === 'ccorp'){
-return [
-{ label: 'Quarterly payroll tax returns for the owner (Form 941), 4 per year', value: 300 },
-{ label: 'W-2 for the owner', value: 40 }
-];
+if(opt && (opt.id === 'scorp' || opt.id === 'ccorp')){
+items.push({ label: 'W-2 for the owner', value: 40 });
 }
-else if(opt.id.includes('nonprofit')){
-return [
-{ label: 'Nonprofit fund accounting, 12 months', value: 600 }
-];
+items.push({ label: 'Tax extension filing, if you need more time', value: 25 });
+items.push({ label: 'IRS Document Monitoring, 1 year', value: 25 });
+return items;
 }
-return [];
+/* Bonuses: only when you pay for the year in full at signing */
+function getBonusItems(){
+var items = [];
+var opt = getSboOption();
+if(opt && (opt.id === 'scorp' || opt.id === 'ccorp')){
+items.push({ label: 'Quarterly payroll tax returns for the owner (Form 941), 4 per year', value: 300, bonusPrice: 0 });
+}
+if(opt && opt.id.indexOf('nonprofit') === 0){
+items.push({ label: 'Nonprofit fund accounting, 12 months', value: 600, bonusPrice: 0 });
+}
+var formation = getEntityFormation();
+if(formation) items.push(formation);
+return items;
 }
 function renderResults(){
 const plan = PLANS[state.plan];
 const bkTx = state.bookkeepingTx;
 const bk = calcBookkeepingFee(bkTx);
 const sboOpt = getSboOption();
+const pay = state.payOption || 'full';
+const payFull = pay === 'full';
 document.getElementById('results-plan-badge').textContent = plan.name;
 document.getElementById('results-headline').textContent = plan.name;
 document.getElementById('results-tagline').textContent = plan.tagline;
-let coreRaw = 0;
-let businessReturnAmount = 0;
-let rows = '';
+document.querySelectorAll('#pay-options .pay-opt').forEach(b => b.setAttribute('aria-checked', b.dataset.pay === pay ? 'true' : 'false'));
+
+let core = 0, businessReturnAmount = 0, hasQuote = false, rows = '';
 if(state.plan === 'sbo' && sboOpt){
-coreRaw += sboOpt.price;
-businessReturnAmount = sboOpt.price;
-rows += `<div class="stack-row"><span class="stack-label">${sboOpt.title} business tax return</span><span class="stack-value">$${sboOpt.price.toLocaleString()}/yr</span></div>`;
+core += sboOpt.price; businessReturnAmount = sboOpt.price;
+rows += `<div class="stack-row"><span class="stack-label">${sboOpt.returnLabel}</span><span class="stack-value">${money(sboOpt.price)}/yr</span></div>`;
 }
-let hasQuote = false;
 const bkLabel = `Bookkeeping, ${bkTx.toLocaleString()} transactions/month`;
 if(bk.overCap){
 hasQuote = true;
 rows += `<div class="stack-row"><span class="stack-label">${bkLabel}</span><span class="stack-value">Custom price</span></div>`;
 } else {
-const bkAnnual = bk.fee * 12;
-coreRaw += bkAnnual;
-rows += `<div class="stack-row"><span class="stack-label">${bkLabel}</span><span class="stack-value">$${bkAnnual.toLocaleString()}/yr</span></div>`;
+core += bk.fee * 12;
+rows += `<div class="stack-row"><span class="stack-label">${bkLabel}</span><span class="stack-value">${money(bk.fee * 12)}/yr</span></div>`;
 }
-let bonuses = [];
-if(state.plan === 'ic'){
-bonuses = [
-{ label: plan.personalReturnBonusLabel, value: 300, chargedAmount: 0 }
-];
-} else if(state.plan === 'sbo'){
-bonuses = getSboBonuses().map(b => Object.assign({ chargedAmount: 0 }, b));
-if(isPassthrough()){
-bonuses.unshift({ label: 'Personal tax return (Form 1040) with 1 state and Schedule E for your K-1', value: 300, chargedAmount: 0 });
-}
-}
-const entityBonus = getEntityFormationBonus();
-if(entityBonus) bonuses.push(entityBonus);
-bonuses.push({ label: 'Tax extension filing, if you need more time', value: 25, chargedAmount: 0 });
-bonuses.push({ label: MONITORING_BONUS_LABEL, value: MONITORING_BONUS_VALUE, chargedAmount: 0 });
-const bonusTotal = bonuses.reduce((sum, b) => sum + b.value, 0);
-const bonusChargedTotal = bonuses.reduce((sum, b) => sum + (b.chargedAmount || 0), 0);
-bonuses.forEach(b => {
-const charged = b.chargedAmount || 0;
-rows += `<div class="stack-row"><span class="stack-label">${b.label}<span class="bonus-tag">${charged > 0 ? '50% off' : 'Bonus'}</span></span>
-<span class="stack-value free"><span class="was">$${b.value.toLocaleString()}</span><span class="now">$${charged.toLocaleString()}</span></span></div>`;
+
+const included = getIncludedItems();
+const includedValue = included.reduce((s, i) => s + i.value, 0);
+rows += `<p class="stack-head">Included with your plan</p>`;
+included.forEach(i => {
+const val = i.value ? `<span class="was">${money(i.value)}</span><span class="now">$0</span>` : `<span class="now">Included</span>`;
+rows += `<div class="stack-row"><span class="stack-label">${i.label}<span class="tag tag-included">Included</span></span><span class="stack-value free">${val}</span></div>`;
 });
+
+const bonuses = getBonusItems();
+const discount = (state.plan === 'sbo' && businessReturnAmount > 0) ? Math.round(businessReturnAmount * BUSINESS_RETURN_DISCOUNT_RATE) : 0;
+const bonusValue = bonuses.reduce((s, b) => s + b.value, 0);
+const bonusFullPrice = bonuses.reduce((s, b) => s + b.bonusPrice, 0);
+if(bonuses.length || discount){
+rows += `<p class="stack-head">${payFull ? 'Bonuses for paying in full at signing' : 'Bonuses (only when you pay in full at signing)'}</p>`;
+bonuses.forEach(b => {
+const tag = b.bonusText ? `Bonus: ${b.bonusText}` : 'Bonus';
+const val = payFull
+? `<span class="was">${money(b.value)}</span><span class="now">${money(b.bonusPrice)}</span>`
+: `<span class="full">${money(b.value)}</span>`;
+rows += `<div class="stack-row${payFull ? '' : ' muted'}"><span class="stack-label">${b.label}<span class="tag ${payFull ? 'tag-bonus' : 'tag-off'}">${payFull ? tag : 'Regular price'}</span></span><span class="stack-value free">${val}</span></div>`;
+});
+if(discount){
+const discLabel = (sboOpt && sboOpt.nonprofit) ? '25% off your yearly IRS return' : '25% off your business tax return';
+rows += `<div class="stack-row${payFull ? '' : ' muted'}"><span class="stack-label">${discLabel}<span class="tag ${payFull ? 'tag-bonus' : 'tag-off'}">${payFull ? 'Bonus' : 'Not applied'}</span></span><span class="stack-value free">${payFull ? `<span class="now">–${money(discount)}</span>` : `<span class="full">$0</span>`}</span></div>`;
+}
+}
 document.getElementById('stack-list').innerHTML = rows;
-const totalValue = coreRaw + bonusTotal;
-const hasBusinessReturnDiscount = state.plan === 'sbo' && businessReturnAmount > 0;
-const discountAmount = hasBusinessReturnDiscount ? businessReturnAmount * BUSINESS_RETURN_DISCOUNT_RATE : 0;
-const finalPrice = coreRaw - discountAmount + bonusChargedTotal;
-const savings = totalValue - finalPrice;
-document.getElementById('total-value').textContent = '$' + totalValue.toLocaleString();
-document.getElementById('discount-amount').textContent = '–$' + discountAmount.toLocaleString();
-document.getElementById('final-price').textContent = '$' + finalPrice.toLocaleString();
-document.getElementById('discount-row').classList.toggle('hidden', !hasBusinessReturnDiscount);
-document.getElementById('discount-badge-label').textContent = hasBusinessReturnDiscount ? 'Discounted total due at signing' : 'Total due at signing';
-document.getElementById('savings-line').textContent = hasQuote ? '' :
-`You get $${totalValue.toLocaleString()} in value for $${finalPrice.toLocaleString()}${hasBusinessReturnDiscount ? `. You save $${savings.toLocaleString()}.` : ''}`;
+
+const totalValue = core + includedValue + bonusValue;
+const priceFull = core - discount + bonusFullPrice;
+const priceInstallments = core + bonusValue;
+const price = payFull ? priceFull : priceInstallments;
+const count = PAY_OPTIONS[pay].count;
+const perPayment = Math.round(price / count * 100) / 100;
+const fullSaves = priceInstallments - priceFull;
+
+document.getElementById('total-value').textContent = money(totalValue);
+const note = document.getElementById('bonus-note');
+note.classList.toggle('hidden', !(bonuses.length || discount));
+note.textContent = payFull
+? 'Bonuses and discounts apply when you pay for the year in full at signing.'
+: `Payment plans don't include bonuses or discounts. Pay in full at signing to save ${money(fullSaves)}.`;
+document.getElementById('discount-badge-label').textContent = payFull ? 'Total due at signing' : `${count} payments`;
+document.getElementById('price-caption').textContent = payFull ? 'Your price for the year' : 'Each payment';
+document.getElementById('final-price').textContent = payFull ? money(price) : money(perPayment);
+document.getElementById('savings-line').textContent = hasQuote ? '' : (payFull
+? `You get ${money(totalValue)} in value for ${money(price)}. You save ${money(totalValue - price)}.`
+: `${money(price)} for the year, split into ${count} payments.`);
 const quoteNote = document.getElementById('quote-note');
 quoteNote.classList.toggle('hidden', !hasQuote);
 if(hasQuote) quoteNote.textContent = "Your bookkeeping volume needs a custom price. We'll follow up with an exact number before your plan is final.";
-let bodyLines = [
-`${plan.name.toUpperCase()} (covers one business)`,
-''
-];
-if(state.plan === 'sbo' && sboOpt){
-bodyLines.push(`${sboOpt.title} business tax return: $${sboOpt.price}/yr`);
+
+let L = [`${plan.name.toUpperCase()} (covers one business)`, `Payment: ${PAY_OPTIONS[pay].label}`, ''];
+if(state.plan === 'sbo' && sboOpt) L.push(`${sboOpt.returnLabel}: ${money(sboOpt.price)}/yr`);
+L.push(`${bkLabel}: ${bk.overCap ? 'Custom price' : money(bk.fee * 12) + '/yr'}`);
+L.push('', 'Included with your plan:');
+included.forEach(i => L.push(`• ${i.label} (included)`));
+if(bonuses.length || discount){
+L.push('', payFull ? 'Bonuses for paying in full at signing:' : 'Bonuses (not included with a payment plan, regular prices apply):');
+bonuses.forEach(b => L.push(payFull
+? (b.bonusText ? `• ${b.label}, ${b.bonusText}: ${money(b.value)} → ${money(b.bonusPrice)}` : `• ${b.label} (bonus, $0)`)
+: `• ${b.label}: ${money(b.value)}`));
+if(discount){ const dl = (sboOpt && sboOpt.nonprofit) ? '25% off your yearly IRS return' : '25% off your business tax return'; L.push(payFull ? `• ${dl}: –${money(discount)}` : `• ${dl}: not applied`); }
 }
-const bkPrice = bk.overCap ? 'Custom price' : `$${(bk.fee*12).toLocaleString()}/yr`;
-bodyLines.push(`Bookkeeping, ${bkTx.toLocaleString()} transactions/month: ${bkPrice}`);
-bodyLines.push('');
-bodyLines.push(`Bonus services included ($${bonusTotal} total value):`);
-bonuses.forEach(b => {
-const charged = b.chargedAmount || 0;
-bodyLines.push(charged > 0
-? `• ${b.label}, 50% off: $${b.value.toLocaleString()} → $${charged.toLocaleString()}`
-: `• ${b.label} (bonus, included)`);
-});
-bodyLines.push('');
-bodyLines.push(`Total value if purchased separately: $${totalValue.toLocaleString()}`);
-if(hasBusinessReturnDiscount){
-bodyLines.push(`25% off business tax return (paid for the year at signing): –$${discountAmount.toLocaleString()}`);
+L.push('', `Total value if purchased separately: ${money(totalValue)}`);
+L.push(payFull ? `Total due at signing: ${money(price)}` : `Annual price: ${money(price)}, paid in ${count} payments of ${money(perPayment)}`);
+if(!payFull && fullSaves > 0) L.push(`Paying in full at signing would save ${money(fullSaves)}.`);
+if(hasQuote) L.push('', 'Bookkeeping will be priced after we review your transaction volume.');
+planBodyLines = L;
 }
-if(bonusChargedTotal > 0){
-bodyLines.push(`Discounted bonus services due at signing: $${bonusChargedTotal.toLocaleString()}`);
-}
-bodyLines.push(`Annual price: $${finalPrice.toLocaleString()}`);
-if(hasQuote) bodyLines.push('','Bookkeeping will be priced after we review your transaction volume.');
-planBodyLines = bodyLines;
-}
+
+document.querySelectorAll('#pay-options .pay-opt').forEach(b => b.addEventListener('click', () => { state.payOption = b.dataset.pay; renderResults(); }));
 wireEmailSend(
 document.getElementById('email-plan-link'),
 document.getElementById('prospect-email-results'),
@@ -754,7 +793,7 @@ return [
 }
 );
 document.getElementById('start-over').addEventListener('click', () => {
-state = { plan: null, registered: null, sboReturnType: null, entityType: null, bookkeepingTx: 100 };
+state = { plan: null, registered: null, sboReturnType: null, entityType: null, bookkeepingTx: 100, payOption: 'full' };
 document.querySelectorAll('#identify-choices .choice-card').forEach(c => c.classList.remove('selected'));
 document.getElementById('identify-next').disabled = true;
 document.getElementById('sbo-return-next').disabled = true;
