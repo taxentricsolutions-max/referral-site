@@ -665,10 +665,10 @@ function getBonusItems(){
 var items = [];
 var opt = getSboOption();
 if(opt && (opt.id === 'scorp' || opt.id === 'ccorp')){
-items.push({ label: 'Quarterly payroll tax returns for the owner (Form 941), 4 per year', value: 300, bonusPrice: 0 });
+items.push({ label: 'Quarterly payroll tax returns for the owner (Form 941), 4 per year', value: 300, bonusPrice: 0, optional: true });
 }
 if(opt && opt.id.indexOf('nonprofit') === 0){
-items.push({ label: 'Nonprofit fund accounting, 12 months', value: 600, bonusPrice: 0 });
+items.push({ label: 'Nonprofit fund accounting, 12 months', value: 600, bonusPrice: 0, optional: true });
 }
 var formation = getEntityFormation();
 if(formation) items.push(formation);
@@ -708,7 +708,8 @@ const val = i.value ? `<span class="was">${money(i.value)}</span><span class="no
 rows += `<div class="stack-row"><span class="stack-label">${i.label}<span class="tag tag-included">Included</span></span><span class="stack-value free">${val}</span></div>`;
 });
 
-const bonuses = getBonusItems();
+const bonuses = getBonusItems().filter(b => payFull || !b.optional);
+const optionalSkipped = getBonusItems().filter(b => !payFull && b.optional);
 const discount = (state.plan === 'sbo' && businessReturnAmount > 0) ? Math.round(businessReturnAmount * BUSINESS_RETURN_DISCOUNT_RATE) : 0;
 const bonusValue = bonuses.reduce((s, b) => s + b.value, 0);
 const bonusFullPrice = bonuses.reduce((s, b) => s + b.bonusPrice, 0);
@@ -735,13 +736,14 @@ const price = payFull ? priceFull : priceInstallments;
 const count = PAY_OPTIONS[pay].count;
 const perPayment = Math.round(price / count * 100) / 100;
 const fullSaves = priceInstallments - priceFull;
+const skippedValue = optionalSkipped.reduce((t, b) => t + b.value, 0);
 
 document.getElementById('total-value').textContent = money(totalValue);
 const note = document.getElementById('bonus-note');
 note.classList.toggle('hidden', !(bonuses.length || discount));
 note.textContent = payFull
 ? 'Bonuses and discounts apply when you pay for the year in full at signing.'
-: `Payment plans don't include bonuses or discounts. Pay in full at signing to save ${money(fullSaves)}.`;
+: `Payment plans don't include bonuses or discounts. Pay in full at signing to save ${money(fullSaves)}${skippedValue ? ` and get ${money(skippedValue)} in bonus services` : ''}.`;
 document.getElementById('discount-badge-label').textContent = payFull ? 'Total due at signing' : `${count} payments`;
 document.getElementById('price-caption').textContent = payFull ? 'Your price for the year' : 'Each payment';
 document.getElementById('final-price').textContent = payFull ? money(price) : money(perPayment);
@@ -766,7 +768,7 @@ if(discount){ const dl = (sboOpt && sboOpt.nonprofit) ? '25% off your yearly IRS
 }
 L.push('', `Total value if purchased separately: ${money(totalValue)}`);
 L.push(payFull ? `Total due at signing: ${money(price)}` : `Annual price: ${money(price)}, paid in ${count} payments of ${money(perPayment)}`);
-if(!payFull && fullSaves > 0) L.push(`Paying in full at signing would save ${money(fullSaves)}.`);
+if(!payFull && (fullSaves > 0 || skippedValue)) L.push(`Paying in full at signing would save ${money(fullSaves)}${skippedValue ? ` and add ${money(skippedValue)} in bonus services` : ''}.`);
 if(hasQuote) L.push('', 'Bookkeeping will be priced after we review your transaction volume.');
 planBodyLines = L;
 }
