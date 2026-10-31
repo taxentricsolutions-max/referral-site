@@ -130,8 +130,8 @@ Choose <span class="brand-gradient-text">your annual plan</span>
 </h1>
 <p class="mt-4 max-w-xl mx-auto text-base sm:text-lg" style="color:var(--ink-muted);">
 For independent contractors and small business owners. Answer a few questions and we'll
-recommend a plan and show you the price. Pay in full at signing for bonuses and discounts, or
-split it into 3 or 6 payments. Each plan covers one business.
+recommend a plan and show you the price. Business tax returns are 20% off with every plan. Pay in full at
+signing for bonuses, or split it into 3 or 6 payments. Each plan covers one business.
 </p>
 </section>
 <section class="max-w-3xl mx-auto px-6 pb-20">
@@ -293,9 +293,9 @@ Plans for more than one business or very high transaction volume are priced indi
 can get your price right. Enter your email and we'll follow up with a plan built around your numbers.
 </p>
 <div class="info-note">
-Growth Plans include the same benefits: bookkeeping with account setup, tax preparation, a tax extension
-if you need one, and 1 year of IRS Document Monitoring. Pay for the year in full at signing and you also get
-25% off your business tax return and 50% off help starting a business if you need it.
+Growth Plans include the same benefits: bookkeeping with account setup, tax preparation with 20% off your
+business tax return, a tax extension if you need one, and 1 year of IRS Document Monitoring. Pay for the year
+in full at signing and you also get 50% off help starting a business if you need it.
 </div>
 <div class="mt-4">
 <label for="prospect-email-growth" class="block text-sm font-bold mb-1">Your email</label>
@@ -431,7 +431,7 @@ name: 'Enterprise Plan',
 tagline: 'For partnerships, S-corporations, C-corporations, and nonprofits.'
 }
 };
-var BUSINESS_RETURN_DISCOUNT_RATE = 0.25;
+var BUSINESS_RETURN_DISCOUNT_RATE = 0.20;
 var currentStepId = 'identify';
 var planBodyLines = [];
 function getSboOption(){ return SBO_RETURN_OPTIONS.find(o => o.id === state.sboReturnType); }
@@ -702,18 +702,23 @@ rows += `<div class="stack-row"><span class="stack-label">${bkLabel}</span><span
 
 const included = getIncludedItems();
 const includedValue = included.reduce((s, i) => s + i.value, 0);
+const discount = (state.plan === 'sbo' && businessReturnAmount > 0) ? Math.round(businessReturnAmount * BUSINESS_RETURN_DISCOUNT_RATE) : 0;
+const discLabel = (sboOpt && sboOpt.nonprofit) ? '20% off your yearly IRS return' : '20% off your business tax return';
 rows += `<p class="stack-head">Included with your plan</p>`;
 included.forEach(i => {
 const val = i.value ? `<span class="was">${money(i.value)}</span><span class="now">$0</span>` : `<span class="now">Included</span>`;
 rows += `<div class="stack-row"><span class="stack-label">${i.label}<span class="tag tag-included">Included</span></span><span class="stack-value free">${val}</span></div>`;
 });
+if(discount){
+rows += `<div class="stack-row"><span class="stack-label">${discLabel}<span class="tag tag-included">Included</span></span><span class="stack-value free"><span class="now">–${money(discount)}</span></span></div>`;
+}
 
-const bonuses = getBonusItems().filter(b => payFull || !b.optional);
-const optionalSkipped = getBonusItems().filter(b => !payFull && b.optional);
-const discount = (state.plan === 'sbo' && businessReturnAmount > 0) ? Math.round(businessReturnAmount * BUSINESS_RETURN_DISCOUNT_RATE) : 0;
+const allBonuses = getBonusItems();
+const bonuses = allBonuses.filter(b => payFull || !b.optional);
+const optionalSkipped = allBonuses.filter(b => !payFull && b.optional);
 const bonusValue = bonuses.reduce((s, b) => s + b.value, 0);
 const bonusFullPrice = bonuses.reduce((s, b) => s + b.bonusPrice, 0);
-if(bonuses.length || discount){
+if(bonuses.length){
 rows += `<p class="stack-head">${payFull ? 'Bonuses for paying in full at signing' : 'Bonuses (only when you pay in full at signing)'}</p>`;
 bonuses.forEach(b => {
 const tag = b.bonusText ? `Bonus: ${b.bonusText}` : 'Bonus';
@@ -722,16 +727,12 @@ const val = payFull
 : `<span class="full">${money(b.value)}</span>`;
 rows += `<div class="stack-row${payFull ? '' : ' muted'}"><span class="stack-label">${b.label}<span class="tag ${payFull ? 'tag-bonus' : 'tag-off'}">${payFull ? tag : 'Regular price'}</span></span><span class="stack-value free">${val}</span></div>`;
 });
-if(discount){
-const discLabel = (sboOpt && sboOpt.nonprofit) ? '25% off your yearly IRS return' : '25% off your business tax return';
-rows += `<div class="stack-row${payFull ? '' : ' muted'}"><span class="stack-label">${discLabel}<span class="tag ${payFull ? 'tag-bonus' : 'tag-off'}">${payFull ? 'Bonus' : 'Not applied'}</span></span><span class="stack-value free">${payFull ? `<span class="now">–${money(discount)}</span>` : `<span class="full">$0</span>`}</span></div>`;
-}
 }
 document.getElementById('stack-list').innerHTML = rows;
 
 const totalValue = core + includedValue + bonusValue;
 const priceFull = core - discount + bonusFullPrice;
-const priceInstallments = core + bonusValue;
+const priceInstallments = core - discount + bonusValue;
 const price = payFull ? priceFull : priceInstallments;
 const count = PAY_OPTIONS[pay].count;
 const perPayment = Math.round(price / count * 100) / 100;
@@ -740,10 +741,11 @@ const skippedValue = optionalSkipped.reduce((t, b) => t + b.value, 0);
 
 document.getElementById('total-value').textContent = money(totalValue);
 const note = document.getElementById('bonus-note');
-note.classList.toggle('hidden', !(bonuses.length || discount));
+note.classList.toggle('hidden', !allBonuses.length);
+const fullPerks = [fullSaves > 0 ? `save ${money(fullSaves)}` : '', skippedValue ? `get ${money(skippedValue)} in bonus services` : ''].filter(Boolean).join(' and ');
 note.textContent = payFull
-? 'Bonuses and discounts apply when you pay for the year in full at signing.'
-: `Payment plans don't include bonuses or discounts. Pay in full at signing to save ${money(fullSaves)}${skippedValue ? ` and get ${money(skippedValue)} in bonus services` : ''}.`;
+? 'Bonuses apply when you pay for the year in full at signing.'
+: `Payment plans don't include bonuses.${fullPerks ? ` Pay in full at signing to ${fullPerks}.` : ''}`;
 document.getElementById('discount-badge-label').textContent = payFull ? 'Total due at signing' : `${count} payments`;
 document.getElementById('price-caption').textContent = payFull ? 'Your price for the year' : 'Each payment';
 document.getElementById('final-price').textContent = payFull ? money(price) : money(perPayment);
@@ -759,16 +761,16 @@ if(state.plan === 'sbo' && sboOpt) L.push(`${sboOpt.returnLabel}: ${money(sboOpt
 L.push(`${bkLabel}: ${bk.overCap ? 'Custom price' : money(bk.fee * 12) + '/yr'}`);
 L.push('', 'Included with your plan:');
 included.forEach(i => L.push(`• ${i.label} (included)`));
-if(bonuses.length || discount){
-L.push('', payFull ? 'Bonuses for paying in full at signing:' : 'Bonuses (not included with a payment plan, regular prices apply):');
+if(discount) L.push(`• ${discLabel}: –${money(discount)}`);
+if(bonuses.length){
+L.push('', payFull ? 'Bonuses for paying in full at signing:' : 'Not included with a payment plan (regular price):');
 bonuses.forEach(b => L.push(payFull
 ? (b.bonusText ? `• ${b.label}, ${b.bonusText}: ${money(b.value)} → ${money(b.bonusPrice)}` : `• ${b.label} (bonus, $0)`)
 : `• ${b.label}: ${money(b.value)}`));
-if(discount){ const dl = (sboOpt && sboOpt.nonprofit) ? '25% off your yearly IRS return' : '25% off your business tax return'; L.push(payFull ? `• ${dl}: –${money(discount)}` : `• ${dl}: not applied`); }
 }
 L.push('', `Total value if purchased separately: ${money(totalValue)}`);
 L.push(payFull ? `Total due at signing: ${money(price)}` : `Annual price: ${money(price)}, paid in ${count} payments of ${money(perPayment)}`);
-if(!payFull && (fullSaves > 0 || skippedValue)) L.push(`Paying in full at signing would save ${money(fullSaves)}${skippedValue ? ` and add ${money(skippedValue)} in bonus services` : ''}.`);
+if(!payFull && fullPerks) L.push(`Paying in full at signing would ${fullPerks}.`);
 if(hasQuote) L.push('', 'Bookkeeping will be priced after we review your transaction volume.');
 planBodyLines = L;
 }
