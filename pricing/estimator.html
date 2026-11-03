@@ -73,6 +73,13 @@ h2{font-size:1.45rem;font-weight:800;margin:0;line-height:1.3}
 .tot div{display:flex;justify-content:space-between;align-items:baseline}
 .big{font-size:2rem;font-weight:900;color:var(--red)}
 .note{font-size:.85rem;color:var(--or);margin-top:.75rem}
+.basic{background:var(--soft);border-radius:1rem;padding:1rem 1.1rem;margin:0 0 1.25rem;font-size:.9rem;line-height:1.5}
+.basic b{display:block;margin-bottom:.35rem}.basic ul{margin:0;padding-left:1.15rem}
+.adi .howmany{margin:.4rem 0 .2rem;padding:.75rem 1rem}
+.bands{display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem;margin:.4rem 0 .2rem}
+.bnd{padding:.6rem .5rem;border-radius:.75rem;border:1.5px solid var(--line);background:var(--white);cursor:pointer;color:var(--ink);font-size:.82rem;font-weight:700;line-height:1.3}
+.bnd small{display:block;font-weight:600;color:var(--mu)}
+.bnd.on{border-color:var(--or);background:var(--or);color:#fff}.bnd.on small{color:#fff}
 .fine{font-size:.8rem;color:var(--mu);line-height:1.55;margin:1rem 0}
 .em{width:100%;padding:.85rem 1rem;border-radius:.9rem;border:2px solid var(--line);font-size:1rem}
 .err{color:var(--red);font-size:.75rem;margin-top:.25rem;display:none}.err.v{display:block}
@@ -175,7 +182,8 @@ var Q={
  /* ----- Bookkeeping ----- */
  k1:{ty:"tx",g:"books",h:"How many transactions does your business have each month?",s:"A transaction is any money in or out, like a sale, bill payment, card purchase, or transfer. Not sure? Count the lines on last month's bank and card statements."},
  k2:{ty:"yn",g:"books",h:"Is this for a nonprofit that tracks money by grant or program?",s:"Nonprofit fund accounting",p:50,r:"mo",n:"Nonprofit fund accounting"},
- k3:{ty:"yn",g:"books",h:"Do you need help with anything else?",s:"Setting up QuickBooks, catching up on past months, paying bills, sending invoices, sales tax, inventory, or 1099s.",quote:1,n:"Other bookkeeping services"},
+ kb:{ty:"yn",g:"books",h:"Do you need more than Basic?",s:"Your monthly price covers Basic bookkeeping. Choose Yes if your business has anything extra, like more accounts, payroll, invoices, or sales tax."},
+ ka:{ty:"ad",g:"books",h:"What else does your business need?",s:"Choose everything that applies. Prices are added to your monthly bookkeeping."},
 
  /* ----- Planning ----- */
  t1:{ty:"hrs",g:"planning",h:"How much time would you like with us?",s:"$125 per hour, billed in 15-minute increments. Bring any tax question, or let's make a plan to lower next year's taxes.",p:125},
@@ -198,7 +206,28 @@ var Q={
  i3:{ty:"yn",g:"irs",h:"Did you get a different letter from the IRS?",s:"We'll review it and give you a price.",quote:1,n:"Other IRS letter"},
  i4:{ty:"yn",g:"irs",h:"Would you like an early warning about IRS problems?",s:"IRS Document Monitoring: we watch your IRS file and alert you to missing forms or new penalties.",p:25,r:"yr",n:"IRS Document Monitoring"}
 };
-var TIERS=[[25,75,0,0],[50,75,3,25],[100,150,3,50],[200,300,1.5,100],[400,450,.75,200],[800,600,.5,400],[2000,800,.35,800]];
+/* ===== Bookkeeping add-ons. k: n = count x price/mo, b = monthly volume band x unit price, cu = months behind x monthly price (once), q = custom price ===== */
+var BANDS=[10,25,50];
+var ADD=[
+ {id:"ba",t:"Extra bank accounts",s:"Checking or savings, beyond the 1 included",k:"n",p:35,q:"How many extra?"},
+ {id:"cc",t:"Extra business credit cards",s:"Beyond the 1 included, including store cards",k:"n",p:35,q:"How many extra?"},
+ {id:"nf",t:"Accounts that won't connect to a bank feed",s:"You send us statements or spreadsheets instead",k:"n",p:60,q:"How many?"},
+ {id:"pp",t:"PayPal, Stripe, Square, Venmo or Cash App",s:"Priced per account",k:"n",p:45,q:"How many?"},
+ {id:"st",t:"Online store payouts",s:"Shopify, Amazon, Etsy or eBay, priced per store",k:"n",p:75,q:"How many stores?"},
+ {id:"ln",t:"Business loans or financed equipment",s:"We split each payment into principal and interest",k:"n",p:20,q:"How many?"},
+ {id:"pr",t:"Payroll",s:"We record each payroll from Gusto, ADP, QuickBooks Payroll, or similar",k:"n",p:15,q:"Payrolls each month?",max:5},
+ {id:"sr",t:"Record sales by customer or product",s:"We create a sales receipt for each sale",k:"b",u:2,q:"Sales each month?"},
+ {id:"iv",t:"Match customer payments to your invoices",s:"For businesses that send invoices",k:"b",u:1.5,q:"Payments each month?"},
+ {id:"dp",t:"Group payments into bank deposits",s:"When several payments land in your bank as one deposit",k:"b",u:2,q:"Deposits each month?"},
+ {id:"tx",t:"Sales tax tracking",s:"Priced per state you collect in",k:"n",p:50,q:"How many states?"},
+ {id:"rp",t:"Rental properties",s:"Income and expenses tracked by property",k:"n",p:25,q:"How many properties?"},
+ {id:"in",t:"Inventory",s:"Products you buy and resell. You send us your counts.",k:"n",p:100,max:1},
+ {id:"cu",t:"Catching up on past months",s:"Months that need to be done before we start. Paid once.",k:"cu",q:"How many months behind?",max:36},
+ {id:"mb",t:"More than one business",s:"Each business has its own books",k:"q"},
+ {id:"cl",t:"Fixing books that were done wrong",s:"We'll review them first",k:"q"},
+ {id:"ot",t:"Something else",s:"Paying bills, sending invoices for you, running payroll, grants, or anything not listed",k:"q"}];
+function addById(id){for(var i=0;i<ADD.length;i++)if(ADD[i].id===id)return ADD[i]}
+var TIERS=[[25,100,0,0],[50,100,2,25],[100,150,3,50],[200,300,1.5,100],[400,450,.75,200],[800,600,.5,400],[2000,800,.35,800]];
 function bkFee(tx){if(tx<=0)return 0;for(var i=0;i<TIERS.length;i++){var t=TIERS[i];if(tx<=t[0])return t[1]+(tx-t[3])*t[2]}return -1}
 
 /* ===== State ===== */
@@ -211,7 +240,7 @@ function flow(){var f=["top"];
   if(has("taxes","business")){f.push("b1");if(A.b1==="pt"||A.b1==="sc")f.push("bk");f.push("bp","bw","bn","bx")}
   if(has("taxes","nonprofit"))f.push("n1","n2");
   if(has("taxes","amend")){f.push("a1");if(A.a1&&A.a1!=="cx"){f.push("a2");(A.a2||[]).forEach(function(i){if(!amItem(i).inc)f.push("ac_"+i)})}}}
- if(has("top","books")){f.push("k1");if(!has("top","taxes")||has("taxes","nonprofit"))f.push("k2");f.push("k3")}
+ if(has("top","books")){f.push("k1");if(!has("top","taxes")||has("taxes","nonprofit"))f.push("k2");f.push("kb");if(A.kb>0)f.push("ka")}
  if(has("top","formation")){f.push("f1");if(A.f1==="np")f.push("f2")}
  if(has("top","planning"))f.push("t1");
  if(has("top","irs"))f.push("i1","i2","i3","i4");
@@ -224,9 +253,14 @@ function step(k){if(k.indexOf("ac_")===0){var it=amItem(k.slice(3));return{ty:"a
 function lines(){var L=[];flow().forEach(function(k){var s=step(k);if(!s||!s.g)return;var v=A[k];
  if(k==="a2")(v||[]).forEach(function(id){var it=amItem(id);if(it.inc)L.push({g:s.g,n:it.n,a:0,inc:1})});
  if(s.ty==="one"&&v)s.o.forEach(function(o){if(o.id===v&&(o.p||o.quote))L.push({g:s.g,n:o.n,a:o.p||0,qt:o.quote})});
- if(s.ty==="yn"&&v>0)L.push({g:s.g,n:s.n+(v>1?" (x"+v+")":""),a:(s.p||0)*v,r:s.r,qt:s.quote});
+ if(s.ty==="yn"&&v>0&&s.n)L.push({g:s.g,n:s.n+(v>1?" (x"+v+")":""),a:(s.p||0)*v,r:s.r,qt:s.quote});
  if(s.ty==="ac"&&v&&v.k){var it=s.it,c=v.c||1;L.push({g:s.g,n:it.n+(v.k==="ad"?": add":": correct")+(c>1?" (x"+c+")":""),a:(v.k==="ad"?it.p:it.p/2)*c})}
  if(s.ty==="tx"&&v>0){var f=bkFee(v),nm="Bookkeeping ("+v.toLocaleString()+" transactions/month)";L.push(f<0?{g:s.g,n:nm,a:0,qt:1}:{g:s.g,n:nm,a:f,r:"mo"})}
+ if(s.ty==="ad"&&A.kb>0&&v)ADD.forEach(function(it){var c=v[it.id];if(c===undefined)return;
+  if(it.k==="q")L.push({g:s.g,n:it.t,a:0,qt:1});
+  if(it.k==="n")L.push({g:s.g,n:it.t+(c>1?" (x"+c+")":""),a:it.p*c,r:"mo"});
+  if(it.k==="b"){if(c>=BANDS.length)L.push({g:s.g,n:it.t+" (more than 50 a month)",a:0,qt:1});else L.push({g:s.g,n:it.t+" (up to "+BANDS[c]+" a month)",a:it.u*BANDS[c],r:"mo"})}
+  if(it.k==="cu"){var bf=bkFee(A.k1||0);if(bf<=0)L.push({g:s.g,n:"Catching up on "+c+" past month"+(c>1?"s":""),a:0,qt:1});else L.push({g:s.g,n:"Catching up on "+c+" past month"+(c>1?"s":""),a:bf*c})}});
  if(s.ty==="hrs"&&v>0)L.push({g:s.g,n:"Tax planning & advice ("+v+(v===1?" hour)":" hours)"),a:s.p*v})});return L}
 function totals(L){var t={once:0,mo:0,yr:0,qt:[]};L.forEach(function(l){if(l.qt)t.qt.push(l.n);else if(l.r==="mo")t.mo+=l.a;else if(l.r==="yr")t.yr+=l.a;else t.once+=l.a});return t}
 function totalText(t){var p=[];if(t.once||(!t.mo&&!t.yr&&!t.qt.length))p.push(money(t.once));if(t.mo)p.push(money(t.mo)+"/mo");if(t.yr)p.push(money(t.yr)+"/yr");if(!p.length)p.push("Custom price");return p.join(" + ")}
@@ -250,9 +284,19 @@ function render(){var f=flow(),i=f.indexOf(cur);if(i<0){cur=f[f.length-1];i=f.le
   if(s.q&&v>0)h+='<div class="howmany"><b>'+s.q+'</b>'+counter(v,'data-cnt="1"')+'</div>';canNext=v!==undefined}
  if(s.ty==="ac"){var it=s.it,av=v||{};h+='<div class="list">'+choice("r",av.k==="ad",'It was left off the return',"",'<span class="pr">'+money(it.p)+'</span>','data-ac="ad"')+choice("r",av.k==="co",'It was on the return, but it was wrong',"",'<span class="pr">'+money(it.p/2)+'</span>','data-ac="co"')+'</div>';
   if(it.q&&av.k)h+='<div class="howmany"><b>'+it.q+'</b>'+counter(av.c||1,'data-acc="1"')+'</div>';canNext=!!av.k}
- if(s.ty==="tx"){var fe=bkFee(v||0);h+='<input type="number" class="num fr" id="txin" min="0" step="1" inputmode="numeric" placeholder="e.g. 100" value="'+(v||"")+'"><div class="bkf"><span style="font-weight:700;font-size:.9rem">Your monthly price</span><b id="txfee">'+(fe<0?"Custom price":money(fe)+"/mo")+'</b></div><p class="ts" id="txnote">'+(fe<0?"Over 2,000 transactions a month is priced individually.":"Based on standard bank and credit card accounts.")+'</p><button type="button" class="lnk fr" id="tiersBtn">'+(tierOpen?"Hide pricing details":"See how pricing works")+'</button>';
+ if(s.ty==="tx"){var fe=bkFee(v||0);h+='<input type="number" class="num fr" id="txin" min="0" step="1" inputmode="numeric" placeholder="e.g. 100" value="'+(v||"")+'"><div class="bkf"><span style="font-weight:700;font-size:.9rem">Your monthly price</span><b id="txfee">'+(fe<0?"Custom price":money(fe)+"/mo")+'</b></div><p class="ts" id="txnote">'+(fe<0?"Over 2,000 transactions a month is priced individually.":"Covers 1 bank account and 1 business credit card.")+'</p><button type="button" class="lnk fr" id="tiersBtn">'+(tierOpen?"Hide pricing details":"See how pricing works")+'</button>';
   if(tierOpen){h+='<div class="tiers"><span>The cost per transaction goes down as volume goes up. Example: 120 transactions = $300 + (20 × $1.50) = $330/mo.</span>';TIERS.forEach(function(t,j){var lo=j?TIERS[j-1][0]+1:1;h+='<div><span>'+lo+" to "+t[0].toLocaleString()+'</span><span>'+money(t[1])+(t[2]?" + "+money(t[2])+" each over "+t[3]:" flat")+'</span></div>'});h+='<div><span>Over 2,000</span><span>Custom price</span></div></div>'}
   canNext=v>0}
+ if(cur==="kb")h=h.replace('</div>','</div><div class="basic"><b>Basic includes:</b><ul><li>1 business bank account and 1 business credit card, connected to bank feeds</li><li>Sorting every transaction and matching your books to your bank</li><li>A monthly profit and loss report</li><li>Books that are up to date</li></ul></div>');
+ if(s.ty==="ad"){var av=v||{};h+='<div class="list">';ADD.forEach(function(it){var c=av[it.id],on=c!==undefined;
+   var tag=it.k==="q"?'<span class="pr qt">Custom price</span>':it.k==="cu"?'<span class="pr">Paid once</span>':it.k==="b"?'<span class="pr">'+money(it.u)+' each</span>':'<span class="pr">'+money(it.p)+'/mo'+(it.max===1?"":" each")+'</span>';
+   h+='<div class="adi">'+choice("x",on,it.t,it.s,tag,'data-ad="'+it.id+'"');
+   if(on&&(it.k==="n"||it.k==="cu")&&it.max!==1)h+='<div class="howmany"><b>'+it.q+'</b>'+counter(c,'data-adc="'+it.id+'"')+'</div>';
+   if(on&&it.k==="b"){h+='<div class="ts" style="margin:.5rem 0 0;font-weight:700;color:var(--ink)">'+it.q+'</div><div class="bands">';
+    ["1 to 10","11 to 25","26 to 50","More than 50"].forEach(function(l,j){h+='<button type="button" class="bnd fr'+(c===j?" on":"")+'" data-band="'+it.id+'" data-j="'+j+'">'+l+'<small>'+(j<3?"up to "+money(it.u*BANDS[j])+"/mo":"Custom price")+'</small></button>'});h+='</div>'}
+   h+='</div>'});
+  h+='</div><p class="ts" style="margin-top:1rem">Add-on prices are estimates. We confirm your price after we review your accounts.</p>';
+  canNext=Object.keys(av).length>0}
  if(s.ty==="hrs"){var hv=v||0;h+='<div class="howmany" style="margin-top:0"><b>'+(hv?hv+(hv===1?" hour":" hours")+" · "+money(s.p*hv):"Hours")+'</b>'+counter(hv,'data-hrs="1"')+'</div>';canNext=hv>0}
  if(cur!=="top"&&cur!=="taxes")h+='<div class="run"><span>Your estimate so far</span><b>'+totalText(totals(lines()))+'</b></div>';
  h+='<div class="nav">'+(i>0?'<button type="button" class="bgh fr" id="back">Back</button>':'<span></span>')+'<button type="button" class="bp fr" id="next"'+(canNext?"":" disabled")+'>'+(f[i+1]==="review"?"See my estimate":"Continue")+'</button></div>';
@@ -294,10 +338,13 @@ stepEl.addEventListener("click",function(e){var b=e.target.closest("button");if(
  if(d.cnt){A[cur]=Math.max(1,Math.min(s.max||50,A[cur]+(+d.d)));return render()}
  if(d.ac){var av=A[cur]=A[cur]||{};av.k=d.ac;av.c=av.c||1;render();if(!s.it.q)auto();return}
  if(d.acc){A[cur].c=Math.max(1,Math.min(50,(A[cur].c||1)+(+d.d)));return render()}
+ if(d.ad){var o=A[cur]=A[cur]||{},it=addById(d.ad);if(o[d.ad]!==undefined)delete o[d.ad];else o[d.ad]=it.k==="b"?0:1;return render()}
+ if(d.adc){var it2=addById(d.adc);A[cur][d.adc]=Math.max(1,Math.min(it2.max||20,A[cur][d.adc]+(+d.d)));return render()}
+ if(d.band){A[cur][d.band]=+d.j;return render()}
  if(d.hrs){A[cur]=Math.max(0,Math.min(40,(A[cur]||0)+(+d.d)*.5));return render()}});
 stepEl.addEventListener("input",function(e){if(e.target.id!=="txin")return;var v=Math.max(0,Math.round(+e.target.value||0));A[cur]=v;var fe=bkFee(v);
  document.getElementById("txfee").textContent=fe<0?"Custom price":money(fe)+"/mo";
- document.getElementById("txnote").textContent=fe<0?"Over 2,000 transactions a month is priced individually.":"Based on standard bank and credit card accounts.";
+ document.getElementById("txnote").textContent=fe<0?"Over 2,000 transactions a month is priced individually.":"Covers 1 bank account and 1 business credit card.";
  document.getElementById("next").disabled=!(v>0);
  var r=stepEl.querySelector(".run b");if(r)r.textContent=totalText(totals(lines()))});
 
