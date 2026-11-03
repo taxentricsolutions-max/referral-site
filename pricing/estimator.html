@@ -219,15 +219,15 @@ var ADD=[
  {id:"sr",t:"Record sales by customer or product",s:"We create a sales receipt for each sale",k:"b",u:2,q:"Sales each month?"},
  {id:"iv",t:"Match customer payments to your invoices",s:"For businesses that send invoices",k:"b",u:1.5,q:"Payments each month?"},
  {id:"dp",t:"Group payments into bank deposits",s:"When several payments land in your bank as one deposit",k:"b",u:2,q:"Deposits each month?"},
- {id:"tx",t:"Sales tax tracking",s:"Priced per state you collect in",k:"n",p:50,q:"How many states?"},
+ {id:"tx",t:"Sales tax tracking",s:"Priced per state you collect in",k:"n",p:75,q:"How many states?"},
  {id:"rp",t:"Rental properties",s:"Income and expenses tracked by property",k:"n",p:25,q:"How many properties?"},
  {id:"in",t:"Inventory",s:"Products you buy and resell. You send us your counts.",k:"n",p:100,max:1},
- {id:"cu",t:"Catching up on past months",s:"Months that need to be done before we start. Paid once.",k:"cu",q:"How many months behind?",max:36},
+ {id:"cu",t:"Catching up on past months",s:"Months that need to be done before we start. Your monthly price per month ($150 minimum), paid once.",k:"cu",q:"How many months behind?",max:36},
  {id:"mb",t:"More than one business",s:"Each business has its own books",k:"q"},
  {id:"cl",t:"Fixing books that were done wrong",s:"We'll review them first",k:"q"},
  {id:"ot",t:"Something else",s:"Paying bills, sending invoices for you, running payroll, grants, or anything not listed",k:"q"}];
 function addById(id){for(var i=0;i<ADD.length;i++)if(ADD[i].id===id)return ADD[i]}
-var TIERS=[[25,100,0,0],[50,100,2,25],[100,150,3,50],[200,300,1.5,100],[400,450,.75,200],[800,600,.5,400],[2000,800,.35,800]];
+var TIERS=[[25,100,0,0],[50,100,4,25],[100,200,3,50],[200,350,2,100],[400,550,1.25,200],[800,800,.75,400],[2000,1100,.5,800]];
 function bkFee(tx){if(tx<=0)return 0;for(var i=0;i<TIERS.length;i++){var t=TIERS[i];if(tx<=t[0])return t[1]+(tx-t[3])*t[2]}return -1}
 
 /* ===== State ===== */
@@ -260,7 +260,7 @@ function lines(){var L=[];flow().forEach(function(k){var s=step(k);if(!s||!s.g)r
   if(it.k==="q")L.push({g:s.g,n:it.t,a:0,qt:1});
   if(it.k==="n")L.push({g:s.g,n:it.t+(c>1?" (x"+c+")":""),a:it.p*c,r:"mo"});
   if(it.k==="b"){if(c>=BANDS.length)L.push({g:s.g,n:it.t+" (more than 50 a month)",a:0,qt:1});else L.push({g:s.g,n:it.t+" (up to "+BANDS[c]+" a month)",a:it.u*BANDS[c],r:"mo"})}
-  if(it.k==="cu"){var bf=bkFee(A.k1||0);if(bf<=0)L.push({g:s.g,n:"Catching up on "+c+" past month"+(c>1?"s":""),a:0,qt:1});else L.push({g:s.g,n:"Catching up on "+c+" past month"+(c>1?"s":""),a:bf*c})}});
+  if(it.k==="cu"){var bf=bkFee(A.k1||0);if(bf<=0)L.push({g:s.g,n:"Catching up on "+c+" past month"+(c>1?"s":""),a:0,qt:1});else L.push({g:s.g,n:"Catching up on "+c+" past month"+(c>1?"s":""),a:Math.max(bf,150)*c})}});
  if(s.ty==="hrs"&&v>0)L.push({g:s.g,n:"Tax planning & advice ("+v+(v===1?" hour)":" hours)"),a:s.p*v})});return L}
 function totals(L){var t={once:0,mo:0,yr:0,qt:[]};L.forEach(function(l){if(l.qt)t.qt.push(l.n);else if(l.r==="mo")t.mo+=l.a;else if(l.r==="yr")t.yr+=l.a;else t.once+=l.a});return t}
 function totalText(t){var p=[];if(t.once||(!t.mo&&!t.yr&&!t.qt.length))p.push(money(t.once));if(t.mo)p.push(money(t.mo)+"/mo");if(t.yr)p.push(money(t.yr)+"/yr");if(!p.length)p.push("Custom price");return p.join(" + ")}
@@ -285,7 +285,7 @@ function render(){var f=flow(),i=f.indexOf(cur);if(i<0){cur=f[f.length-1];i=f.le
  if(s.ty==="ac"){var it=s.it,av=v||{};h+='<div class="list">'+choice("r",av.k==="ad",'It was left off the return',"",'<span class="pr">'+money(it.p)+'</span>','data-ac="ad"')+choice("r",av.k==="co",'It was on the return, but it was wrong',"",'<span class="pr">'+money(it.p/2)+'</span>','data-ac="co"')+'</div>';
   if(it.q&&av.k)h+='<div class="howmany"><b>'+it.q+'</b>'+counter(av.c||1,'data-acc="1"')+'</div>';canNext=!!av.k}
  if(s.ty==="tx"){var fe=bkFee(v||0);h+='<input type="number" class="num fr" id="txin" min="0" step="1" inputmode="numeric" placeholder="e.g. 100" value="'+(v||"")+'"><div class="bkf"><span style="font-weight:700;font-size:.9rem">Your monthly price</span><b id="txfee">'+(fe<0?"Custom price":money(fe)+"/mo")+'</b></div><p class="ts" id="txnote">'+(fe<0?"Over 2,000 transactions a month is priced individually.":"Covers 1 bank account and 1 business credit card.")+'</p><button type="button" class="lnk fr" id="tiersBtn">'+(tierOpen?"Hide pricing details":"See how pricing works")+'</button>';
-  if(tierOpen){h+='<div class="tiers"><span>The cost per transaction goes down as volume goes up. Example: 120 transactions = $300 + (20 × $1.50) = $330/mo.</span>';TIERS.forEach(function(t,j){var lo=j?TIERS[j-1][0]+1:1;h+='<div><span>'+lo+" to "+t[0].toLocaleString()+'</span><span>'+money(t[1])+(t[2]?" + "+money(t[2])+" each over "+t[3]:" flat")+'</span></div>'});h+='<div><span>Over 2,000</span><span>Custom price</span></div></div>'}
+  if(tierOpen){h+='<div class="tiers"><span>The cost per transaction goes down as volume goes up. Example: 120 transactions = $350 + (20 × $2.00) = $390/mo.</span>';TIERS.forEach(function(t,j){var lo=j?TIERS[j-1][0]+1:1;h+='<div><span>'+lo+" to "+t[0].toLocaleString()+'</span><span>'+money(t[1])+(t[2]?" + "+money(t[2])+" each over "+t[3]:" flat")+'</span></div>'});h+='<div><span>Over 2,000</span><span>Custom price</span></div></div>'}
   canNext=v>0}
  if(cur==="kb")h=h.replace('</div>','</div><div class="basic"><b>Basic includes:</b><ul><li>1 business bank account and 1 business credit card, connected to bank feeds</li><li>Sorting every transaction and matching your books to your bank</li><li>A monthly profit and loss report</li><li>Books that are up to date</li></ul></div>');
  if(s.ty==="ad"){var av=v||{};h+='<div class="list">';ADD.forEach(function(it){var c=av[it.id],on=c!==undefined;

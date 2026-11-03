@@ -228,14 +228,14 @@ Transactions per month
 See how pricing works
 </button>
 <div id="bookkeeping-tier-table" class="hidden mt-3 space-y-1.5 text-xs" style="color:var(--ink-muted);">
-<p>Monthly prices are shown below. The cost of each transaction goes down as your volume goes up. Example: 120 transactions = $300 + (20 × $1.50) = $330 a month.</p>
+<p>Monthly prices are shown below. The cost of each transaction goes down as your volume goes up. Example: 120 transactions = $350 + (20 × $2.00) = $390 a month.</p>
 <div class="flex justify-between"><span>1 – 25 transactions</span><span class="font-semibold">$100/mo flat</span></div>
-<div class="flex justify-between"><span>26 – 50 transactions</span><span class="font-semibold">$100 + $2.00 each over 25</span></div>
-<div class="flex justify-between"><span>51 – 100 transactions</span><span class="font-semibold">$150 + $3.00 each over 50</span></div>
-<div class="flex justify-between"><span>101 – 200 transactions</span><span class="font-semibold">$300 + $1.50 each over 100</span></div>
-<div class="flex justify-between"><span>201 – 400 transactions</span><span class="font-semibold">$450 + $0.75 each over 200</span></div>
-<div class="flex justify-between"><span>401 – 800 transactions</span><span class="font-semibold">$600 + $0.50 each over 400</span></div>
-<div class="flex justify-between"><span>801 – 2,000 transactions</span><span class="font-semibold">$800 + $0.35 each over 800</span></div>
+<div class="flex justify-between"><span>26 – 50 transactions</span><span class="font-semibold">$100 + $4.00 each over 25</span></div>
+<div class="flex justify-between"><span>51 – 100 transactions</span><span class="font-semibold">$200 + $3.00 each over 50</span></div>
+<div class="flex justify-between"><span>101 – 200 transactions</span><span class="font-semibold">$350 + $2.00 each over 100</span></div>
+<div class="flex justify-between"><span>201 – 400 transactions</span><span class="font-semibold">$550 + $1.25 each over 200</span></div>
+<div class="flex justify-between"><span>401 – 800 transactions</span><span class="font-semibold">$800 + $0.75 each over 400</span></div>
+<div class="flex justify-between"><span>801 – 2,000 transactions</span><span class="font-semibold">$1,100 + $0.50 each over 800</span></div>
 <div class="flex justify-between"><span>2,000+ transactions</span><span class="font-semibold">Custom price</span></div>
 </div>
 <div class="mt-7 flex justify-between">
@@ -404,12 +404,12 @@ var ENTITY_TYPE_OPTIONS = [
 ];
 var BK_TIERS = [
 { max:25,   base:100, rate:0,    prevCap:0   },
-{ max:50,   base:100, rate:2.00, prevCap:25  },
-{ max:100,  base:150, rate:3.00, prevCap:50  },
-{ max:200,  base:300, rate:1.50, prevCap:100 },
-{ max:400,  base:450, rate:0.75, prevCap:200 },
-{ max:800,  base:600, rate:0.50, prevCap:400 },
-{ max:2000, base:800, rate:0.35, prevCap:800 }
+{ max:50,   base:100, rate:4.00, prevCap:25  },
+{ max:100,  base:200, rate:3.00, prevCap:50  },
+{ max:200,  base:350, rate:2.00, prevCap:100 },
+{ max:400,  base:550, rate:1.25, prevCap:200 },
+{ max:800,  base:800, rate:0.75, prevCap:400 },
+{ max:2000, base:1100, rate:0.50, prevCap:800 }
 ];
 function calcBookkeepingFee(tx){
 if(tx <= 0) return { fee:0, overCap:false };
