@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRS Records Monitoring | Taxentric Solutions</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script>
+    // Web app URL for the IRS monitoring opt-in Google Sheet
+    window.OPTIN_URL = "https://script.google.com/macros/s/AKfycbwQOKmqT85LWtNykKqxE64EO-DERzEjDSmfYTcb9yn17gkWRKK3HEo-9nCT9d9BCu3iEQ/exec";
+  </script>
+  <style>
+    .row2{display:flex;gap:12px}.row2 .field{flex:1}
+    .opts{display:flex;gap:10px}
+    .opts label{flex:1;display:flex;align-items:center;gap:8px;font-weight:500;border:1px solid #e7e5e4;border-radius:10px;padding:12px;cursor:pointer;margin:0}
+    .hint{font-size:13px;color:#78716c;margin:-6px 0 14px}
+    @media(max-width:480px){.row2{flex-direction:column;gap:0}}
+  </style>
+</head>
+<body>
+  <main class="page-center">
+    <div class="card" style="text-align:center;">
+      <img src="logo.png" alt="Taxentric Solutions" style="height:64px;margin:0 auto 12px;display:block;">
+
+      <div id="formView">
+        <p class="eyebrow">IRS records monitoring</p>
+        <h1>Yes, I'm in!</h1>
+        <p class="subtitle">Fill out this quick form to start IRS records monitoring, free for the first 6 months. We'll email you your next steps.</p>
+        <form id="optForm" novalidate style="text-align:left;">
+          <div class="row2">
+            <div class="field">
+              <label for="firstName">Legal first name</label>
+              <input type="text" id="firstName" name="firstName" autocomplete="given-name" maxlength="50" required>
+            </div>
+            <div class="field">
+              <label for="lastName">Legal last name</label>
+              <input type="text" id="lastName" name="lastName" autocomplete="family-name" maxlength="50" required>
+            </div>
+          </div>
+          <p class="hint">Enter your name exactly as it appears on your tax return.</p>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" maxlength="120" required placeholder="you@example.com">
+          </div>
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="30" required placeholder="(770) 555-1234">
+          </div>
+          <div class="field">
+            <label>Are you a current Taxentric client?</label>
+            <div class="opts">
+              <label><input type="radio" name="currentClient" value="Yes"> Yes</label>
+              <label><input type="radio" name="currentClient" value="No"> No, I'm new</label>
+            </div>
+          </div>
+          <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p id="err" class="form-error hidden" role="alert"></p>
+          <button id="submitBtn" class="btn" type="submit">Sign me up</button>
+        </form>
+        <p class="legal" style="text-align:center;">Please don't enter your Social Security number here. We'll collect what we need securely in your client portal.</p>
+      </div>
+
+      <div id="doneView" class="hidden">
+        <p class="eyebrow">You're signed up</p>
+        <h1>Thanks, <span id="doneName"></span>!</h1>
+        <p class="subtitle">Watch your email for your engagement letter. New clients will also get an invite to set up their secure client portal.</p>
+        <a class="btn" href="https://taxentric.com">Visit taxentric.com</a>
+      </div>
+
+      <div class="card-footer">© 2023 Taxentric Solutions. All rights reserved.</div>
+    </div>
+  </main>
+  <script>
+    (function () {
+      var form = document.getElementById('optForm');
+      var err = document.getElementById('err');
+      var btn = document.getElementById('submitBtn');
+      function showErr(msg) { err.textContent = msg; err.classList.remove('hidden'); }
+      function val(id) { return document.getElementById(id).value.trim(); }
+
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        err.classList.add('hidden');
+        var d = {
+          firstName: val('firstName'), lastName: val('lastName'), email: val('email'), phone: val('phone'),
+          currentClient: (form.querySelector('input[name=currentClient]:checked') || {}).value || '',
+          website: form.website.value
+        };
+        if (!d.firstName || !d.lastName) return showErr('Please enter your legal first and last name.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) return showErr('Please enter a valid email address.');
+        if (d.phone.replace(/\D/g, '').length < 10) return showErr('Please enter a phone number with area code.');
+        if (!d.currentClient) return showErr('Please tell us whether you are a current client.');
+        btn.disabled = true; btn.textContent = 'One moment...';
+        fetch(window.OPTIN_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(d)
+        }).then(function (r) { return r.json(); }).then(function (res) {
+          if (!res.ok) throw new Error(res.error || 'Something went wrong.');
+          document.getElementById('doneName').textContent = d.firstName;
+          document.getElementById('formView').classList.add('hidden');
+          document.getElementById('doneView').classList.remove('hidden');
+        }).catch(function (e) {
+          showErr(e && e.message && e.message.indexOf('Please') === 0 ? e.message :
+            'Something went wrong. Please try again, or call us at 770.765.6267.');
+          btn.disabled = false; btn.textContent = 'Sign me up';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
