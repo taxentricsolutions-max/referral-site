@@ -68,6 +68,11 @@ tr.past td{color:var(--mu)}tr.past td.left{color:var(--mu)}
 @media(max-width:600px){table{font-size:13px}td,th{padding:9px 12px}}
 @media(prefers-reduced-motion:reduce){.bar i{transition:none}}
 
+.blk{display:flex;gap:14px;align-items:flex-start;margin:26px 2px 10px}
+.blk .num{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--or),var(--rd))}
+.blk b{font-size:20px;line-height:1.2;display:block}
+.blk .tm{display:inline-block;margin:4px 0 2px;font-weight:700;color:var(--or);font-size:14px;white-space:nowrap}
+.blk .sub{display:block}
 .carry{border-color:light-dark(#fecaca,#5b2323);background:light-dark(#fff5f5,#2a1717)}
 .carry>h3{color:var(--rd)}
 .carry .since{color:var(--rd);font-weight:600}
@@ -150,52 +155,56 @@ tr.past td{color:var(--mu)}tr.past td.left{color:var(--mu)}
 <script>
 {
 const DAILY=[
- ["Start of day: communications",[
+ ["Triage",[
+  ["Scan for urgent items","Look through chats, email and voicemail for IRS notices, anything due today, and upset clients. Reply if it takes under 2 minutes; flag everything else for the midday batch."],
+  ["Respond to new website leads","Contact form and fee estimator emails. Reply now: the first firm to respond usually wins the client."],
+  ["Check today's Calendly calls","Prep for each free 15-minute call. Afterward, create the TaxDome account and job for anyone moving forward.","https://calendly.com/","Calendly"],
+  ["Check e-file acknowledgments","Federal and state accepted or rejected. Fix rejections the same day, then send the \"return e-filed\" email."]],{n:1,t:"Triage",time:"8:30 to 8:50 AM",d:"15 to 20 min. Handle only what's urgent or wins business. Anything over 2 minutes gets flagged for midday."}],
+ ["Returns in TaxAct",[
+  ["Prepare returns in the In prep queue","Personal returns within 24 to 48 hours and business returns within 48 to 72 hours of documents being complete."],
+  ["Review prepared returns","1st review and manager review before anything goes to the client."],
+  ["Send drafts and e-file authorizations","Upload the draft return and 8879 to the portal, then send the invoice."],
+  ["Release paid returns for e-filing","Clients pay after review and before filing. File as soon as the invoice and 8879 are both in."],
+  ["Track paper-filed returns","Prior-year returns that had to be mailed: note the mail date and tracking number on the job."]],{n:2,t:"Deep work: returns",time:"8:50 to 11:30 AM",d:"Phone on Do Not Disturb, email closed. This is the work that brings in revenue."}],
+ ["Replies",[
   ["Reply to TaxDome chats","Answer every client message from yesterday and overnight. Aim to reply the same business day."],
   ["Clear email inboxes","Outlook (yannick.ebama@ and support@taxentric.com). Move any documents sent by email into the client's portal, and remind them to use the portal next time."],
-  ["Return calls and voicemails","770.765.6267 and 404.990.0115. Add a note to the client's TaxDome account after each call."],
-  ["Check today's Calendly calls","Prep for each free 15-minute call. Afterward, create the TaxDome account and job for anyone moving forward.","https://calendly.com/","Calendly"],
-  ["Respond to new website leads","Contact form and fee estimator emails. Send next steps within 24 hours."]]],
+  ["Return calls and voicemails","770.765.6267 and 404.990.0115. Add a note to the client's TaxDome account after each call."]],{n:3,t:"Communications, batch 1",time:"11:30 AM to 12:30 PM",d:"Full replies to everything flagged in triage, then onboarding."}],
  ["New clients and onboarding",[
   ["Activate pending portal accounts","Resend invites to accounts that haven't activated. TaxDome can't email clients until they do."],
   ["Nudge unsigned engagement letters","Proposals and ELs pending more than 3 days (reminders should be on, but call anyone stuck)."],
   ["Confirm ID verifications","Check Stripe Identity results, then complete the \"Confirm ID verified in Stripe\" tasks."],
   ["Review submitted organizers","Open each new organizer. For business clients, check the Bookkeeping answers, tag BK setup / Catch-up / Annual plan, then complete the review task."],
-  ["Follow up on overdue organizers","Message clients whose organizer has been open more than 5 days."]]],
+  ["Follow up on overdue organizers","Message clients whose organizer has been open more than 5 days."]],null],
  ["Pipelines and tasks",[
   ["Scan every pipeline for red (overdue) jobs","Individual 1040, Business, Monthly Bookkeeping, IRS Monitoring sign-up and IRS Monitoring Renewal."],
   ["Check stages that don't move on their own","Extension, Extension filed, Return complete, Prep post extension. Move finished jobs along by hand."],
   ["Work today's and overdue tasks","Complete, reschedule, or reassign. Tag first, then complete, so jobs route correctly."],
   ["Chase Missing docs","Check uploads from clients tagged Missing docs. Remove the tag once everything is in."],
-  ["Flag extensions early","Tag Extension on anyone whose documents or catch-up books won't be ready in time."]]],
- ["Returns in TaxAct",[
-  ["Prepare returns in the In prep queue","Personal returns within 24 to 48 hours and business returns within 48 to 72 hours of documents being complete."],
-  ["Review prepared returns","1st review and manager review before anything goes to the client."],
-  ["Send drafts and e-file authorizations","Upload the draft return and 8879 to the portal, then send the invoice."],
-  ["Check e-file acknowledgments","Federal and state accepted or rejected. Fix rejections the same day, then send the \"return e-filed\" email."],
-  ["Track paper-filed returns","Prior-year returns that had to be mailed: note the mail date and tracking number on the job."]]],
+  ["Flag extensions early","Tag Extension on anyone whose documents or catch-up books won't be ready in time."]],{n:4,t:"Operations",time:"1:30 to 3:30 PM",d:"Keep every job moving and every dollar collected."}],
  ["Money: TaxDome invoices",[
-  ["Release paid returns for e-filing","Clients pay after review and before filing. File as soon as the invoice and 8879 are both in."],
   ["Follow up on unpaid invoices","Remind anyone past 7 days. Don't file a return until its invoice is paid."],
-  ["Check plan and bookkeeping payments","Annual plan installments (pause work after 15 days late) and failed recurring bookkeeping charges."]]],
+  ["Check plan and bookkeeping payments","Annual plan installments (pause work after 15 days late) and failed recurring bookkeeping charges."]],null],
  ["Bookkeeping",[
   ["Check bank feeds","Reconnect any disconnected feeds, and ask the client to sign back in if needed."],
   ["Monthly statements due by the 10th","Follow up on bookkeeping clients missing uploads or answers."],
-  ["Move catch-up jobs forward","Batch your questions to each client, and keep catch-up ahead of their filing deadline."]]],
+  ["Move catch-up jobs forward","Batch your questions to each client, and keep catch-up ahead of their filing deadline."]],null],
  ["IRS records monitoring",[
   ["Log new opt-ins","New rows in the IRS Monitoring Opt-ins sheet: create the TaxDome account if needed and add the job to the sign-up pipeline."],
   ["Check Tax Pro Account authorizations","Requests waiting on client approval: nudge the client. Approved: complete the Verify task to start the trial.","https://www.irs.gov/tax-professionals/tax-pro-account","Tax Pro Account"],
   ["Schedule renewals","Complete each \"Schedule renewal\" task by adding the yearly recurrence on the job's Internal deadline date."],
-  ["Handle overdue renewals","Renewal jobs past 35 days unsigned: withdraw the IRS authorization and delete the client's recurrence."]]],
+  ["Handle overdue renewals","Renewal jobs past 35 days unsigned: withdraw the IRS authorization and delete the client's recurrence."]],null],
+ ["Replies",[
+  ["Second round of replies","Chats, email and voicemail that came in since midday. Everyone hears back today."]],{n:5,t:"Communications, batch 2 and wrap-up",time:"3:30 to 5:00 PM",d:"Second round of replies, growth work, and setting up tomorrow."}],
  ["Referrals and marketing",[
   ["Review new referral signups","Referral sheet: delete fake or spam names (the form has no captcha)."],
   ["Match referred friends to clients","When a referred client's first invoice is paid, set Reward Status to Qualified. Pay only after payment."],
   ["Process unsubscribes","Zoho unsubscribes and the Unsubscribes sheet: tag No marketing in TaxDome. Honor within 10 business days."],
-  ["Check today's Zoho campaign","If one went out, look at bounces and replies. Non-tax offers go only to the non-tax-client list."]]],
+  ["Check today's Zoho campaign","If one went out, look at bounces and replies. Non-tax offers go only to the non-tax-client list."]],null],
  ["End of day",[
   ["Update client-facing statuses","So every client sees where their return stands."],
   ["Nothing left unanswered","Inbox, chats and voicemail all at zero, or each has a promised reply time."],
-  ["Set tomorrow's top 3","Write them in today's notes below."]]]
+  ["Set tomorrow's top 3","Write them in today's notes below."]],null]
 ];
 const WEEKLY=[
  ["Weekly review (Fridays)",[
@@ -275,10 +284,10 @@ function renderCarry(kind){
 }
 function renderList(kind){
   const r=get(kind,cur(kind));
-  return LISTS[kind].map(([title,items])=>{
+  return LISTS[kind].map(([title,items,blk])=>{
     const its=items.map(i=>ITEMS[kind].find(x=>x.id===slug(i[0])));
     const done=its.filter(it=>r.c[it.id]).length;
-    return '<div class="sec"><h3>'+esc(title)+'<small class="'+(done===its.length?"done":"")+'">'+done+' of '+its.length+'</small></h3>'+its.map(it=>itemHtml(kind,it,!!r.c[it.id])).join("")+'</div>';
+    return (blk?'<div class="blk"><span class="num">'+blk.n+'</span><div><b>'+esc(blk.t)+'</b><span class="tm">'+esc(blk.time)+'</span><span class="sub">'+esc(blk.d)+'</span></div></div>':'')+'<div class="sec"><h3>'+esc(title)+'<small class="'+(done===its.length?"done":"")+'">'+done+' of '+its.length+'</small></h3>'+its.map(it=>itemHtml(kind,it,!!r.c[it.id])).join("")+'</div>';
   }).join("");
 }
 function stats(kind,key){const r=rec[kind][key]||{c:{}},t=ITEMS[kind].length,d=ITEMS[kind].filter(it=>r.c[it.id]).length;return{d,t,p:Math.round(d/t*100)}}
