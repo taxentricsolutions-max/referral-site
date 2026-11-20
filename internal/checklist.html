@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tax Season Daily Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, practical work tool for a one-person tax firm in season.
+   IDEA: the day sheet on a preparer's clipboard, filled top to bottom.
+   PICTURE: the live checklist itself, with a big progress meter and deadline countdown.
+   COLOUR and TYPE: Taxentric brand: cream ground, orange-to-red gradient, amber accent; Inter.
+   LAYOUT: header meter and deadlines, tabs, one calm column of sections. */
+:root{color-scheme:light dark;
+ --bg:light-dark(#FFF9F0,#17120e);--card:light-dark(#ffffff,#221b15);--ink:light-dark(#292524,#f5efe8);
+ --mu:light-dark(#78716C,#b5aaa0);--line:light-dark(#F2E4C5,#3a2e24);--soft:light-dark(#FFF3E0,#2b2119);
+ --or:#F97316;--rd:#DC2626;--am:#F59E0B;--ok:light-dark(#15803d,#4ade80)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:900px;margin:0 auto;padding:clamp(20px,4vw,40px) max(4vw,14px) 60px}
+.top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:stretch}
+h1{font-size:clamp(28px,4.5vw,40px);line-height:1.05;margin:0 0 6px;font-weight:800;text-wrap:balance}
+.date{color:var(--mu);font-weight:600;margin:0 0 16px}
+.meter{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.big{font-size:clamp(40px,7vw,56px);font-weight:800;line-height:1;background:linear-gradient(90deg,var(--or),var(--rd));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bar{height:12px;border-radius:99px;background:var(--soft);overflow:hidden;margin:12px 0 8px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--or),var(--rd));transition:width .4s}
+.sub{color:var(--mu);font-size:14px}
+.dl{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px}
+.dl h2{font-size:15px;margin:0 0 8px}
+.dl li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.dl li:last-child{border:0}.dl b{white-space:nowrap;color:var(--rd);flex:none}
+ul{list-style:none;margin:0;padding:0}
+.tabs{display:flex;gap:4px;margin:24px 0 18px;padding:5px;background:var(--card);border:1px solid var(--line);border-radius:999px;max-width:460px}
+.tabs a{flex:1;text-align:center;min-height:44px;display:grid;place-items:center;border-radius:999px;font-weight:700;color:var(--mu);text-decoration:none;font-size:15px}
+.tabs a[aria-current=page]{background:linear-gradient(90deg,var(--or),var(--rd));color:#fff}
+.tabs a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--am);outline-offset:2px}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:14px;overflow:hidden}
+.sec>h3{margin:0;padding:14px 18px;font-size:17px;display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.sec>h3 small{font-weight:600;color:var(--mu);font-size:13px;white-space:nowrap}
+.sec>h3 small.done{color:var(--ok)}
+.item{display:flex;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);cursor:pointer}
+.item:last-child{border:0}
+.item input{appearance:none;flex:none;width:24px;height:24px;margin:2px 0 0;border:2px solid var(--line);border-radius:7px;background:var(--bg);cursor:pointer;display:grid;place-items:center}
+.item input:checked{background:linear-gradient(135deg,var(--or),var(--rd));border-color:transparent}
+.item input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item b{display:block;font-weight:600}
+.item span{display:block;color:var(--mu);font-size:14px}
+.item a{color:var(--or);font-weight:600}
+.item.on b{text-decoration:line-through;color:var(--mu)}
+.notes{width:100%;min-height:110px;font:16px/1.5 Inter,sans-serif;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg);color:var(--ink);resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:18px 0 8px}
+button{font:600 15px Inter,sans-serif;min-height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.pri{background:linear-gradient(90deg,var(--or),var(--rd));color:#fff;border:0}
+.confirm{display:none;gap:8px;align-items:center;font-size:14px}.confirm.show{display:flex}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:11px 18px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--mu)}
+td.n{white-space:nowrap;font-weight:700}
+td.left{white-space:nowrap;text-align:right;font-weight:700;color:var(--rd)}
+tr.past td{color:var(--mu)}tr.past td.left{color:var(--mu)}
+.fine{color:var(--mu);font-size:13px;margin:10px 4px}
+[hidden]{display:none!important}
+@media(max-width:700px){.top{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:13px}td,th{padding:9px 12px}}
+@media(prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Tax season daily checklist</h1>
+      <p class="date" id="today"></p>
+      <div class="meter">
+        <div class="big" id="pct">0%</div>
+        <div class="bar"><i id="barfill"></i></div>
+        <div class="sub" id="count"></div>
+      </div>
+    </div>
+    <div class="dl">
+      <h2>Next deadlines</h2>
+      <ul id="nextdl"></ul>
+    </div>
+  </div>
+
+  <nav class="tabs" aria-label="Checklist views">
+    <a href="#daily" id="t-daily">Daily</a>
+    <a href="#weekly" id="t-weekly">Weekly</a>
+    <a href="#dates" id="t-dates">Key dates</a>
+  </nav>
+
+  <section id="v-daily"><div id="daily-list"></div>
+    <div class="sec"><h3>Notes for today</h3><div style="padding:14px 18px"><label for="notes" class="sub">Follow-ups, promises to clients, anything to pick up tomorrow</label><textarea id="notes" class="notes"></textarea></div></div>
+  </section>
+  <section id="v-weekly" hidden><div id="weekly-list"></div></section>
+  <section id="v-dates" hidden>
+    <div class="sec"><h3>Filing deadlines (calendar-year filers)</h3>
+      <table><thead><tr><th>Due</th><th>What</th><th style="text-align:right">Days left</th></tr></thead><tbody id="dates"></tbody></table></div>
+    <p class="fine">Dates already moved to the next business day where the deadline falls on a weekend. Check irs.gov for disaster postponements in your clients' areas.</p>
+  </section>
+
+  <div class="row">
+    <span class="sub" id="saved">Your checks save in this browser and reset each day (weekly list each Monday).</span>
+    <span><button id="reset">Clear this list</button>
+    <span class="confirm" id="confirm">Clear all checks? <button class="pri" id="yes">Clear</button><button id="no">Keep</button></span></span>
+  </div>
+</div>
+
+<script>
+{
+const DAILY=[
+ ["Start of day: communications",[
+  ["Reply to TaxDome chats","Answer every client message from yesterday and overnight. Aim to reply the same business day."],
+  ["Clear email inboxes","Outlook (yannick.ebama@ and support@taxentric.com). Move any documents sent by email into the client's portal, and remind them to use the portal next time."],
+  ["Return calls and voicemails","770.765.6267 and 404.990.0115. Add a note to the client's TaxDome account after each call."],
+  ["Check today's Calendly calls","Prep for each free 15-minute call. Afterward, create the TaxDome account and job for anyone moving forward.","https://calendly.com/","Calendly"],
+  ["Respond to new website leads","Contact form and fee estimator emails. Send next steps within 24 hours."]]],
+ ["New clients and onboarding",[
+  ["Activate pending portal accounts","Resend invites to accounts that haven't activated. TaxDome can't email clients until they do."],
+  ["Nudge unsigned engagement letters","Proposals and ELs pending more than 3 days (reminders should be on, but call anyone stuck)."],
+  ["Confirm ID verifications","Check Stripe Identity results, then complete the \"Confirm ID verified in Stripe\" tasks."],
+  ["Review submitted organizers","Open each new organizer. For business clients, check the Bookkeeping answers, tag BK setup / Catch-up / Annual plan, then complete the review task."],
+  ["Follow up on overdue organizers","Message clients whose organizer has been open more than 5 days."]]],
+ ["Pipelines and tasks",[
+  ["Scan every pipeline for red (overdue) jobs","Individual 1040, Business, Monthly Bookkeeping, IRS Monitoring sign-up and IRS Monitoring Renewal."],
+  ["Check stages that don't move on their own","Extension, Extension filed, Return complete, Prep post extension. Move finished jobs along by hand."],
+  ["Work today's and overdue tasks","Complete, reschedule, or reassign. Tag first, then complete, so jobs route correctly."],
+  ["Chase Missing docs","Check uploads from clients tagged Missing docs. Remove the tag once everything is in."],
+  ["Flag extensions early","Tag Extension on anyone whose documents or catch-up books won't be ready in time."]]],
+ ["Returns in TaxAct",[
+  ["Prepare returns in the In prep queue","Personal returns within 24 to 48 hours and business returns within 48 to 72 hours of documents being complete."],
+  ["Review prepared returns","1st review and manager review before anything goes to the client."],
+  ["Send drafts and e-file authorizations","Upload the draft return and 8879 to the portal, then send the invoice."],
+  ["Check e-file acknowledgments","Federal and state accepted or rejected. Fix rejections the same day, then send the \"return e-filed\" email."],
+  ["Track paper-filed returns","Prior-year returns that had to be mailed: note the mail date and tracking number on the job."]]],
+ ["Money: TaxDome invoices",[
+  ["Release paid returns for e-filing","Clients pay after review and before filing. File as soon as the invoice and 8879 are both in."],
+  ["Follow up on unpaid invoices","Remind anyone past 7 days. Don't file a return until its invoice is paid."],
+  ["Check plan and bookkeeping payments","Annual plan installments (pause work after 15 days late) and failed recurring bookkeeping charges."]]],
+ ["Bookkeeping",[
+  ["Check bank feeds","Reconnect any disconnected feeds, and ask the client to sign back in if needed."],
+  ["Monthly statements due by the 10th","Follow up on bookkeeping clients missing uploads or answers."],
+  ["Move catch-up jobs forward","Batch your questions to each client, and keep catch-up ahead of their filing deadline."]]],
+ ["IRS records monitoring",[
+  ["Log new opt-ins","New rows in the IRS Monitoring Opt-ins sheet: create the TaxDome account if needed and add the job to the sign-up pipeline."],
+  ["Check Tax Pro Account authorizations","Requests waiting on client approval: nudge the client. Approved: complete the Verify task to start the trial.","https://www.irs.gov/tax-professionals/tax-pro-account","Tax Pro Account"],
+  ["Schedule renewals","Complete each \"Schedule renewal\" task by adding the yearly recurrence on the job's Internal deadline date."],
+  ["Handle overdue renewals","Renewal jobs past 35 days unsigned: withdraw the IRS authorization and delete the client's recurrence."]]],
+ ["Referrals and marketing",[
+  ["Review new referral signups","Referral sheet: delete fake or spam names (the form has no captcha)."],
+  ["Match referred friends to clients","When a referred client's first invoice is paid, set Reward Status to Qualified. Pay only after payment."],
+  ["Process unsubscribes","Zoho unsubscribes and the Unsubscribes sheet: tag No marketing in TaxDome. Honor within 10 business days."],
+  ["Check today's Zoho campaign","If one went out, look at bounces and replies. Non-tax offers go only to the non-tax-client list."]]],
+ ["End of day",[
+  ["Update client-facing statuses","So every client sees where their return stands."],
+  ["Nothing left unanswered","Inbox, chats and voicemail all at zero, or each has a promised reply time."],
+  ["Set tomorrow's top 3","Write them in today's notes below."]]]
+];
+const WEEKLY=[
+ ["Weekly review (Fridays)",[
+  ["Find stuck jobs","Any job with no movement in 7+ days, in every pipeline."],
+  ["Review accounts receivable","All open TaxDome invoices by age. Call anyone over 30 days."],
+  ["Pay referral rewards","Pay every Qualified referral, then mark it Paid in the referral sheet."],
+  ["Audit IRS monitoring","Every client in Trial Period has a renewal recurrence; every withdrawn client has none."],
+  ["Sync unsubscribes everywhere","Zoho, the Unsubscribes sheet and TaxDome tags all match."],
+  ["Test the website forms","Submit a test on taxentric.com/irs-monitoring and check the pricing page and referral site load."],
+  ["Check email deliverability","Look for bounces or spam complaints in Zoho, and spot-check that your emails land in inboxes."],
+  ["Plan next week's campaign","Draft and schedule next week's Zoho or TaxDome email."],
+  ["Look two weeks ahead","Check the Key dates tab and tag extensions early for anyone at risk."]]]
+];
+const DATES=[
+ ["2027-01-15","Q4 2026 estimated tax payment","Q4 estimated tax"],
+ ["2027-02-01","W-2s and 1099-NECs to recipients and the IRS; Q4 Form 941 (Jan 31 is a Sunday)","W-2s, 1099-NECs, Q4 941"],
+ ["2027-03-15","Partnership (1065) and S-corp (1120-S) returns, or extensions","1065 and 1120-S returns"],
+ ["2027-04-15","Individual (1040) and C-corp (1120) returns, or extensions; Q1 2027 estimated tax","1040 and 1120 returns"],
+ ["2027-04-30","Q1 Form 941","Q1 Form 941"],
+ ["2027-05-17","Nonprofit returns (990 series) for calendar-year organizations (May 15 is a Saturday)","Nonprofit 990s"],
+ ["2027-06-15","Q2 2027 estimated tax","Q2 estimated tax"],
+ ["2027-09-15","Extended 1065 and 1120-S returns; Q3 2027 estimated tax","Extended 1065 / 1120-S"],
+ ["2027-10-15","Extended 1040 and 1120 returns","Extended 1040 / 1120"],
+ ["2027-11-15","Extended nonprofit returns","Extended 990s"]
+];
+const $=id=>document.getElementById(id);
+const now=new Date();
+const pad=n=>String(n).padStart(2,"0");
+const dayKey=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+const weekKey=mon.getFullYear()+"-"+pad(mon.getMonth()+1)+"-"+pad(mon.getDate());
+const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const state={daily:store.get("txc-d-"+dayKey)||{},weekly:store.get("txc-w-"+weekKey)||{}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function render(list,kind){
+  return list.map(([title,items],si)=>{
+    const done=items.filter((_,ii)=>state[kind][si+"-"+ii]).length;
+    return '<div class="sec"><h3>'+esc(title)+'<small class="'+(done===items.length?"done":"")+'">'+done+' of '+items.length+'</small></h3>'+
+    items.map(([b,s,url,lab],ii)=>{const id=kind+"-"+si+"-"+ii,on=!!state[kind][si+"-"+ii];
+      return '<label class="item'+(on?" on":"")+'" for="'+id+'"><input type="checkbox" id="'+id+'" data-k="'+kind+'" data-i="'+si+"-"+ii+'"'+(on?" checked":"")+'><div><b>'+esc(b)+'</b><span>'+esc(s)+(url?' <a href="'+url+'" target="_blank" rel="noopener">Open '+esc(lab)+'</a>':'')+'</span></div></label>'}).join("")+'</div>';
+  }).join("");
+}
+function days(d){return Math.round((new Date(d+"T00:00:00")-new Date(dayKey+"T00:00:00"))/86400000)}
+function fmt(d){return new Date(d+"T00:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"})}
+function paint(){
+  $("daily-list").innerHTML=render(DAILY,"daily");
+  $("weekly-list").innerHTML=render(WEEKLY,"weekly");
+  const kind=view()==="weekly"?"weekly":"daily",list=kind==="weekly"?WEEKLY:DAILY;
+  const total=list.reduce((t,s)=>t+s[1].length,0),done=Object.values(state[kind]).filter(Boolean).length;
+  const p=total?Math.round(done/total*100):0;
+  $("pct").textContent=p+"%";$("barfill").style.width=p+"%";
+  $("count").textContent=done+" of "+total+(kind==="weekly"?" weekly items done this week":" items done today");
+}
+function view(){const h=location.hash.slice(1);return["daily","weekly","dates"].includes(h)?h:"daily"}
+function route(){
+  const v=view();
+  ["daily","weekly","dates"].forEach(n=>{$("v-"+n).hidden=n!==v;const t=$("t-"+n);if(n===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});
+  $("reset").hidden=v==="dates";paint();
+}
+document.addEventListener("change",e=>{
+  const c=e.target;if(!c.dataset||!c.dataset.k)return;
+  state[c.dataset.k][c.dataset.i]=c.checked;
+  store.set(c.dataset.k==="daily"?"txc-d-"+dayKey:"txc-w-"+weekKey,state[c.dataset.k]);paint();
+  const el=document.getElementById(c.id);if(el)el.focus();
+});
+$("reset").addEventListener("click",()=>{$("confirm").classList.add("show");$("reset").hidden=true});
+$("no").addEventListener("click",()=>{$("confirm").classList.remove("show");$("reset").hidden=false});
+$("yes").addEventListener("click",()=>{const k=view()==="weekly"?"weekly":"daily";state[k]={};store.set(k==="daily"?"txc-d-"+dayKey:"txc-w-"+weekKey,{});$("confirm").classList.remove("show");$("reset").hidden=false;paint()});
+const notes=$("notes");notes.value=store.get("txc-n-"+dayKey)||"";
+notes.addEventListener("input",()=>store.set("txc-n-"+dayKey,notes.value));
+$("today").textContent=now.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+$("dates").innerHTML=DATES.map(([d,w])=>{const n=days(d);return '<tr class="'+(n<0?"past":"")+'"><td class="n">'+fmt(d)+'</td><td>'+esc(w)+'</td><td class="left">'+(n<0?"Passed":n===0?"Today":n+" days")+'</td></tr>'}).join("");
+$("nextdl").innerHTML=DATES.filter(([d])=>days(d)>=0).slice(0,3).map(([d,w,l])=>{const n=days(d);return '<li><span>'+esc(l)+'<br><span class="sub">'+fmt(d)+'</span></span><b>'+(n===0?"Today":n+" days")+'</b></li>'}).join("")||'<li>No upcoming dates listed</li>';
+window.addEventListener("hashchange",route);route();
+}
+</script>
+</body>
+</html>
