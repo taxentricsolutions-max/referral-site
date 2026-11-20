@@ -67,6 +67,29 @@ tr.past td{color:var(--mu)}tr.past td.left{color:var(--mu)}
 @media(max-width:700px){.top{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){table{font-size:13px}td,th{padding:9px 12px}}
 @media(prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+.carry{border-color:light-dark(#fecaca,#5b2323);background:light-dark(#fff5f5,#2a1717)}
+.carry>h3{color:var(--rd)}
+.carry .since{color:var(--rd);font-weight:600}
+.gaps{padding:10px 18px;font-size:14px;color:var(--rd);border-bottom:1px solid var(--line)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;padding:14px 18px}
+.cal .h{font-size:12px;color:var(--mu);text-align:center}
+.cal button{min-height:52px;padding:4px;border-radius:10px;font-size:12px;display:grid;place-items:center;line-height:1.2}
+.cal button b{font-size:14px}
+.cal .g{background:light-dark(#dcfce7,#14341f);border-color:transparent}
+.cal .y{background:light-dark(#ffedd5,#3b2a14);border-color:transparent}
+.cal .r{background:light-dark(#fee2e2,#3b1717);border-color:transparent}
+.cal .e{opacity:.45}
+.cal .sel{outline:3px solid var(--am)}
+.det{padding:4px 18px 16px;font-size:15px}
+.det ul{list-style:disc;padding-left:20px;margin:6px 0 10px}
+.sync{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--mu)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--mu);flex:none}
+.dot.on{background:var(--ok)}.dot.err{background:var(--rd)}
+.panel{padding:14px 18px;display:grid;gap:10px}
+.panel label{font-weight:600;font-size:14px}
+.panel input{width:100%;font:16px Inter,sans-serif;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.msg{font-size:14px}.msg.err{color:var(--rd)}.msg.ok{color:var(--ok)}
 </style>
 </head>
 <body>
@@ -87,16 +110,21 @@ tr.past td{color:var(--mu)}tr.past td.left{color:var(--mu)}
     </div>
   </div>
 
-  <nav class="tabs" aria-label="Checklist views">
+  <nav class="tabs" aria-label="Checklist views" style="max-width:600px">
     <a href="#daily" id="t-daily">Daily</a>
     <a href="#weekly" id="t-weekly">Weekly</a>
-    <a href="#dates" id="t-dates">Key dates</a>
+    <a href="#history" id="t-history">History</a>
+    <a href="#dates" id="t-dates">Dates</a>
   </nav>
 
-  <section id="v-daily"><div id="daily-list"></div>
+  <section id="v-daily"><div id="daily-carry"></div><div id="daily-list"></div>
     <div class="sec"><h3>Notes for today</h3><div style="padding:14px 18px"><label for="notes" class="sub">Follow-ups, promises to clients, anything to pick up tomorrow</label><textarea id="notes" class="notes"></textarea></div></div>
   </section>
-  <section id="v-weekly" hidden><div id="weekly-list"></div></section>
+  <section id="v-weekly" hidden><div id="weekly-carry"></div><div id="weekly-list"></div></section>
+  <section id="v-history" hidden>
+    <div class="sec"><h3>Daily completion <small id="histsum"></small></h3><div class="cal" id="cal"></div><div class="det" id="det"><p class="sub">Choose a day to see what was missed and your notes.</p></div></div>
+    <div class="sec"><h3>Weekly reviews</h3><div class="det" id="weeks"></div></div>
+  </section>
   <section id="v-dates" hidden>
     <div class="sec"><h3>Filing deadlines (calendar-year filers)</h3>
       <table><thead><tr><th>Due</th><th>What</th><th style="text-align:right">Days left</th></tr></thead><tbody id="dates"></tbody></table></div>
@@ -104,9 +132,18 @@ tr.past td{color:var(--mu)}tr.past td.left{color:var(--mu)}
   </section>
 
   <div class="row">
-    <span class="sub" id="saved">Your checks save in this browser and reset each day (weekly list each Monday).</span>
-    <span><button id="reset">Clear this list</button>
+    <span class="sync"><i class="dot" id="dot"></i><span id="syncmsg">Saved on this device only</span></span>
+    <span><button id="setup">Sync settings</button> <button id="reset">Clear this list</button>
     <span class="confirm" id="confirm">Clear all checks? <button class="pri" id="yes">Clear</button><button id="no">Keep</button></span></span>
+  </div>
+  <div class="sec" id="panel" hidden><h3>Sync with Google Sheet</h3>
+    <form class="panel" id="syncform">
+      <p class="sub" style="margin:0">Connect once on each device. Your checks, missed items and notes are then saved to your Google Sheet and shared between your computer and phone.</p>
+      <div><label for="surl">Google Script web app URL</label><input id="surl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></div>
+      <div><label for="spass">Passcode</label><input id="spass" type="password" autocomplete="current-password"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="pri" type="submit">Connect and sync</button><button type="button" id="disc">Disconnect this device</button></div>
+      <p class="msg" id="smsg"></p>
+    </form>
   </div>
 </div>
 
@@ -184,55 +221,175 @@ const DATES=[
  ["2027-10-15","Extended 1040 and 1120 returns","Extended 1040 / 1120"],
  ["2027-11-15","Extended nonprofit returns","Extended 990s"]
 ];
+const SYNC_URL_DEFAULT="";
 const $=id=>document.getElementById(id);
-const now=new Date();
 const pad=n=>String(n).padStart(2,"0");
-const dayKey=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
-const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
-const weekKey=mon.getFullYear()+"-"+pad(mon.getMonth()+1)+"-"+pad(mon.getDate());
-const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-const state={daily:store.get("txc-d-"+dayKey)||{},weekly:store.get("txc-w-"+weekKey)||{}};
-const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function render(list,kind){
-  return list.map(([title,items],si)=>{
-    const done=items.filter((_,ii)=>state[kind][si+"-"+ii]).length;
-    return '<div class="sec"><h3>'+esc(title)+'<small class="'+(done===items.length?"done":"")+'">'+done+' of '+items.length+'</small></h3>'+
-    items.map(([b,s,url,lab],ii)=>{const id=kind+"-"+si+"-"+ii,on=!!state[kind][si+"-"+ii];
-      return '<label class="item'+(on?" on":"")+'" for="'+id+'"><input type="checkbox" id="'+id+'" data-k="'+kind+'" data-i="'+si+"-"+ii+'"'+(on?" checked":"")+'><div><b>'+esc(b)+'</b><span>'+esc(s)+(url?' <a href="'+url+'" target="_blank" rel="noopener">Open '+esc(lab)+'</a>':'')+'</span></div></label>'}).join("")+'</div>';
+const ymd=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const now=new Date(),dayKey=ymd(now);
+const monOf=d=>{const m=new Date(d);m.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(m)};
+const weekKey=monOf(now);
+const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const LISTS={daily:DAILY,weekly:WEEKLY};
+const ITEMS={};
+for(const k in LISTS)ITEMS[k]=LISTS[k].flatMap(([sec,items])=>items.map(i=>({id:slug(i[0]),t:i[0],s:i[1],url:i[2],lab:i[3],sec})));
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+/* records[kind][dateKey] = {c:{id:1}, cd:{id:1}, notes:""} */
+const rec=ls.get("txc-records",{daily:{},weekly:{}});
+/* migrate first version's saves */
+try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i),m=k&&k.match(/^txc-(d|w)-(\d{4}-\d\d-\d\d)$/);if(!m)continue;const kind=m[1]==="d"?"daily":"weekly";if(rec[kind][m[2]])continue;const old=JSON.parse(localStorage.getItem(k)||"{}"),c={};
+ for(const key in old){if(!old[key])continue;const [si,ii]=key.split("-").map(Number);const it=LISTS[kind][si]&&LISTS[kind][si][1][ii];if(it)c[slug(it[0])]=1}
+ rec[kind][m[2]]={c,cd:{},notes:kind==="daily"?ls.get("txc-n-"+m[2],""):""}}}catch(e){}
+const cur=kind=>kind==="daily"?dayKey:weekKey;
+const get=(kind,key)=>rec[kind][key]||(rec[kind][key]={c:{},cd:{},notes:""});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtD=(k,o)=>new Date(k+"T00:00:00").toLocaleDateString(undefined,o||{weekday:"short",month:"short",day:"numeric"});
+
+/* unresolved items carried into `key`: walk every earlier record in order */
+function carryInto(kind,key){
+  const keys=Object.keys(rec[kind]).filter(k=>k<key&&Object.keys(rec[kind][k].c||{}).length+Object.keys(rec[kind][k].cd||{}).length>0).sort();
+  let open={};
+  for(const k of keys){const r=rec[kind][k],next={};
+    for(const id in open)if(!(r.c[id]||r.cd[id]))next[id]=open[id];
+    for(const it of ITEMS[kind])if(!r.c[it.id]&&!(it.id in next))next[it.id]=k;
+    open=next}
+  return {open,last:keys[keys.length-1]};
+}
+function skipped(last){ /* weekdays with no record between last record and today */
+  if(!last)return[];const out=[],d=new Date(last+"T00:00:00");d.setDate(d.getDate()+1);
+  while(ymd(d)<dayKey){if(d.getDay()%6&&!rec.daily[ymd(d)])out.push(ymd(d));d.setDate(d.getDate()+1)}
+  return out;
+}
+function itemHtml(kind,it,checked,extra,carry){
+  const id=(carry?"cy-":"")+kind+"-"+it.id;
+  return '<label class="item'+(checked?" on":"")+'" for="'+id+'"><input type="checkbox" id="'+id+'" data-k="'+kind+'" data-i="'+it.id+'"'+(carry?' data-c="1"':'')+(checked?" checked":"")+'><div><b>'+esc(it.t)+'</b><span>'+(extra||"")+esc(it.s)+(it.url?' <a href="'+it.url+'" target="_blank" rel="noopener">Open '+esc(it.lab)+'</a>':'')+'</span></div></label>';
+}
+function renderCarry(kind){
+  const key=cur(kind),r=get(kind,key),{open,last}=carryInto(kind,key);
+  const ids=Object.keys(open).filter(id=>!r.c[id]&&!r.cd[id]);
+  const gaps=kind==="daily"?skipped(last):[];
+  if(!ids.length&&!gaps.length)return"";
+  const unit=kind==="daily"?"day":"week";
+  return '<div class="sec carry"><h3>Carried over: '+ids.length+' missed<small>from earlier '+unit+'s</small></h3>'+
+   (gaps.length?'<div class="gaps">No checklist recorded for '+gaps.map(g=>fmtD(g)).join(", ")+'. Check anything that day needed.</div>':'')+
+   ids.map(id=>{const it=ITEMS[kind].find(x=>x.id===id);return it?itemHtml(kind,it,false,'<span class="since">Missed since '+fmtD(open[id])+'. </span>',true):""}).join("")+'</div>';
+}
+function renderList(kind){
+  const r=get(kind,cur(kind));
+  return LISTS[kind].map(([title,items])=>{
+    const its=items.map(i=>ITEMS[kind].find(x=>x.id===slug(i[0])));
+    const done=its.filter(it=>r.c[it.id]).length;
+    return '<div class="sec"><h3>'+esc(title)+'<small class="'+(done===its.length?"done":"")+'">'+done+' of '+its.length+'</small></h3>'+its.map(it=>itemHtml(kind,it,!!r.c[it.id])).join("")+'</div>';
   }).join("");
 }
-function days(d){return Math.round((new Date(d+"T00:00:00")-new Date(dayKey+"T00:00:00"))/86400000)}
-function fmt(d){return new Date(d+"T00:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"})}
-function paint(){
-  $("daily-list").innerHTML=render(DAILY,"daily");
-  $("weekly-list").innerHTML=render(WEEKLY,"weekly");
-  const kind=view()==="weekly"?"weekly":"daily",list=kind==="weekly"?WEEKLY:DAILY;
-  const total=list.reduce((t,s)=>t+s[1].length,0),done=Object.values(state[kind]).filter(Boolean).length;
-  const p=total?Math.round(done/total*100):0;
-  $("pct").textContent=p+"%";$("barfill").style.width=p+"%";
-  $("count").textContent=done+" of "+total+(kind==="weekly"?" weekly items done this week":" items done today");
+function stats(kind,key){const r=rec[kind][key]||{c:{}},t=ITEMS[kind].length,d=ITEMS[kind].filter(it=>r.c[it.id]).length;return{d,t,p:Math.round(d/t*100)}}
+let sel=null;
+function renderHistory(){
+  const start=new Date(now);start.setDate(start.getDate()-41);start.setDate(start.getDate()-((start.getDay()+6)%7));
+  let h=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map(x=>'<div class="h">'+x+'</div>').join("");
+  const d=new Date(start);let used=0,sum=0;
+  while(ymd(d)<=dayKey){const k=ymd(d),has=!!rec.daily[k]&&(Object.keys(rec.daily[k].c).length||rec.daily[k].notes);
+    const st=stats("daily",k);if(has&&k<dayKey){used++;sum+=st.p}
+    const cls=!has?"e":st.p>=90?"g":st.p>=60?"y":"r";
+    h+='<button type="button" class="'+cls+(sel===k?" sel":"")+'" data-day="'+k+'"><span>'+d.getDate()+'</span><b>'+(has?st.p+"%":"&nbsp;")+'</b></button>';
+    d.setDate(d.getDate()+1)}
+  $("cal").innerHTML=h;
+  $("histsum").textContent=used?"Average "+Math.round(sum/used)+"% over "+used+" past days":"";
+  const wk=Object.keys(rec.weekly).sort().reverse().slice(0,8);
+  $("weeks").innerHTML=wk.length?wk.map(k=>{const st=stats("weekly",k),miss=ITEMS.weekly.filter(it=>!rec.weekly[k].c[it.id]).map(it=>esc(it.t));return '<p><b>Week of '+fmtD(k,{month:"short",day:"numeric"})+': '+st.p+'%</b>'+(miss.length?'<br><span class="sub">Missed: '+miss.join(", ")+'</span>':'')+'</p>'}).join(""):'<p class="sub">No weekly reviews recorded yet.</p>';
+  if(sel)showDay(sel);
 }
-function view(){const h=location.hash.slice(1);return["daily","weekly","dates"].includes(h)?h:"daily"}
+function showDay(k){
+  const r=rec.daily[k];if(!r){$("det").innerHTML='<p class="sub">Nothing recorded for '+fmtD(k)+'.</p>';return}
+  const st=stats("daily",k),miss=ITEMS.daily.filter(it=>!r.c[it.id]);
+  $("det").innerHTML='<p><b>'+fmtD(k,{weekday:"long",month:"long",day:"numeric"})+': '+st.d+' of '+st.t+' done ('+st.p+'%)</b></p>'+
+   (miss.length?'<p class="sub" style="margin:0">Missed that day:</p><ul>'+miss.map(it=>'<li>'+esc(it.t)+'</li>').join("")+'</ul>':'<p>Everything done.</p>')+
+   (r.notes?'<p class="sub" style="margin:0">Notes:</p><p style="white-space:pre-wrap;margin:4px 0">'+esc(r.notes)+'</p>':'');
+}
+function view(){const h=location.hash.slice(1);return["daily","weekly","history","dates"].includes(h)?h:"daily"}
+function paint(){
+  for(const k of ["daily","weekly"]){$(k+"-carry").innerHTML=renderCarry(k);$(k+"-list").innerHTML=renderList(k)}
+  if(view()==="history")renderHistory();
+  const kind=view()==="weekly"?"weekly":"daily",st=stats(kind,cur(kind));
+  $("pct").textContent=st.p+"%";$("barfill").style.width=st.p+"%";
+  const r=get(kind,cur(kind)),carried=Object.keys(carryInto(kind,cur(kind)).open).filter(id=>!r.c[id]&&!r.cd[id]).length;
+  $("count").textContent=st.d+" of "+st.t+(kind==="weekly"?" weekly items done this week":" items done today")+(carried?" · "+carried+" carried over":"");
+}
 function route(){
   const v=view();
-  ["daily","weekly","dates"].forEach(n=>{$("v-"+n).hidden=n!==v;const t=$("t-"+n);if(n===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});
-  $("reset").hidden=v==="dates";paint();
+  ["daily","weekly","history","dates"].forEach(n=>{$("v-"+n).hidden=n!==v;const t=$("t-"+n);if(n===v)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});
+  $("reset").hidden=!(v==="daily"||v==="weekly");paint();
 }
+
+/* ---------- Google Sheet sync ---------- */
+let cfg=ls.get("txc-sync",{url:SYNC_URL_DEFAULT,pass:""});
+const timers={};
+function status(cls,msg){$("dot").className="dot "+cls;$("syncmsg").textContent=msg}
+function payload(kind,key){
+  const r=rec[kind][key],st=stats(kind,key);
+  return{pass:cfg.pass,date:key,kind,done:st.d,total:st.t,
+    missed:ITEMS[kind].filter(it=>!r.c[it.id]).map(it=>it.t),notes:r.notes||"",state:{c:r.c,cd:r.cd}};
+}
+function push(kind,key){
+  ls.set("txc-records",rec);
+  if(!cfg.url||!cfg.pass){status("","Saved on this device only");return}
+  clearTimeout(timers[kind+key]);status("","Saving...");
+  timers[kind+key]=setTimeout(()=>{
+    fetch(cfg.url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload(kind,key))})
+     .then(r=>r.json()).then(j=>{if(!j.ok)throw new Error(j.error);status("on","Synced to Google Sheet")})
+     .catch(e=>status("err","Not synced: "+(e.message||"check connection")+". Saved on this device."));
+  },700);
+}
+function pull(){
+  if(!cfg.url||!cfg.pass){status("","Saved on this device only");return Promise.resolve()}
+  status("","Syncing...");
+  return fetch(cfg.url+(cfg.url.includes("?")?"&":"?")+"pass="+encodeURIComponent(cfg.pass)+"&days=400")
+   .then(r=>r.json()).then(j=>{
+    if(!j.ok)throw new Error(j.error||"Sync failed");
+    const local=JSON.parse(JSON.stringify(rec));
+    for(const x of j.records){if(!rec[x.kind])continue;
+      const mine=local[x.kind][x.date],key=cur(x.kind);
+      if(x.date===key&&mine){ /* today: keep both devices' checks */
+        rec[x.kind][x.date]={c:Object.assign({},x.state.c,mine.c),cd:Object.assign({},x.state.cd,mine.cd),notes:mine.notes||x.notes||""};
+      }else rec[x.kind][x.date]={c:x.state.c||{},cd:x.state.cd||{},notes:x.notes||""}}
+    ls.set("txc-records",rec);
+    /* send up anything only this device has */
+    for(const kind of ["daily","weekly"])for(const k in local[kind])if(!j.records.some(x=>x.kind===kind&&x.date===k))push(kind,k);
+    push("daily",dayKey);
+    status("on","Synced to Google Sheet");return true;
+   }).catch(e=>{status("err","Not synced: "+e.message+". Saved on this device.");return false});
+}
+
+/* ---------- events ---------- */
 document.addEventListener("change",e=>{
   const c=e.target;if(!c.dataset||!c.dataset.k)return;
-  state[c.dataset.k][c.dataset.i]=c.checked;
-  store.set(c.dataset.k==="daily"?"txc-d-"+dayKey:"txc-w-"+weekKey,state[c.dataset.k]);paint();
-  const el=document.getElementById(c.id);if(el)el.focus();
+  const kind=c.dataset.k,key=cur(kind),r=get(kind,key);
+  if(c.dataset.c){if(c.checked)r.cd[c.dataset.i]=1;else delete r.cd[c.dataset.i]}
+  else{if(c.checked)r.c[c.dataset.i]=1;else delete r.c[c.dataset.i]}
+  paint();push(kind,key);
+  const el=$(c.id);if(el)el.focus();
 });
+document.addEventListener("click",e=>{const b=e.target.closest("[data-day]");if(!b)return;sel=b.dataset.day;renderHistory()});
 $("reset").addEventListener("click",()=>{$("confirm").classList.add("show");$("reset").hidden=true});
 $("no").addEventListener("click",()=>{$("confirm").classList.remove("show");$("reset").hidden=false});
-$("yes").addEventListener("click",()=>{const k=view()==="weekly"?"weekly":"daily";state[k]={};store.set(k==="daily"?"txc-d-"+dayKey:"txc-w-"+weekKey,{});$("confirm").classList.remove("show");$("reset").hidden=false;paint()});
-const notes=$("notes");notes.value=store.get("txc-n-"+dayKey)||"";
-notes.addEventListener("input",()=>store.set("txc-n-"+dayKey,notes.value));
+$("yes").addEventListener("click",()=>{const k=view()==="weekly"?"weekly":"daily",r=get(k,cur(k));r.c={};r.cd={};$("confirm").classList.remove("show");$("reset").hidden=false;paint();push(k,cur(k))});
+const notes=$("notes");
+notes.addEventListener("input",()=>{get("daily",dayKey).notes=notes.value;push("daily",dayKey)});
+$("setup").addEventListener("click",()=>{const p=$("panel");p.hidden=!p.hidden;$("surl").value=cfg.url||"";$("spass").value=cfg.pass||""});
+$("syncform").addEventListener("submit",e=>{e.preventDefault();
+  cfg={url:$("surl").value.trim(),pass:$("spass").value};
+  if(!/^https:\/\/script\.google\.com\//.test(cfg.url)){$("smsg").className="msg err";$("smsg").textContent="Paste the web app URL that starts with https://script.google.com/";return}
+  ls.set("txc-sync",cfg);$("smsg").className="msg";$("smsg").textContent="Connecting...";
+  pull().then(ok=>{$("smsg").className="msg "+(ok?"ok":"err");$("smsg").textContent=ok?"Connected. This device now syncs with your Google Sheet.":"Couldn't connect. Check the URL and passcode.";notes.value=get("daily",dayKey).notes||"";paint()})});
+$("disc").addEventListener("click",()=>{cfg={url:"",pass:""};ls.set("txc-sync",cfg);$("surl").value="";$("spass").value="";$("smsg").className="msg";$("smsg").textContent="Disconnected. Checks now save on this device only.";status("","Saved on this device only")});
+
+/* ---------- start ---------- */
 $("today").textContent=now.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});
-$("dates").innerHTML=DATES.map(([d,w])=>{const n=days(d);return '<tr class="'+(n<0?"past":"")+'"><td class="n">'+fmt(d)+'</td><td>'+esc(w)+'</td><td class="left">'+(n<0?"Passed":n===0?"Today":n+" days")+'</td></tr>'}).join("");
-$("nextdl").innerHTML=DATES.filter(([d])=>days(d)>=0).slice(0,3).map(([d,w,l])=>{const n=days(d);return '<li><span>'+esc(l)+'<br><span class="sub">'+fmt(d)+'</span></span><b>'+(n===0?"Today":n+" days")+'</b></li>'}).join("")||'<li>No upcoming dates listed</li>';
+const days=d=>Math.round((new Date(d+"T00:00:00")-new Date(dayKey+"T00:00:00"))/86400000);
+$("dates").innerHTML=DATES.map(([d,w])=>{const n=days(d);return '<tr class="'+(n<0?"past":"")+'"><td class="n">'+fmtD(d,{weekday:"short",month:"short",day:"numeric",year:"numeric"})+'</td><td>'+esc(w)+'</td><td class="left">'+(n<0?"Passed":n===0?"Today":n+" days")+'</td></tr>'}).join("");
+$("nextdl").innerHTML=DATES.filter(([d])=>days(d)>=0).slice(0,3).map(([d,w,l])=>{const n=days(d);return '<li><span>'+esc(l)+'<br><span class="sub">'+fmtD(d,{weekday:"short",month:"short",day:"numeric",year:"numeric"})+'</span></span><b>'+(n===0?"Today":n+" days")+'</b></li>'}).join("")||'<li>No upcoming dates listed</li>';
+notes.value=get("daily",dayKey).notes||"";
 window.addEventListener("hashchange",route);route();
+pull().then(()=>{notes.value=get("daily",dayKey).notes||notes.value;paint()});
 }
 </script>
 </body>
