@@ -164,8 +164,8 @@ const DAILY=[
  ["Returns in TaxAct",[
   ["Prepare returns in the In prep queue","Personal returns within 24 to 48 hours and business returns within 48 to 72 hours of documents being complete."],
   ["Review prepared returns","1st review and manager review before anything goes to the client."],
-  ["Send drafts and e-file authorizations","Upload the draft return and 8879 to the portal, then send the invoice."],
-  ["Release paid returns for e-filing","Clients pay after review and before filing. File as soon as the invoice and 8879 are both in."],
+  ["Send drafts and e-file authorizations","Upload the draft return and the tax summary page to the portal. Confirm the client's 5-digit signature PIN (from their organizer or client task) to sign the 8879, then send the invoice."],
+  ["Release paid returns for e-filing","Clients pay after review and before filing. File as soon as the invoice is paid and you have the client's signature PIN."],
   ["Track paper-filed returns","Prior-year returns that had to be mailed: note the mail date and tracking number on the job."]],{n:2,t:"Deep work: returns",time:"8:50 to 11:30 AM",d:"Phone on Do Not Disturb, email closed. This is the work that brings in revenue."}],
  ["Replies",[
   ["Reply to TaxDome chats","Answer every client message from yesterday and overnight. Aim to reply the same business day."],
@@ -203,8 +203,7 @@ const DAILY=[
   ["Review new referral signups","Referral sheet: delete fake or spam names (the form has no captcha)."],
   ["Match referred friends to clients","When a referred client's first invoice is paid, set Reward Status to Qualified. Pay only after payment."],
   ["Process unsubscribes","Zoho unsubscribes and the Unsubscribes sheet: tag No marketing in TaxDome. Honor within 10 business days."],
-  ["Send or schedule today's Zoho campaign","If a campaign is planned for today: preview it, test the links and button, check the list (non-tax offers go only to the non-tax-client list), then send or schedule it."],
-  ["Check today's Zoho campaign","If one went out, look at opens, bounces and replies, and answer any replies."]],null],
+  ["Check today's Zoho campaign","Campaigns are scheduled ahead of time. If one went out today, confirm it sent, then check opens, bounces and replies, and answer any replies."]],null],
  ["End of day",[
   ["Update client-facing statuses","So every client sees where their return stands."],
   ["Nothing left unanswered","Inbox, chats and voicemail all at zero, or each has a promised reply time."],
@@ -219,7 +218,7 @@ const WEEKLY=[
   ["Sync unsubscribes everywhere","Zoho, the Unsubscribes sheet and TaxDome tags all match."],
   ["Test the website forms","Submit a test on taxentric.com/irs-monitoring and check the pricing page and referral site load."],
   ["Check email deliverability","Look for bounces or spam complaints in Zoho, and spot-check that your emails land in inboxes."],
-  ["Plan next week's campaign","Pick next week's email, build it in Zoho Campaigns, send yourself a test, and schedule it."],
+  ["Plan next week's campaign","Make sure the next 2 weeks of campaigns are scheduled in Zoho, with a test sent to yourself for each one."],
   ["Look two weeks ahead","Check the Key dates tab and tag extensions early for anyone at risk."]]]
 ];
 const DATES=[
@@ -254,7 +253,7 @@ const WHERE={
  "check-e-file-acknowledgments":"Outlook › TaxAct E-file confirmations folder, then TaxAct for any rejections",
  "prepare-returns-in-the-in-prep-queue":"TaxDome › In prep stage, then TaxAct",
  "review-prepared-returns":"TaxAct, with the job in TaxDome",
- "send-drafts-and-e-file-authorizations":"TaxDome (upload, signature request, invoice)",
+ "send-drafts-and-e-file-authorizations":"TaxDome (draft, tax summary, PIN, invoice)",
  "release-paid-returns-for-e-filing":"TaxDome › Billing to confirm payment, then TaxAct to file",
  "track-paper-filed-returns":"TaxDome › the client's job notes",
  "reply-to-taxdome-chats":"TaxDome › Communications",
@@ -285,7 +284,6 @@ const WHERE={
  "review-new-referral-signups":"Referral spreadsheet (Google Sheets)",
  "match-referred-friends-to-clients":"Referral spreadsheet › Client Signups tab, checked against TaxDome › Billing",
  "process-unsubscribes":"Zoho Campaigns › Contacts › Unsubscribed, the Unsubscribes sheet, and TaxDome tags",
- "send-or-schedule-today-s-zoho-campaign":"Zoho Campaigns",
  "check-today-s-zoho-campaign":"Zoho Campaigns › Reports",
  "update-client-facing-statuses":"TaxDome › Workflow › Pipelines",
  "nothing-left-unanswered":"TaxDome › Communications, "+PHONE+", and your Outlook folders",
@@ -297,7 +295,7 @@ const WHERE={
  "sync-unsubscribes-everywhere":"Zoho Campaigns, the Unsubscribes sheet, and TaxDome tags",
  "test-the-website-forms":"taxentric.com/irs-monitoring, taxentric.com/pricing, referrals.taxentric.com",
  "check-email-deliverability":"Zoho Campaigns › Reports",
- "plan-next-week-s-campaign":"Zoho Campaigns",
+ "plan-next-week-s-campaign":"Zoho Campaigns › Scheduled",
  "look-two-weeks-ahead":"The Dates tab on this page"};
 const APPT_IDS=["check-today-s-calendly-calls","follow-up-on-today-s-calls"];
 const isSeason=k=>{const md=k.slice(5);return md>="01-15"&&md<="04-15"};
