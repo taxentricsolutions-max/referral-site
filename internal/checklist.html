@@ -48,6 +48,7 @@ ul{list-style:none;margin:0;padding:0}
 .item input:checked{background:linear-gradient(135deg,var(--or),var(--rd));border-color:transparent}
 .item input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .item b{display:block;font-weight:600}
+.item .where{display:inline-block;margin:3px 0 4px;padding:2px 10px;border-radius:999px;background:var(--soft);color:light-dark(#9a3412,#fdba74);font-size:13px;font-weight:600}
 .item span{display:block;color:var(--mu);font-size:14px}
 .item a{color:var(--or);font-weight:600}
 .item.on b{text-decoration:line-through;color:var(--mu)}
@@ -168,7 +169,7 @@ const DAILY=[
   ["Track paper-filed returns","Prior-year returns that had to be mailed: note the mail date and tracking number on the job."]],{n:2,t:"Deep work: returns",time:"8:50 to 11:30 AM",d:"Phone on Do Not Disturb, email closed. This is the work that brings in revenue."}],
  ["Replies",[
   ["Reply to TaxDome chats","Answer every client message from yesterday and overnight. Aim to reply the same business day."],
-  ["Clear email inboxes","Outlook (yannick.ebama@ and support@taxentric.com). Move any documents sent by email into the client's portal, and remind them to use the portal next time."],
+  ["Clear email inboxes","Reply to client emails, and move any documents sent by email into the client's portal. Then clear anything left in Outlook's main inbox."],
   ["Return calls and voicemails","770.765.6267 and 404.990.0115. Add a note to the client's TaxDome account after each call."]],{n:3,t:"Communications, batch 1",time:"11:30 AM to 12:30 PM",d:"Full replies to everything flagged in triage, then onboarding."}],
  ["New clients and onboarding",[
   ["Activate pending portal accounts","Resend invites to accounts that haven't activated. TaxDome can't email clients until they do."],
@@ -201,7 +202,8 @@ const DAILY=[
   ["Review new referral signups","Referral sheet: delete fake or spam names (the form has no captcha)."],
   ["Match referred friends to clients","When a referred client's first invoice is paid, set Reward Status to Qualified. Pay only after payment."],
   ["Process unsubscribes","Zoho unsubscribes and the Unsubscribes sheet: tag No marketing in TaxDome. Honor within 10 business days."],
-  ["Check today's Zoho campaign","If one went out, look at bounces and replies. Non-tax offers go only to the non-tax-client list."]],null],
+  ["Send or schedule today's Zoho campaign","If a campaign is planned for today: preview it, test the links and button, check the list (non-tax offers go only to the non-tax-client list), then send or schedule it."],
+  ["Check today's Zoho campaign","If one went out, look at opens, bounces and replies, and answer any replies."]],null],
  ["End of day",[
   ["Update client-facing statuses","So every client sees where their return stands."],
   ["Nothing left unanswered","Inbox, chats and voicemail all at zero, or each has a promised reply time."],
@@ -216,7 +218,7 @@ const WEEKLY=[
   ["Sync unsubscribes everywhere","Zoho, the Unsubscribes sheet and TaxDome tags all match."],
   ["Test the website forms","Submit a test on taxentric.com/irs-monitoring and check the pricing page and referral site load."],
   ["Check email deliverability","Look for bounces or spam complaints in Zoho, and spot-check that your emails land in inboxes."],
-  ["Plan next week's campaign","Draft and schedule next week's Zoho or TaxDome email."],
+  ["Plan next week's campaign","Pick next week's email, build it in Zoho Campaigns, send yourself a test, and schedule it."],
   ["Look two weeks ahead","Check the Key dates tab and tag extensions early for anyone at risk."]]]
 ];
 const DATES=[
@@ -243,6 +245,58 @@ const LISTS={daily:DAILY,weekly:WEEKLY};
 const ITEMS={};
 for(const k in LISTS)ITEMS[k]=LISTS[k].flatMap(([sec,items])=>items.map(i=>({id:slug(i[0]),t:i[0],s:i[1],url:i[2],lab:i[3],sec})));
 /* Tax season (Jan 15 to Apr 15): checklist Mon-Sat. Rest of year: Mon-Fri. Other days are appointment days. */
+const PHONE=dayKey>="2027-01-01"?"Quo":"Google Voice";
+const WHERE={
+ "scan-for-urgent-items":"TaxDome › Communications (chats and email) and "+PHONE+" voicemail",
+ "respond-to-new-website-leads":"Outlook › Fee estimator and Contact us folders",
+ "check-today-s-calendly-calls":"Outlook › Calendly folder, or calendly.com",
+ "check-e-file-acknowledgments":"Outlook › TaxAct E-file confirmations folder, then TaxAct for any rejections",
+ "prepare-returns-in-the-in-prep-queue":"TaxDome › In prep stage, then TaxAct",
+ "review-prepared-returns":"TaxAct, with the job in TaxDome",
+ "send-drafts-and-e-file-authorizations":"TaxDome (upload, signature request, invoice)",
+ "release-paid-returns-for-e-filing":"TaxDome › Billing to confirm payment, then TaxAct to file",
+ "track-paper-filed-returns":"TaxDome › the client's job notes",
+ "reply-to-taxdome-chats":"TaxDome › Communications",
+ "clear-email-inboxes":"TaxDome › Communications, then Outlook's main inbox",
+ "return-calls-and-voicemails":PHONE,
+ "activate-pending-portal-accounts":"TaxDome › Clients (accounts not yet activated)",
+ "nudge-unsigned-engagement-letters":"TaxDome › Documents › Proposals & ELs",
+ "confirm-id-verifications":"Stripe › Identity, then complete the task in TaxDome",
+ "review-submitted-organizers":"TaxDome › Documents › Organizers",
+ "follow-up-on-overdue-organizers":"TaxDome › Documents › Organizers",
+ "scan-every-pipeline-for-red-overdue-jobs":"TaxDome › Workflow › Pipelines",
+ "check-stages-that-don-t-move-on-their-own":"TaxDome › Workflow › Pipelines",
+ "work-today-s-and-overdue-tasks":"TaxDome › Workflow › Tasks",
+ "chase-missing-docs":"TaxDome (accounts tagged Missing docs)",
+ "flag-extensions-early":"TaxDome (tag Extension on the account)",
+ "follow-up-on-unpaid-invoices":"TaxDome › Billing › Invoices",
+ "check-plan-and-bookkeeping-payments":"TaxDome › Billing (recurring invoices and payments)",
+ "check-bank-feeds":"QuickBooks › Banking",
+ "monthly-statements-due-by-the-10th":"QuickBooks, plus TaxDome uploads for accounts without feeds",
+ "move-catch-up-jobs-forward":"QuickBooks",
+ "log-new-opt-ins":"Outlook › IRS Monitoring Opt-Ins folder, then verify in the IRS Monitoring Opt-ins sheet",
+ "check-tax-pro-account-authorizations":"IRS Tax Pro Account (irs.gov), then the Verify task in TaxDome",
+ "schedule-renewals":"TaxDome › Workflow › Job recurrences",
+ "handle-overdue-renewals":"TaxDome (IRS Monitoring Renewal pipeline), and Tax Pro Account to withdraw",
+ "second-round-of-replies":"TaxDome › Communications and "+PHONE+" voicemail",
+ "follow-up-on-today-s-calls":"TaxDome (account, job and notes)",
+ "review-new-referral-signups":"Referral spreadsheet (Google Sheets)",
+ "match-referred-friends-to-clients":"Referral spreadsheet › Client Signups tab, checked against TaxDome › Billing",
+ "process-unsubscribes":"Zoho Campaigns › Contacts › Unsubscribed, the Unsubscribes sheet, and TaxDome tags",
+ "send-or-schedule-today-s-zoho-campaign":"Zoho Campaigns",
+ "check-today-s-zoho-campaign":"Zoho Campaigns › Reports",
+ "update-client-facing-statuses":"TaxDome › Workflow › Pipelines",
+ "nothing-left-unanswered":"TaxDome › Communications, "+PHONE+", and your Outlook folders",
+ "set-tomorrow-s-top-3":"Notes for today, below",
+ "find-stuck-jobs":"TaxDome › Workflow › Pipelines (sort by time in stage)",
+ "review-accounts-receivable":"TaxDome › Billing › Invoices",
+ "pay-referral-rewards":"Referral spreadsheet",
+ "audit-irs-monitoring":"TaxDome › Workflow › Job recurrences, and the IRS Monitoring pipelines",
+ "sync-unsubscribes-everywhere":"Zoho Campaigns, the Unsubscribes sheet, and TaxDome tags",
+ "test-the-website-forms":"taxentric.com/irs-monitoring, taxentric.com/pricing, referrals.taxentric.com",
+ "check-email-deliverability":"Zoho Campaigns › Reports",
+ "plan-next-week-s-campaign":"Zoho Campaigns",
+ "look-two-weeks-ahead":"The Dates tab on this page"};
 const APPT_IDS=["check-today-s-calendly-calls","follow-up-on-today-s-calls"];
 const isSeason=k=>{const md=k.slice(5);return md>="01-15"&&md<="04-15"};
 const isWork=k=>{const g=new Date(k+"T00:00:00").getDay();return (g>=1&&g<=5)||(g===6&&isSeason(k))};
@@ -276,7 +330,7 @@ function skipped(last){ /* weekdays with no record between last record and today
 }
 function itemHtml(kind,it,checked,extra,carry){
   const id=(carry?"cy-":"")+kind+"-"+it.id;
-  return '<label class="item'+(checked?" on":"")+'" for="'+id+'"><input type="checkbox" id="'+id+'" data-k="'+kind+'" data-i="'+it.id+'"'+(carry?' data-c="1"':'')+(checked?" checked":"")+'><div><b>'+esc(it.t)+'</b><span>'+(extra||"")+esc(it.s)+(it.url?' <a href="'+it.url+'" target="_blank" rel="noopener">Open '+esc(it.lab)+'</a>':'')+'</span></div></label>';
+  return '<label class="item'+(checked?" on":"")+'" for="'+id+'"><input type="checkbox" id="'+id+'" data-k="'+kind+'" data-i="'+it.id+'"'+(carry?' data-c="1"':'')+(checked?" checked":"")+'><div><b>'+esc(it.t)+'</b>'+(WHERE[it.id]?'<span class="where">'+esc(WHERE[it.id])+'</span>':'')+'<span>'+(extra||"")+esc(it.s)+(it.url?' <a href="'+it.url+'" target="_blank" rel="noopener">Open '+esc(it.lab)+'</a>':'')+'</span></div></label>';
 }
 function renderCarry(kind){
   if(kind==="daily"&&!isWork(dayKey))return"";
