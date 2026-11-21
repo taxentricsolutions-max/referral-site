@@ -295,7 +295,7 @@ can get your price right. Enter your email and we'll follow up with a plan built
 <div class="info-note">
 Growth Plans include the same benefits: bookkeeping, tax preparation with 20% off your
 business tax return, a tax extension if you need one, and 1 year of IRS Document Monitoring. Pay for the year
-in full at signing and you also get bookkeeping setup, including your chart of accounts, at no charge if your books need it, plus 50% off help starting a business if you need it.
+in full at signing and you also get bookkeeping setup or cleanup, including your chart of accounts, at no charge if your books need it, plus 50% off help starting a business if you need it.
 </div>
 <div class="mt-4">
 <label for="prospect-email-growth" class="block text-sm font-bold mb-1">Your email</label>
@@ -663,7 +663,7 @@ return items;
 }
 /* Bonuses: only when you pay for the year in full at signing */
 function getBonusItems(){
-var items = [{ label: 'Bookkeeping setup, including your chart of accounts (if needed)', value: 200, bonusPrice: 0, optional: true }];
+var items = [{ label: 'Bookkeeping setup or cleanup, including your chart of accounts (if needed)', value: 200, bonusPrice: 0, optional: true }];
 var opt = getSboOption();
 if(opt && (opt.id === 'scorp' || opt.id === 'ccorp')){
 items.push({ label: 'Quarterly payroll tax returns for the owner (Form 941), 4 per year', value: 300, bonusPrice: 0, optional: true });
